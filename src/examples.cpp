@@ -4,6 +4,50 @@
 
 #include "src/cctz.h"
 
+// from examples/classic.cc
+// 
+std::string Format(const std::string& fmt, const std::tm& tm) {
+  char buf[100];
+  std::strftime(buf, sizeof(buf), fmt.c_str(), &tm);
+  return buf;
+}
+
+// [[Rcpp::export]]
+void example0() {
+    const std::time_t now = std::time(nullptr);
+
+    std::tm tm_utc;
+    gmtime_r(&now, &tm_utc);
+    std::cout << Format("UTC: %F %T\n", tm_utc);
+
+    std::tm tm_local;
+    localtime_r(&now, &tm_local);
+    std::cout << Format("Local: %F %T\n", tm_local);
+}
+
+// from examples/hello.cc
+// 
+// [[Rcpp::export]]
+int helloMoon() {
+    cctz::TimeZone syd;
+    if (!cctz::LoadTimeZone("Australia/Sydney", &syd)) return -1;
+
+    // Neil Armstrong first walks on the moon
+    const auto tp1 = cctz::MakeTime(1969, 7, 21, 12, 56, 0, syd);
+
+    const std::string s = cctz::Format("%F %T %z", tp1, syd);
+    std::cout << s << "\n";
+
+    cctz::TimeZone nyc;
+    cctz::LoadTimeZone("America/New_York", &nyc);
+
+    const auto tp2 = cctz::MakeTime(1969, 7, 20, 22, 56, 0, nyc);
+    return tp2 == tp1 ? 0 : 1;
+}
+
+
+// from examples/example1.cc to examples/example4.cc
+
 // [[Rcpp::export]]
 void example1() {
     cctz::TimeZone lax;

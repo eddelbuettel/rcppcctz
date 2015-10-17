@@ -5,6 +5,25 @@
 
 using namespace Rcpp;
 
+// example0
+void example0();
+RcppExport SEXP RcppCCTZ_example0() {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    example0();
+    return R_NilValue;
+END_RCPP
+}
+// helloMoon
+int helloMoon();
+RcppExport SEXP RcppCCTZ_helloMoon() {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    __result = Rcpp::wrap(helloMoon());
+    return __result;
+END_RCPP
+}
 // example1
 void example1();
 RcppExport SEXP RcppCCTZ_example1() {
