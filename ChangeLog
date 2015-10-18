@@ -1,3 +1,7 @@
+2015-10-18  Dirk Eddelbuettel  <edd@debian.org>
+
+	* README.md: Added
+
 2015-10-17  Dirk Eddelbuettel  <edd@debian.org>
 
 	* .travis.yml: Added Travis support
