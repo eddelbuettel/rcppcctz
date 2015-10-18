@@ -1,6 +1,12 @@
 \name{RcppCCTZ-package}
 \alias{RcppCCTZ-package}
 \alias{RcppCCTZ}
+\alias{example0}
+\alias{example1}
+\alias{example2}
+\alias{example3}
+\alias{example4}
+\alias{helloMoon}
 \docType{package}
 \title{
   A short title line describing what the package does

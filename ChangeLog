@@ -1,0 +1,10 @@
+2015-10-17  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml: Added Travis support
+
+	* src/examples.cpp: Added examples from CCTZ repo
+
+2015-10-16  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/*: Initial packaging based on CCTZ repo
+

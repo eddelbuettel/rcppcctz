@@ -18,11 +18,11 @@ void example0() {
 
     std::tm tm_utc;
     gmtime_r(&now, &tm_utc);
-    std::cout << Format("UTC: %F %T\n", tm_utc);
+    Rcpp::Rcout << Format("UTC: %F %T\n", tm_utc);
 
     std::tm tm_local;
     localtime_r(&now, &tm_local);
-    std::cout << Format("Local: %F %T\n", tm_local);
+    Rcpp::Rcout << Format("Local: %F %T\n", tm_local);
 }
 
 // from examples/hello.cc
@@ -36,7 +36,7 @@ int helloMoon() {
     const auto tp1 = cctz::MakeTime(1969, 7, 21, 12, 56, 0, syd);
 
     const std::string s = cctz::Format("%F %T %z", tp1, syd);
-    std::cout << s << "\n";
+    Rcpp::Rcout << s << "\n";
 
     cctz::TimeZone nyc;
     cctz::LoadTimeZone("America/New_York", &nyc);
