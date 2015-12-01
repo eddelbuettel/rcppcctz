@@ -5,11 +5,11 @@ Version: 0.0.1
 Date: 2015-11-30
 Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
-Description: Rcpp Access to the CCTZ timezone library is provided.
- CCTZ is a C++ library for translating between absolute and civil times
+Description: 'Rcpp' Access to the 'CCTZ' timezone library is provided.
+ 'CCTZ' is a C++ library for translating between absolute and civil times
  using the rules of a time zone.
  .
- The CCTZ source code, released under the Apache 2.0 License, is included in
+ The 'CCTZ' source code, released under the Apache 2.0 License, is included in
  this package.  See <https://github.com/google/cctz> for more details.
 License: GPL (>= 2)
 Imports: Rcpp (>= 0.11.0)
