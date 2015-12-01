@@ -2,13 +2,16 @@ Package: RcppCCTZ
 Type: Package
 Title: Rcpp Bindings for the CCTZ Library
 Version: 0.0.1
-Date: 2015-10-15
+Date: 2015-11-30
 Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
-Description: Rcpp Access to the CCTZ Timezones Library is provided.
- The implementation is incomplete at present.
+Description: Rcpp Access to the CCTZ timezones library is provided.
+ CCTZ is a C++ library for translating between absolute and civil times
+ using the rules of a time zone. See <https://github.com/google/cctz>
+ for more details.
 License: GPL (>= 2)
 Imports: Rcpp (>= 0.11.0)
 LinkingTo: Rcpp
-SystemRequirements: A 64-bit POSIX OS such as Linux or OS X.
+SystemRequirements: A 64-bit POSIX OS such as Linux or OS X with IANA time
+ zone data in /usr/share/zoneinfo.
 OS_type: unix
