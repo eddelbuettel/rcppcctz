@@ -13,6 +13,8 @@
 //     See the License for the specific language governing permissions and
 //     limitations under the License.
 
+#ifndef __sun
+
 #include "src/cctz_libc.h"
 
 #include <chrono>
@@ -153,3 +155,5 @@ TimeInfo TimeZoneLibC::MakeTimeInfo(int64_t year, int mon, int day,
 }
 
 }  // namespace cctz
+
+#endif

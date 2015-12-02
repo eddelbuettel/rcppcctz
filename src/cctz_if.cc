@@ -20,12 +20,14 @@
 namespace cctz {
 
 std::unique_ptr<TimeZoneIf> TimeZoneIf::Load(const std::string& name) {
+#ifndef __sun  
   // Support "libc:localtime" and "libc:*" to access the legacy
   // localtime and UTC support respectively from the C library.
   if (name.compare(0, 5, "libc:") == 0) {
     return std::unique_ptr<TimeZoneIf>(new TimeZoneLibC(name.substr(5)));
   }
-
+#endif
+  
   // Otherwise use the "zoneinfo" implementation by default.
   std::unique_ptr<TimeZoneInfo> tz(new TimeZoneInfo);
   if (!tz->Load(name)) tz.reset();
