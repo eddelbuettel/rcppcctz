@@ -1,4 +1,4 @@
-## RcppCCTZ [![Build Status](https://travis-ci.org/eddelbuettel/rcppcctz.svg)](https://travis-ci.org/eddelbuettel/rcpptoml) [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) 
+## RcppCCTZ [![Build Status](https://travis-ci.org/eddelbuettel/rcppcctz.svg)](https://travis-ci.org/eddelbuettel/rcpptoml) [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/RcppCCTZ)](http://cran.rstudio.com/package=RcppCCTZ) [![Downloads](http://cranlogs.r-pkg.org/badges/RcppCCTZ?color=brightgreen)](http://www.r-pkg.org/pkg/RcppCCTZ)
 
 Rcpp bindings for [CCTZ](https://github.com/google/cctz)
 
@@ -20,7 +20,9 @@ X. Old school Unix variants may work.
 
 ### Status
 
-Preliminary. It builds, and the example functions are accessible from R.
+Now on [CRAN](https://cran.rstudio.com/web/packages/RcppCCTZ/index.html) but
+still somewhat preliminary. Builds cleanly, and the example functions are
+accessible from R.
 
 ### Author
 
