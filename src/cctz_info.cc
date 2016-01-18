@@ -49,6 +49,23 @@ namespace cctz {
 
 namespace {
 
+// Convert errnum to a message, using buf[buflen] if necessary.
+// buf must be non-null, and buflen non-zero.
+char* errmsg(int errnum, char* buf, size_t buflen) {
+#if defined(_WIN32) || defined(_WIN64)
+  strerror_s(buf, buflen, errnum);
+  return buf;
+#elif defined(__APPLE__)
+  strerror_r(errnum, buf, buflen);
+  return buf;
+#elif (_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && ! _GNU_SOURCE
+  strerror_r(errnum, buf, buflen);
+  return buf;
+#else
+  return strerror_r(errnum, buf, buflen);
+#endif
+}
+
 // Wrap the tzfile.h isleap() macro with an inline function, which will
 // then have normal argument-passing semantics (i.e., single evaluation).
 inline bool IsLeap(int64_t year) { return isleap(year); }
@@ -628,13 +645,12 @@ bool TimeZoneInfo::Load(const std::string& name) {
 
   // Load the time-zone data.
   bool loaded = false;
-  if (FILE* fp = fopen(path.c_str(), "r")) {
+  if (FILE* fp = fopen(path.c_str(), "rb")) {
     loaded = Load(name, fp);
     fclose(fp);
   } else {
-    char ebuf[64] = "Failed to open";
-    strerror_r(errno, ebuf, sizeof ebuf);
-    std::clog << path << ": " << ebuf << "\n";
+    char ebuf[64];
+    std::clog << path << ": " << errmsg(errno, ebuf, sizeof ebuf) << "\n";
   }
   return loaded;
 }
