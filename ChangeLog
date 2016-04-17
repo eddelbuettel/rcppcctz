@@ -1,3 +1,16 @@
+2016-04-17  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Version 0.0.3
+	* inst/NEWS.Rd: Updated
+
+	* src/*: Updated to CCTZ v2 upstream
+	* inst/include/src/: Ditto
+
+	* src/time_tool.cc (main): #ifdef'ed out, replace std::cout with
+	Rcpp::Rcout, added #include <Rcpp.h>
+
+	* src/examples.cpp: Converted to v2 of API
+
 2016-01-17  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Version 0.0.3
