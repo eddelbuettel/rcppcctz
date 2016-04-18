@@ -61,3 +61,12 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// exampleFormat
+void exampleFormat();
+RcppExport SEXP RcppCCTZ_exampleFormat() {
+BEGIN_RCPP
+    Rcpp::RNGScope __rngScope;
+    exampleFormat();
+    return R_NilValue;
+END_RCPP
+}

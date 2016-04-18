@@ -25,3 +25,7 @@ example4 <- function() {
     invisible(.Call('RcppCCTZ_example4', PACKAGE = 'RcppCCTZ'))
 }
 
+exampleFormat <- function() {
+    invisible(.Call('RcppCCTZ_exampleFormat', PACKAGE = 'RcppCCTZ'))
+}
+

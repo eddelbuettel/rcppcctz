@@ -112,3 +112,21 @@ void example4() {
     Rcpp::Rcout << cctz::format("Now: %F %T %z\n", now, lax);
     Rcpp::Rcout << cctz::format("Day: %F %T %z\n", day, lax);
 }
+
+
+// from time_zone_format_test.cc
+//
+// [[Rcpp::export]]
+void exampleFormat() {
+
+    const cctz::time_zone tz = cctz::utc_time_zone();
+    cctz::time_point<std::chrono::nanoseconds> tp = std::chrono::system_clock::from_time_t(0);
+    tp += std::chrono::hours(3) + std::chrono::minutes(4) + std::chrono::seconds(5);
+    tp += std::chrono::milliseconds(6) + std::chrono::microseconds(7) +
+        std::chrono::nanoseconds(8);
+
+    std::string txt = format("%H:%M:%E15S", tp, tz);
+
+    Rcpp::Rcout << "15 digit precision on subsecond time: " << txt << std::endl;    
+}
+
