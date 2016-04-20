@@ -70,3 +70,16 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// tzDiff
+double tzDiff(const std::string tzfrom, const std::string tzto, Rcpp::Datetime dt);
+RcppExport SEXP RcppCCTZ_tzDiff(SEXP tzfromSEXP, SEXP tztoSEXP, SEXP dtSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const std::string >::type tzfrom(tzfromSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type tzto(tztoSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Datetime >::type dt(dtSEXP);
+    __result = Rcpp::wrap(tzDiff(tzfrom, tzto, dt));
+    return __result;
+END_RCPP
+}

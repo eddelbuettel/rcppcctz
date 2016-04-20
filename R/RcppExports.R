@@ -29,3 +29,7 @@ exampleFormat <- function() {
     invisible(.Call('RcppCCTZ_exampleFormat', PACKAGE = 'RcppCCTZ'))
 }
 
+tzDiff <- function(tzfrom, tzto, dt) {
+    .Call('RcppCCTZ_tzDiff', PACKAGE = 'RcppCCTZ', tzfrom, tzto, dt)
+}
+
