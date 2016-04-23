@@ -7,33 +7,35 @@
 \alias{example3}
 \alias{example4}
 \alias{helloMoon}
+\alias{exampleFormat}
 \docType{package}
 \title{
-  A short title line describing what the package does
+  A Simple Wrapper to the CCTZ Library for Time Zone Calculations
 }
 \description{
-  A more detailed description of what the package does. A length
-  of about one to five lines is recommended.
+  CCTZ contains two underlying libraries which build on the C++11
+  library \code{chrono}.  The first covers \emph{civil time} for
+  computing with human-scale time such as dates and time. It is
+  header-only. The second covers time zones and allow translation
+  between absolute time and civil time.
+
+  RcppCCTZ brings CCTZ to R by means of Rcpp.
 }
 \details{
-  This section should provide a more detailed overview of how to use the
-  package, including the most important functions.
+  CCTZ requires a valid timezone library as well as recent-enough
+  compiler to cope with C++11.  This means that Windows is currently not
+  supported..
 }
 \author{
-Your Name, email optional.
+  Dirk Eddelbuettel wrote the package; Bradley White and Greg Miller
+  wrote the underlying CCTZ library,
 
-Maintainer: Your Name <your@email.com>
+  Maintainer: Dirk Eddelbuettel <edd@debian.org>
 }
 \references{
-  This optional section can contain literature or other references for
-  background information.
+  The CCZT repository at \url{https://github.com/google/cctz} has additional information.
 }
-% Optionally other standard keywords, one per line,
-% from the file KEYWORDS in the R documentation.
 \keyword{ package }
-\seealso{
-  Optional links to other man pages
-}
 \examples{
-  # Optional simple examples of the most important functions
+  helloMoon()
 }
