@@ -8,7 +8,6 @@
 \alias{example4}
 \alias{helloMoon}
 \alias{exampleFormat}
-\alias{tzDiff}
 \docType{package}
 \title{
   A Simple Wrapper to the CCTZ Library for Time Zone Calculations
