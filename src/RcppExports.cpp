@@ -71,15 +71,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // tzDiff
-double tzDiff(const std::string tzfrom, const std::string tzto, Rcpp::Datetime dt);
-RcppExport SEXP RcppCCTZ_tzDiff(SEXP tzfromSEXP, SEXP tztoSEXP, SEXP dtSEXP) {
+double tzDiff(const std::string tzfrom, const std::string tzto, Rcpp::Datetime dt, bool verbose);
+RcppExport SEXP RcppCCTZ_tzDiff(SEXP tzfromSEXP, SEXP tztoSEXP, SEXP dtSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const std::string >::type tzfrom(tzfromSEXP);
     Rcpp::traits::input_parameter< const std::string >::type tzto(tztoSEXP);
     Rcpp::traits::input_parameter< Rcpp::Datetime >::type dt(dtSEXP);
-    __result = Rcpp::wrap(tzDiff(tzfrom, tzto, dt));
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    __result = Rcpp::wrap(tzDiff(tzfrom, tzto, dt, verbose));
     return __result;
 END_RCPP
 }
