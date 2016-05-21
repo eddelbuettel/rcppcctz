@@ -21,7 +21,7 @@
 // Define OFFSET(tm) and ABBR(tm) for your platform to return the UTC
 // offset and zone abbreviation after a call to localtime_r().
 #if defined(linux)
-# if defined(__USE_BSD)
+# if defined(__USE_BSD) || defined(__USE_MISC)
 #  define OFFSET(tm) ((tm).tm_gmtoff)
 #  define ABBR(tm)   ((tm).tm_zone)
 # else
@@ -91,8 +91,6 @@ Breakdown TimeZoneLibC::BreakTime(const time_point<sys_seconds>& tp) const {
   bd.hour = tm.tm_hour;
   bd.minute = tm.tm_min;
   bd.second = tm.tm_sec;
-  bd.weekday = (tm.tm_wday ? tm.tm_wday : 7);
-  bd.yearday = tm.tm_yday + 1;
   bd.is_dst = tm.tm_isdst > 0;
   return bd;
 }
