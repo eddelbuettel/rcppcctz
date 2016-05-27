@@ -84,3 +84,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// toTz
+Rcpp::Datetime toTz(Rcpp::Datetime dt, const std::string tzfrom, const std::string tzto, bool verbose);
+RcppExport SEXP RcppCCTZ_toTz(SEXP dtSEXP, SEXP tzfromSEXP, SEXP tztoSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::Datetime >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type tzfrom(tzfromSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type tzto(tztoSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    __result = Rcpp::wrap(toTz(dt, tzfrom, tzto, verbose));
+    return __result;
+END_RCPP
+}

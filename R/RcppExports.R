@@ -53,3 +53,23 @@ tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
     .Call('RcppCCTZ_tzDiff', PACKAGE = 'RcppCCTZ', tzfrom, tzto, dt, verbose)
 }
 
+#' Change from one given timezone to another.
+#'
+#' Time zone offsets vary by date, and this helper function converts
+#' a Datetime object from one given timezone to another.
+#'
+#' @title Return difference between two time zones at a given date.
+#' @param dt A Datetime object specifying when the difference is to be computed.
+#' @param tzfrom The first time zone as a character vector.
+#' @param tzto The second time zone as a character vector.
+#' @param verbose A boolean toggle indicating whether more verbose operations
+#' are desired, default is \code{FALSE}.
+#' @return A Datetime object with the given (civil time) determined by the
+#' incoming object (and its timezone) shifted to the target timezone.
+#' @author Dirk Eddelbuettel
+#' @examples
+#' toTz(Sys.time(), "America/New_York", "Europe/London")
+toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
+    .Call('RcppCCTZ_toTz', PACKAGE = 'RcppCCTZ', dt, tzfrom, tzto, verbose)
+}
+

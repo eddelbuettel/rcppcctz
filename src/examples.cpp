@@ -8,9 +8,9 @@
 // from examples/classic.cc
 // 
 std::string Format(const std::string& fmt, const std::tm& tm) {
-  char buf[100];
-  std::strftime(buf, sizeof(buf), fmt.c_str(), &tm);
-  return buf;
+    char buf[100];
+    std::strftime(buf, sizeof(buf), fmt.c_str(), &tm);
+    return buf;
 }
 
 // [[Rcpp::export]]
