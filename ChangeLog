@@ -1,4 +1,15 @@
+2016-07-09  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version): Version 0.0.5
+
+2016-05-27  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/utilities.cpp: New helper function toTz()
+	* man/toTz.Rd: Documentation
+
 2016-05-21  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version): Rolled minor version and date
 
 	* src/*: Synced with CCTZ upstream
 	* inst/include/src/: Ditto
