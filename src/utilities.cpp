@@ -62,19 +62,12 @@ double tzDiff(const std::string tzfrom,
 }
 
 
-// double toDouble(cctz::time_point<cctz::sys_seconds> tp) {
-//     cctz::time_point<cctz::sys_seconds> unix_epoch =
-//         std::chrono::time_point_cast<cctz::sys_seconds>(std::chrono::system_clock::from_time_t(0));
-//     return(tp - unix_epoch).count();
-// }
-                                                                                 
-
 //' Change from one given timezone to another.
 //'
 //' Time zone offsets vary by date, and this helper function converts
 //' a Datetime object from one given timezone to another.
 //'
-//' @title Return difference between two time zones at a given date.
+//' @title Shift datetime object from one timezone to another
 //' @param dt A Datetime object specifying when the difference is to be computed.
 //' @param tzfrom The first time zone as a character vector.
 //' @param tzto The second time zone as a character vector.

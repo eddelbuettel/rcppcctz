@@ -4,7 +4,8 @@
 
 2016-05-27  Dirk Eddelbuettel  <edd@debian.org>
 
-	* src/utilities.cpp: New helper function toTz()
+	* src/utilities.cpp (toTz): New utility function to 'transfer' a
+	datetime object from one timezone to another
 	* man/toTz.Rd: Documentation
 
 2016-05-21  Dirk Eddelbuettel  <edd@debian.org>

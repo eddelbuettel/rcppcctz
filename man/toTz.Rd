@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{toTz}
 \alias{toTz}
-\title{Return difference between two time zones at a given date.}
+\title{Shift datetime object from one timezone to another}
 \usage{
 toTz(dt, tzfrom, tzto, verbose = FALSE)
 }
