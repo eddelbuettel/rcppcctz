@@ -1,3 +1,10 @@
+2016-07-11  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/include/civil_time_detail.h (cctz): Synced with upstream
+	* src/time_zone_format.cc: Ditto
+	* src/time_zone_info.cc: Ditto
+	* src/time_zone_lookup.cc: Ditto
+
 2016-07-09  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version): Version 0.0.5
