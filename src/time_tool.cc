@@ -28,6 +28,8 @@
 #include "civil_time.h"
 #include "time_zone.h"
 
+#include <Rcpp.h>
+
 // Pulls in the aliases from cctz for brevity.
 template <typename D>
 using time_point = cctz::time_point<D>;
@@ -121,15 +123,15 @@ void InstantInfo(const std::string& label, time_point<sys_seconds> when,
   std::size_t width =
       2 + std::max(std::max(time_label.size(), utc_label.size()),
                    zone_label.size());
-  std::cout << label << " {\n";
-  std::cout << std::setw(width) << std::right << time_label << ": ";
-  std::cout << std::setw(10) << format("%s", when, utc);
-  std::cout << "\n";
-  std::cout << std::setw(width) << std::right << utc_label << ": ";
-  std::cout << FormatTimeInZone(when, utc) << "\n";
-  std::cout << std::setw(width) << std::right << zone_label << ": ";
-  std::cout << FormatTimeInZone(when, zone) << "\n";
-  std::cout << "}\n";
+  Rcpp::Rcout << label << " {\n";
+  Rcpp::Rcout << std::setw(width) << std::right << time_label << ": ";
+  Rcpp::Rcout << std::setw(10) << format("%s", when, utc);
+  Rcpp::Rcout << "\n";
+  Rcpp::Rcout << std::setw(width) << std::right << utc_label << ": ";
+  Rcpp::Rcout << FormatTimeInZone(when, utc) << "\n";
+  Rcpp::Rcout << std::setw(width) << std::right << zone_label << ": ";
+  Rcpp::Rcout << FormatTimeInZone(when, zone) << "\n";
+  Rcpp::Rcout << "}\n";
 }
 
 // Report everything we know about a cctz::civil_second (YMDHMS).
@@ -137,12 +139,12 @@ int BreakdownInfo(const cctz::civil_second& cs, cctz::time_zone zone) {
   cctz::time_zone::civil_lookup cl = zone.lookup(cs);
   switch (cl.kind) {
     case cctz::time_zone::civil_lookup::UNIQUE: {
-      std::cout << "kind: UNIQUE\n";
+      Rcpp::Rcout << "kind: UNIQUE\n";
       InstantInfo("when", cl.pre, zone);
       break;
     }
     case cctz::time_zone::civil_lookup::SKIPPED: {
-      std::cout << "kind: SKIPPED\n";
+      Rcpp::Rcout << "kind: SKIPPED\n";
       InstantInfo("post", cl.post, zone);  // might == trans-1
       InstantInfo("trans-1", cl.trans - std::chrono::seconds(1), zone);
       InstantInfo("trans", cl.trans, zone);
@@ -150,7 +152,7 @@ int BreakdownInfo(const cctz::civil_second& cs, cctz::time_zone zone) {
       break;
     }
     case cctz::time_zone::civil_lookup::REPEATED: {
-      std::cout << "kind: REPEATED\n";
+      Rcpp::Rcout << "kind: REPEATED\n";
       InstantInfo("pre", cl.pre, zone);  // might == trans-1
       InstantInfo("trans-1", cl.trans - std::chrono::seconds(1), zone);
       InstantInfo("trans", cl.trans, zone);
@@ -163,7 +165,7 @@ int BreakdownInfo(const cctz::civil_second& cs, cctz::time_zone zone) {
 
 // Report everything we know about a time_point<sys_seconds>.
 int TimeInfo(time_point<sys_seconds> when, cctz::time_zone zone) {
-  std::cout << "kind: UNIQUE\n";
+  Rcpp::Rcout << "kind: UNIQUE\n";
   InstantInfo("when", when, zone);
   return 0;
 }
@@ -184,6 +186,7 @@ bool LooksLikeNegOffset(const char* s) {
   return false;
 }
 
+#if 0
 int main(int argc, char** argv) {
   std::string prog = argv[0] ? Basename(argv[0]) : "time_tool";
 
@@ -256,3 +259,4 @@ int main(int argc, char** argv) {
   std::cerr << args << ": Malformed time spec\n";
   return 1;
 }
+#endif

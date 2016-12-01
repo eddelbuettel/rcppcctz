@@ -6,12 +6,13 @@
 	* inst/include/time_zone_impl.h: Ditto
 	* inst/include/time_zone_info.h: Ditto
 	* inst/include/time_zone_libc.h: Ditto
-	* src/time_tool.cc: Ditto
+
 	* src/time_zone_format.cc: Ditto
 	* src/time_zone_impl.cc: Ditto
 	* src/time_zone_info.cc: Ditto
 	* src/time_zone_libc.cc: Ditto
 	* src/time_zone_lookup.cc: Ditto
+	* src/time_tool.cc: Ditto, also updated again for std::{cout,cerr}
 
 	* inst/include/src/cctz_if.h: Removed as removed upstream
 	* inst/include/src/cctz_impl.h: Ditto
