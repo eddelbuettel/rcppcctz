@@ -1,0 +1,64 @@
+edd@max:~/git/cctz(master)$ tree include/ src/
+include/
+├── civil_time_detail.h            ok
+├── civil_time.h                   ok
+└── time_zone.h                    ok
+src/
+├── cctz.h                         ok
+├── cctz_v1_test.cc
+├── civil_time_test.cc
+├── time_tool.cc                   ok
+├── time_zone_format.cc            ok
+├── time_zone_format_test.cc
+├── time_zone_if.cc                ok
+├── time_zone_if.h                 ok (different directory)
+├── time_zone_impl.cc              ok
+├── time_zone_impl.h               ok (different directory)
+├── time_zone_info.cc              ok
+├── time_zone_info.h               ok (different directory)
+├── time_zone_libc.cc              ok
+├── time_zone_libc.h               ok (different directory)
+├── time_zone_lookup.cc            ok
+├── time_zone_lookup_test.cc
+├── time_zone_posix.cc             ok
+├── time_zone_posix.h              ok (different directory)
+└── tzfile.h                       ok
+
+0 directories, 22 files
+edd@max:~/git/cctz(master)$ 
+
+
+edd@max:~/git/rcppcctz/inst/include(feature/upstream_2016-12)$ tree . ../../src/
+.
+├── civil_time_detail.h     ok
+├── civil_time.h            ok
+├── src
+│   ├── cctz.h              ok
+│   ├── cctz_if.h           --> remove
+│   ├── cctz_impl.h         --> remove
+│   ├── cctz_info.h         --> remove
+│   ├── cctz_libc.h         --> remove
+│   └── cctz_posix.h        --> remove
+├── time_zone.h             ok
+├── time_zone_if.h          ok (different directory)
+├── time_zone_impl.h        ok (different directory)
+├── time_zone_info.h        ok (different directory)
+├── time_zone_libc.h        ok (different directory)
+├── time_zone_posix.h       ok (different directory)
+└── tzfile.h                ok
+../../src/
+├── examples.cpp
+├── Makevars
+├── RcppExports.cpp
+├── time_tool.cc            ok
+├── time_zone_format.cc     ok
+├── time_zone_if.cc         ok
+├── time_zone_impl.cc       ok
+├── time_zone_info.cc       ok
+├── time_zone_libc.cc       ok
+├── time_zone_lookup.cc     ok
+├── time_zone_posix.cc      ok
+└── utilities.cpp
+
+1 directory, 27 files
+edd@max:~/git/rcppcctz/inst/include(feature/upstream_2016-12)$ 

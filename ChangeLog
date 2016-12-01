@@ -1,3 +1,25 @@
+2016-12-01  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/include/civil_time_detail.h: Synced with upstream
+	* inst/include/time_zone.h: Ditto
+	* inst/include/time_zone_if.h: Ditto
+	* inst/include/time_zone_impl.h: Ditto
+	* inst/include/time_zone_info.h: Ditto
+	* inst/include/time_zone_libc.h: Ditto
+
+	* src/time_zone_format.cc: Ditto
+	* src/time_zone_impl.cc: Ditto
+	* src/time_zone_info.cc: Ditto
+	* src/time_zone_libc.cc: Ditto
+	* src/time_zone_lookup.cc: Ditto
+	* src/time_tool.cc: Ditto, also updated again for std::{cout,cerr}
+
+	* inst/include/src/cctz_if.h: Removed as removed upstream
+	* inst/include/src/cctz_impl.h: Ditto
+	* inst/include/src/cctz_info.h: Ditto
+	* inst/include/src/cctz_libc.h: Ditto
+	* inst/include/src/cctz_posix.h: Ditto
+
 2016-07-11  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/include/civil_time_detail.h (cctz): Synced with upstream
