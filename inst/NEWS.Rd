@@ -1,6 +1,13 @@
 \name{NEWS}
 \title{News for Package \pkg{RcppCCTZ}}
 
+\section{Changes in version 0.0.6 (2016-xx-yy)}{
+  \itemize{
+    \item Synchronized with small \code{CCTZ} upstream change.
+    \item Updated documentation.
+  }
+}
+
 \section{Changes in version 0.0.5 (2016-07-09)}{
   \itemize{
     \item New utility example functions \code{toTz()} and \code{tzDiff}
