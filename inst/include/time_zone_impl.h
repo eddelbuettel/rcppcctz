@@ -26,6 +26,9 @@ namespace cctz {
 // time_zone::Impl is the internal object referenced by a cctz::time_zone.
 class time_zone::Impl {
  public:
+  // The UTC time zone. Also used for other time zones that fail to load.
+  static time_zone UTC();
+
   // Load a named time zone. Returns false if the name is invalid, or if
   // some other kind of error occurs. Note that loading "UTC" never fails.
   static bool LoadTimeZone(const std::string& name, time_zone* tz);
@@ -34,15 +37,21 @@ class time_zone::Impl {
   static const time_zone::Impl& get(const time_zone& tz);
 
   // Breaks a time_point down to civil-time components in this time zone.
-  time_zone::absolute_lookup BreakTime(const time_point<sys_seconds>& tp) const;
+  time_zone::absolute_lookup BreakTime(
+      const time_point<sys_seconds>& tp) const {
+    return zone_->BreakTime(tp);
+  }
 
   // Converts the civil-time components in this time zone into a time_point.
   // That is, the opposite of BreakTime(). The requested civil time may be
   // ambiguous or illegal due to a change of UTC offset.
-  time_zone::civil_lookup MakeTimeInfo(civil_second cs) const;
+  time_zone::civil_lookup MakeTime(const civil_second& cs) const {
+    return zone_->MakeTime(cs);
+  }
 
  private:
   explicit Impl(const std::string& name);
+  static const Impl* UTCImpl();
 
   const std::string name_;
   std::unique_ptr<TimeZoneIf> zone_;

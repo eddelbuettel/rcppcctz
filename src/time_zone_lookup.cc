@@ -21,9 +21,7 @@
 namespace cctz {
 
 time_zone utc_time_zone() {
-  time_zone tz;
-  load_time_zone("UTC", &tz);
-  return tz;
+  return time_zone::Impl::UTC();
 }
 
 time_zone local_time_zone() {
@@ -40,9 +38,7 @@ time_zone local_time_zone() {
     zone = "localtime";
   }
   time_zone tz;
-  if (!load_time_zone(zone, &tz)) {
-    load_time_zone("UTC", &tz);
-  }
+  load_time_zone(zone, &tz);
 #if defined(_MSC_VER)
   free(tz_env);
 #endif
@@ -59,7 +55,7 @@ time_zone::absolute_lookup time_zone::lookup(
 }
 
 time_zone::civil_lookup time_zone::lookup(const civil_second& cs) const {
-  return time_zone::Impl::get(*this).MakeTimeInfo(cs);
+  return time_zone::Impl::get(*this).MakeTime(cs);
 }
 
 }  // namespace cctz
