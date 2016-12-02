@@ -78,12 +78,22 @@ double tzDiff(const std::string tzfrom,
 //' @author Dirk Eddelbuettel
 //' @examples
 //' toTz(Sys.time(), "America/New_York", "Europe/London")
+//' # this redoes the 'Armstrong on the moon in NYC and Sydney' example
+//' # note that the default print method will print the return object in _your local time_
+//' toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), "America/New_York", "Australia/Sydney", verbose=TRUE)
+//' # whereas explicitly formating for Sydney time does the right thing
+//' format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), 
+//'             "America/New_York", "Australia/Sydney", verbose=TRUE), 
+//'        tz="Australia/Sydney")
 // [[Rcpp::export]]
 Rcpp::Datetime toTz(Rcpp::Datetime dt,
                     const std::string tzfrom,
                     const std::string tzto,
                     bool verbose=false) {
 
+    // retain existing sub-second information
+    double remainder = dt.getFractionalTimestamp() - std::floor(dt.getFractionalTimestamp());
+    
     cctz::time_zone tz1, tz2;   // two time zone objects
     if (!cctz::load_time_zone(tzfrom, &tz1)) Rcpp::stop("Bad 'from' timezone");
     if (!cctz::load_time_zone(tzto, &tz2))   Rcpp::stop("Bad 'to' timezone");
@@ -101,9 +111,6 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
 
     // create a civil-time object from time-point and new timezone
     const auto ct = cctz::convert(tp, tz2);
-
-    // retain existing sub-second information
-    double remainder = dt.getFractionalTimestamp() - std::floor(dt.getFractionalTimestamp());
 
     namespace sc = std::chrono; 	// shorthand
     cctz::time_point<cctz::sys_seconds> ntp = cctz::convert(ct, tz2);

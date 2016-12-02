@@ -1,3 +1,12 @@
+2016-12-02  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version and date
+
+	* src/examples.cpp (helloMoon): Updates to helloMoon() example
+
+	* src/utilities.cpp (toTz): Update example
+	* man/toTz.Rd: Ditto
+
 2016-12-01  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/include/civil_time_detail.h: Synced with upstream

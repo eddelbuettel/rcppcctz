@@ -29,21 +29,22 @@ void example0() {
 // from examples/hello.cc
 // 
 // [[Rcpp::export]]
-int helloMoon() {
-    cctz::time_zone syd;
-    if (!cctz::load_time_zone("Australia/Sydney", &syd)) return -1;
-
-    // Neil Armstrong first walks on the moon
-    const auto tp1 = cctz::convert(cctz::civil_second(1969, 7, 21, 12, 56, 0), syd);
-
-    const std::string s = cctz::format("%F %T %z", tp1, syd);
-    Rcpp::Rcout << s << "\n";
-
-    cctz::time_zone nyc;
+Rcpp::CharacterVector helloMoon(bool verbose=false) {
+    cctz::time_zone syd, nyc;
+    cctz::load_time_zone("Australia/Sydney", &syd);
     cctz::load_time_zone("America/New_York", &nyc);
 
-    const auto tp2 = cctz::convert(cctz::civil_second(1969, 7, 20, 22, 56, 0), nyc);
-    return tp2 == tp1 ? 0 : 1;
+    // Neil Armstrong first walks on the moon
+    const auto tp = cctz::convert(cctz::civil_second(1969, 7, 20, 22, 56, 0), nyc);
+    const std::string s1 = cctz::format("%F %T %z", tp, nyc);
+    if (verbose) Rcpp::Rcout << s1 << "\n";
+
+    // That time in Sydney
+    const std::string s2 = cctz::format("%F %T %z", tp, syd);
+    if (verbose) Rcpp::Rcout << s2 << "\n";
+    
+    return Rcpp::CharacterVector::create(Rcpp::Named("New_York") = s1,
+                                         Rcpp::Named("Sydney") = s2);
 }
 
 
