@@ -4,6 +4,7 @@
 \section{Changes in version 0.0.6 (2016-xx-yy)}{
   \itemize{
     \item Synchronized with small \code{CCTZ} upstream change.
+    \item New formating helper returning a string
     \item Updated documentation.
   }
 }

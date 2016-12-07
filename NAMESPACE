@@ -1,3 +1,15 @@
 useDynLib(RcppCCTZ)
-exportPattern("^[[:alpha:]]+")
-importFrom(Rcpp, evalCpp)
+importFrom("Rcpp", "evalCpp")
+
+#exportPattern("^[[:alpha:]]+")
+export("toTz",
+       "tzDiff",
+       #
+       "example0",
+       "example1",
+       "example2",
+       "example3",
+       "example4",
+       "helloMoon",
+       "exampleFormat")
+       

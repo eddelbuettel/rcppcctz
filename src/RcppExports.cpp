@@ -99,3 +99,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// format
+std::string format(Rcpp::Datetime dt, std::string fmt, std::string lcltzstr, std::string tgttzstr);
+RcppExport SEXP RcppCCTZ_format(SEXP dtSEXP, SEXP fmtSEXP, SEXP lcltzstrSEXP, SEXP tgttzstrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::Datetime >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fmt(fmtSEXP);
+    Rcpp::traits::input_parameter< std::string >::type lcltzstr(lcltzstrSEXP);
+    Rcpp::traits::input_parameter< std::string >::type tgttzstr(tgttzstrSEXP);
+    rcpp_result_gen = Rcpp::wrap(format(dt, fmt, lcltzstr, tgttzstr));
+    return rcpp_result_gen;
+END_RCPP
+}

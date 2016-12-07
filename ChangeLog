@@ -1,3 +1,10 @@
+2016-12-07  Dirk Eddelbuettel  <edd@debian.org>
+
+	* NAMESPACE: Control more finely what is, or isn't exported
+
+	* src/utilities.cpp (format): New (currently unexported) formatting
+	helper using full std::chrono object precision
+
 2016-12-02  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version and date

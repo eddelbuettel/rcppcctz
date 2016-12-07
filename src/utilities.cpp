@@ -124,3 +124,22 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
 }
 
 
+// [[Rcpp::export]]
+std::string format(Rcpp::Datetime dt,
+                   std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
+                   std::string lcltzstr = "America/Chicago",
+                   std::string tgttzstr = "UTC") {
+         
+    cctz::time_zone tgttz, lcltz;
+    load_time_zone(tgttzstr, &tgttz);
+    load_time_zone(lcltzstr, &lcltz);
+
+    cctz::time_point<std::chrono::microseconds> tp =
+        cctz::convert(cctz::civil_second(dt.getYear(), dt.getMonth(), dt.getDay(),
+                                         dt.getHours(), dt.getMinutes(), dt.getSeconds()), lcltz)
+        + std::chrono::microseconds(dt.getMicroSeconds());
+    
+    std::string res = cctz::format(fmt, tp, tgttz);
+    return res;
+}
+

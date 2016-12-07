@@ -80,3 +80,7 @@ toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
     .Call('RcppCCTZ_toTz', PACKAGE = 'RcppCCTZ', dt, tzfrom, tzto, verbose)
 }
 
+format <- function(dt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "America/Chicago", tgttzstr = "UTC") {
+    .Call('RcppCCTZ_format', PACKAGE = 'RcppCCTZ', dt, fmt, lcltzstr, tgttzstr)
+}
+
