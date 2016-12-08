@@ -6,6 +6,7 @@
 #include "time_zone.h"
 #include "time_zone_if.h"
 
+namespace sc = std::chrono; 	// shorthand
 
 //' Difference between two given timezones at a specified date.
 //'
@@ -55,7 +56,7 @@ double tzDiff(const std::string tzfrom,
                                    tz2);
     if (verbose) Rcpp::Rcout << cctz::format("%F %T %z", tp2, tz2) << std::endl;
 
-    std::chrono::hours d = std::chrono::duration_cast<std::chrono::hours>(tp1-tp2);
+    sc::hours d = sc::duration_cast<sc::hours>(tp1-tp2);
     if (verbose) Rcpp::Rcout << "Difference: " << d.count() << std::endl;
     
     return d.count();
@@ -112,7 +113,6 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
     // create a civil-time object from time-point and new timezone
     const auto ct = cctz::convert(tp, tz2);
 
-    namespace sc = std::chrono; 	// shorthand
     cctz::time_point<cctz::sys_seconds> ntp = cctz::convert(ct, tz2);
     cctz::time_point<cctz::sys_seconds> unix_epoch =
         sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
@@ -124,22 +124,75 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
 }
 
 
+//' Format a Datetime object
+//'
+//' An alternative to \code{format.POSIXct} based on the CCTZ library
+//'
+//' @title Format a Datetime object as string
+//' @param dt A Datetime object to be formatted
+//' @param fmt A string with the format, which is based on \code{strftime} with some
+//'   extensions; see the CCTZ documentation for details.
+//' @param lcltzstr The local timezone object for creation the CCTZ timepoint
+//' @param tgttzstr The target timezone for the desired format
+//' @return A string with the requested format of the datetime object
+//' @author Dirk Eddelbuettel
+//' @examples
+//' now <- Sys.time()
+//' formatDatetime(now)            # current (UTC) time, in full precision RFC3339
+//' formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
 // [[Rcpp::export]]
-std::string format(Rcpp::Datetime dt,
-                   std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
-                   std::string lcltzstr = "America/Chicago",
-                   std::string tgttzstr = "UTC") {
+std::string formatDatetime(Rcpp::Datetime dt,
+                           std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
+                           std::string lcltzstr = "UTC",
+                           std::string tgttzstr = "UTC") {
          
     cctz::time_zone tgttz, lcltz;
     load_time_zone(tgttzstr, &tgttz);
     load_time_zone(lcltzstr, &lcltz);
 
-    cctz::time_point<std::chrono::microseconds> tp =
+    cctz::time_point<sc::microseconds> tp =
         cctz::convert(cctz::civil_second(dt.getYear(), dt.getMonth(), dt.getDay(),
                                          dt.getHours(), dt.getMinutes(), dt.getSeconds()), lcltz)
-        + std::chrono::microseconds(dt.getMicroSeconds());
+        + sc::microseconds(dt.getMicroSeconds());
     
     std::string res = cctz::format(fmt, tp, tgttz);
     return res;
 }
 
+//' Parse a Datetime object
+//'
+//' An alternative to \code{as.POSIXct} based on the CCTZ library
+//'
+//' @title Parse a Datetime object from a string
+//' @param txt A string from which a datetime is to be parsed
+//' @param fmt A string with the format, which is based on \code{strftime} with some
+//'   extensions; see the CCTZ documentation for details.
+//' @param tzstr The local timezone for the desired format
+//' @return A Datetime object
+//' @author Dirk Eddelbuettel
+//' @examples
+//' ds <- getOption("digits.secs")
+//' options(digits.secs=6) # max value
+//' parseDatetime("2016-12-07 10:11:12",        "%Y-%m-%d %H:%M:%S");   # full seconds
+//' parseDatetime("2016-12-07 10:11:12.123456", "%Y-%m-%d %H:%M:%E*S"); # fractional seconds
+//' parseDatetime("2016-12-07T10:11:12.123456-00:00")  ## default RFC3339 format
+//' options(digits.secs=ds)
+// [[Rcpp::export]]
+Rcpp::Datetime parseDatetime(std::string txt,
+                             std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
+                             std::string tzstr = "UTC") {
+    cctz::time_zone tz;
+    load_time_zone(tzstr, &tz);
+    sc::system_clock::time_point tp;
+    if (!cctz::parse(fmt, txt, tz, &tp)) return R_NilValue;
+
+    // Rcpp::Rcout << cctz::format(fmt, tp, tz) << std::endl;
+    
+    cctz::time_point<cctz::sys_seconds> unix_epoch =
+        sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
+
+    // time since epoch, with fractional seconds added back in
+    double dt = (tp - unix_epoch).count() * 1.0e-9;
+    //Rcpp::Rcout << dt << std::endl;
+    return Rcpp::Datetime(dt);
+}

@@ -80,7 +80,45 @@ toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
     .Call('RcppCCTZ_toTz', PACKAGE = 'RcppCCTZ', dt, tzfrom, tzto, verbose)
 }
 
-format <- function(dt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "America/Chicago", tgttzstr = "UTC") {
-    .Call('RcppCCTZ_format', PACKAGE = 'RcppCCTZ', dt, fmt, lcltzstr, tgttzstr)
+#' Format a Datetime object
+#'
+#' An alternative to \code{format.POSIXct} based on the CCTZ library
+#'
+#' @title Format a Datetime object as string
+#' @param dt A Datetime object to be formatted
+#' @param fmt A string with the format, which is based on \code{strftime} with some
+#'   extensions; see the CCTZ documentation for details.
+#' @param lcltzstr The local timezone object for creation the CCTZ timepoint
+#' @param tgttzstr The target timezone for the desired format
+#' @return A string with the requested format of the datetime object
+#' @author Dirk Eddelbuettel
+#' @examples
+#' now <- Sys.time()
+#' formatDatetime(now)            # current (UTC) time, in full precision RFC3339
+#' formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
+formatDatetime <- function(dt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
+    .Call('RcppCCTZ_formatDatetime', PACKAGE = 'RcppCCTZ', dt, fmt, lcltzstr, tgttzstr)
+}
+
+#' Parse a Datetime object
+#'
+#' An alternative to \code{as.POSIXct} based on the CCTZ library
+#'
+#' @title Parse a Datetime object from a string
+#' @param txt A string from which a datetime is to be parsed
+#' @param fmt A string with the format, which is based on \code{strftime} with some
+#'   extensions; see the CCTZ documentation for details.
+#' @param tzstr The local timezone for the desired format
+#' @return A Datetime object
+#' @author Dirk Eddelbuettel
+#' @examples
+#' ds <- getOption("digits.secs")
+#' options(digits.secs=6) # max value
+#' parseDatetime("2016-12-07 10:11:12",        "%Y-%m-%d %H:%M:%S");   # full seconds
+#' parseDatetime("2016-12-07 10:11:12.123456", "%Y-%m-%d %H:%M:%E*S"); # fractional seconds
+#' parseDatetime("2016-12-07T10:11:12.123456-00:00")  ## default RFC3339 format
+#' options(digits.secs=ds)
+parseDatetime <- function(txt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
+    .Call('RcppCCTZ_parseDatetime', PACKAGE = 'RcppCCTZ', txt, fmt, tzstr)
 }
 

@@ -1,9 +1,11 @@
 2016-12-07  Dirk Eddelbuettel  <edd@debian.org>
 
-	* NAMESPACE: Control more finely what is, or isn't exported
+	* src/utilities.cpp (formatDatetime,parseDatetime): New functions
+	using full std::chrono object precision
+	* man/formatDatetime.Rd: New documentation
+	* man/parseDatetime.Rd: Ditto
 
-	* src/utilities.cpp (format): New (currently unexported) formatting
-	helper using full std::chrono object precision
+	* NAMESPACE: Control more finely what is, or isn't exported
 
 2016-12-02  Dirk Eddelbuettel  <edd@debian.org>
 

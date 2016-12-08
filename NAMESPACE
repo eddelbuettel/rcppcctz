@@ -4,6 +4,8 @@ importFrom("Rcpp", "evalCpp")
 #exportPattern("^[[:alpha:]]+")
 export("toTz",
        "tzDiff",
+       "formatDatetime",
+       "parseDatetime",
        #
        "example0",
        "example1",
@@ -12,4 +14,4 @@ export("toTz",
        "example4",
        "helloMoon",
        "exampleFormat")
-       
+

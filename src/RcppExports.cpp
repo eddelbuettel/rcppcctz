@@ -99,9 +99,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// format
-std::string format(Rcpp::Datetime dt, std::string fmt, std::string lcltzstr, std::string tgttzstr);
-RcppExport SEXP RcppCCTZ_format(SEXP dtSEXP, SEXP fmtSEXP, SEXP lcltzstrSEXP, SEXP tgttzstrSEXP) {
+// formatDatetime
+std::string formatDatetime(Rcpp::Datetime dt, std::string fmt, std::string lcltzstr, std::string tgttzstr);
+RcppExport SEXP RcppCCTZ_formatDatetime(SEXP dtSEXP, SEXP fmtSEXP, SEXP lcltzstrSEXP, SEXP tgttzstrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -109,7 +109,20 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type fmt(fmtSEXP);
     Rcpp::traits::input_parameter< std::string >::type lcltzstr(lcltzstrSEXP);
     Rcpp::traits::input_parameter< std::string >::type tgttzstr(tgttzstrSEXP);
-    rcpp_result_gen = Rcpp::wrap(format(dt, fmt, lcltzstr, tgttzstr));
+    rcpp_result_gen = Rcpp::wrap(formatDatetime(dt, fmt, lcltzstr, tgttzstr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// parseDatetime
+Rcpp::Datetime parseDatetime(std::string txt, std::string fmt, std::string tzstr);
+RcppExport SEXP RcppCCTZ_parseDatetime(SEXP txtSEXP, SEXP fmtSEXP, SEXP tzstrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type txt(txtSEXP);
+    Rcpp::traits::input_parameter< std::string >::type fmt(fmtSEXP);
+    Rcpp::traits::input_parameter< std::string >::type tzstr(tzstrSEXP);
+    rcpp_result_gen = Rcpp::wrap(parseDatetime(txt, fmt, tzstr));
     return rcpp_result_gen;
 END_RCPP
 }
