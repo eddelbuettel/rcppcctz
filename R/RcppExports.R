@@ -122,3 +122,11 @@ parseDatetime <- function(txt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
     .Call('RcppCCTZ_parseDatetime', PACKAGE = 'RcppCCTZ', txt, fmt, tzstr)
 }
 
+formatDouble <- function(nt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
+    .Call('RcppCCTZ_formatDouble', PACKAGE = 'RcppCCTZ', nt, fmt, lcltzstr, tgttzstr)
+}
+
+parseDouble <- function(txt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
+    .Call('RcppCCTZ_parseDouble', PACKAGE = 'RcppCCTZ', txt, fmt, tzstr)
+}
+

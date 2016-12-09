@@ -196,3 +196,40 @@ Rcpp::Datetime parseDatetime(std::string txt,
     //Rcpp::Rcout << dt << std::endl;
     return Rcpp::Datetime(dt);
 }
+
+// [[Rcpp::export]]
+std::string formatDouble(double nt,
+                         std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
+                         std::string lcltzstr = "UTC",
+                         std::string tgttzstr = "UTC") {
+         
+    cctz::time_zone tgttz, lcltz;
+    load_time_zone(tgttzstr, &tgttz);
+    load_time_zone(lcltzstr, &lcltz);
+
+    int64_t d = static_cast<int64_t>(nt*1e9);
+    cctz::time_point<sc::nanoseconds> tp = sc::system_clock::from_time_t(0);
+    tp += sc::nanoseconds(d);
+    
+    std::string res = cctz::format(fmt, tp, tgttz);
+    return res;
+}
+
+// [[Rcpp::export]]
+double parseDouble(std::string txt,
+                   std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
+                   std::string tzstr = "UTC") {
+    cctz::time_zone tz;
+    load_time_zone(tzstr, &tz);
+    sc::system_clock::time_point tp;
+    if (!cctz::parse(fmt, txt, tz, &tp)) return 0;
+
+    // Rcpp::Rcout << cctz::format(fmt, tp, tz) << std::endl;
+
+    cctz::time_point<cctz::sys_seconds> unix_epoch =
+        sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
+
+    // time since epoch, with fractional seconds added back in
+    double dt = (tp - unix_epoch).count() * 1.0e-9;
+    return dt;
+}

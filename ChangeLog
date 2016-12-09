@@ -1,3 +1,8 @@
+2016-12-09  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/utilities.cpp (formatDouble,parseDouble): New functions
+	using full std::chrono nanosecond resolution, using doubles
+
 2016-12-07  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/utilities.cpp (formatDatetime,parseDatetime): New functions
