@@ -1,5 +1,7 @@
 2016-12-10  Dirk Eddelbuettel  <edd@debian.org>
 
+	* README.md: Expanded and added examples section
+
 	* src/utilities.cpp (formatDatetime, parseDatetime): Vectorized
 
 2016-12-09  Dirk Eddelbuettel  <edd@debian.org>
