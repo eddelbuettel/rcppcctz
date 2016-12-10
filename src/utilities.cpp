@@ -129,7 +129,7 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
 //' An alternative to \code{format.POSIXct} based on the CCTZ library
 //'
 //' @title Format a Datetime vector as a string vector
-//' @param dt A Datetime vector object to be formatted
+//' @param dtv A Datetime vector object to be formatted
 //' @param fmt A string with the format, which is based on \code{strftime} with some
 //'   extensions; see the CCTZ documentation for details.
 //' @param lcltzstr The local timezone object for creation the CCTZ timepoint
@@ -171,7 +171,7 @@ Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
 //' An alternative to \code{as.POSIXct} based on the CCTZ library
 //'
 //' @title Parse a Datetime vector from a string vector
-//' @param txt A string vector from which a Datetime vector is to be parsed
+//' @param svec A string vector from which a Datetime vector is to be parsed
 //' @param fmt A string with the format, which is based on \code{strftime} with some
 //'   extensions; see the CCTZ documentation for details.
 //' @param tzstr The local timezone for the desired format
@@ -214,40 +214,52 @@ Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
 }
 
 // [[Rcpp::export]]
-std::string formatDouble(double nt,
-                         std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
-                         std::string lcltzstr = "UTC",
-                         std::string tgttzstr = "UTC") {
+Rcpp::CharacterVector formatDouble(Rcpp::NumericVector ntv,
+                                   std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
+                                   std::string lcltzstr = "UTC",
+                                   std::string tgttzstr = "UTC") {
          
     cctz::time_zone tgttz, lcltz;
     load_time_zone(tgttzstr, &tgttz);
     load_time_zone(lcltzstr, &lcltz);
 
-    int64_t d = static_cast<int64_t>(nt*1e9);
-    cctz::time_point<sc::nanoseconds> tp = sc::system_clock::from_time_t(0);
-    tp += sc::nanoseconds(d);
+    auto n = ntv.size();
+    Rcpp::CharacterVector cv(n);
+    for (auto i=0; i<n; i++) {
+        int64_t d = static_cast<int64_t>(ntv(i) * 1e9);
+        cctz::time_point<sc::nanoseconds> tp = sc::system_clock::from_time_t(0);
+        tp += sc::nanoseconds(d);
     
-    std::string res = cctz::format(fmt, tp, tgttz);
-    return res;
+        std::string res = cctz::format(fmt, tp, tgttz);
+        cv(i) = res;
+    }
+    return cv;
 }
 
 // [[Rcpp::export]]
-double parseDouble(std::string txt,
-                   std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
-                   std::string tzstr = "UTC") {
+Rcpp::NumericVector parseDouble(Rcpp::CharacterVector svec,
+                                std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
+                                std::string tzstr = "UTC") {
     cctz::time_zone tz;
     load_time_zone(tzstr, &tz);
     sc::system_clock::time_point tp;
-    if (!cctz::parse(fmt, txt, tz, &tp)) return 0;
 
     // Rcpp::Rcout << cctz::format(fmt, tp, tz) << std::endl;
 
     cctz::time_point<cctz::sys_seconds> unix_epoch =
         sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
 
-    // time since epoch, with fractional seconds added back in
-    double dt = (tp - unix_epoch).count() * 1.0e-9;
-    return dt;
+    auto n = svec.size();
+    Rcpp::NumericVector dv(n);
+    for (auto i=0; i<n; i++) {
+        std::string txt(svec(i));
+    
+        if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
+
+        double dt = (tp - unix_epoch).count() * 1.0e-9;
+        dv(i) = dt;
+    }
+    return dv;
 }
 
 // [[Rcpp::export]]
