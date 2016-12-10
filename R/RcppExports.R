@@ -125,8 +125,8 @@ parseDatetime <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
     .Call('RcppCCTZ_parseDatetime', PACKAGE = 'RcppCCTZ', svec, fmt, tzstr)
 }
 
-formatDouble <- function(ntv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
-    .Call('RcppCCTZ_formatDouble', PACKAGE = 'RcppCCTZ', ntv, fmt, lcltzstr, tgttzstr)
+formatDouble <- function(secv, nanov, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
+    .Call('RcppCCTZ_formatDouble', PACKAGE = 'RcppCCTZ', secv, nanov, fmt, lcltzstr, tgttzstr)
 }
 
 parseDouble <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {

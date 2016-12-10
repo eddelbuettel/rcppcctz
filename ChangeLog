@@ -4,6 +4,9 @@
 
 	* src/utilities.cpp (formatDatetime, parseDatetime): Vectorized
 
+	* src/utilities.cpp (formatDouble,parseDouble): Altered to work on
+	'128 bit' via two sets of doubles for seconds + nanoseconds
+
 2016-12-09  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/utilities.cpp (formatDouble,parseDouble): New functions

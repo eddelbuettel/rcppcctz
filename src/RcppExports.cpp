@@ -127,21 +127,22 @@ BEGIN_RCPP
 END_RCPP
 }
 // formatDouble
-Rcpp::CharacterVector formatDouble(Rcpp::NumericVector ntv, std::string fmt, std::string lcltzstr, std::string tgttzstr);
-RcppExport SEXP RcppCCTZ_formatDouble(SEXP ntvSEXP, SEXP fmtSEXP, SEXP lcltzstrSEXP, SEXP tgttzstrSEXP) {
+Rcpp::CharacterVector formatDouble(Rcpp::NumericVector secv, Rcpp::NumericVector nanov, std::string fmt, std::string lcltzstr, std::string tgttzstr);
+RcppExport SEXP RcppCCTZ_formatDouble(SEXP secvSEXP, SEXP nanovSEXP, SEXP fmtSEXP, SEXP lcltzstrSEXP, SEXP tgttzstrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ntv(ntvSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type secv(secvSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type nanov(nanovSEXP);
     Rcpp::traits::input_parameter< std::string >::type fmt(fmtSEXP);
     Rcpp::traits::input_parameter< std::string >::type lcltzstr(lcltzstrSEXP);
     Rcpp::traits::input_parameter< std::string >::type tgttzstr(tgttzstrSEXP);
-    rcpp_result_gen = Rcpp::wrap(formatDouble(ntv, fmt, lcltzstr, tgttzstr));
+    rcpp_result_gen = Rcpp::wrap(formatDouble(secv, nanov, fmt, lcltzstr, tgttzstr));
     return rcpp_result_gen;
 END_RCPP
 }
 // parseDouble
-Rcpp::NumericVector parseDouble(Rcpp::CharacterVector svec, std::string fmt, std::string tzstr);
+Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec, std::string fmt, std::string tzstr);
 RcppExport SEXP RcppCCTZ_parseDouble(SEXP svecSEXP, SEXP fmtSEXP, SEXP tzstrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

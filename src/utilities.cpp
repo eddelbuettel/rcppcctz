@@ -214,7 +214,8 @@ Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
 }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector formatDouble(Rcpp::NumericVector ntv,
+Rcpp::CharacterVector formatDouble(Rcpp::NumericVector secv,
+                                   Rcpp::NumericVector nanov,
                                    std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
                                    std::string lcltzstr = "UTC",
                                    std::string tgttzstr = "UTC") {
@@ -223,12 +224,14 @@ Rcpp::CharacterVector formatDouble(Rcpp::NumericVector ntv,
     load_time_zone(tgttzstr, &tgttz);
     load_time_zone(lcltzstr, &lcltz);
 
-    auto n = ntv.size();
+    auto n = secv.size();
     Rcpp::CharacterVector cv(n);
     for (auto i=0; i<n; i++) {
-        int64_t d = static_cast<int64_t>(ntv(i) * 1e9);
+        int64_t secs = static_cast<int64_t>(secv(i));
+        int64_t nanos = static_cast<int64_t>(nanov(i));
+        
         cctz::time_point<sc::nanoseconds> tp = sc::system_clock::from_time_t(0);
-        tp += sc::nanoseconds(d);
+        tp += sc::seconds(secs) + sc::nanoseconds(nanos);
     
         std::string res = cctz::format(fmt, tp, tgttz);
         cv(i) = res;
@@ -237,7 +240,7 @@ Rcpp::CharacterVector formatDouble(Rcpp::NumericVector ntv,
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector parseDouble(Rcpp::CharacterVector svec,
+Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec,
                                 std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
                                 std::string tzstr = "UTC") {
     cctz::time_zone tz;
@@ -250,16 +253,20 @@ Rcpp::NumericVector parseDouble(Rcpp::CharacterVector svec,
         sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
 
     auto n = svec.size();
-    Rcpp::NumericVector dv(n);
+    Rcpp::NumericMatrix dm(n, 2);
     for (auto i=0; i<n; i++) {
         std::string txt(svec(i));
     
         if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
 
-        double dt = (tp - unix_epoch).count() * 1.0e-9;
-        dv(i) = dt;
+        auto nanoseconds = (tp - unix_epoch).count();
+        double secs = std::trunc(nanoseconds / 1.0e9);
+        auto nanos = nanoseconds - static_cast<int64_t>(secs * 1e9);
+        //Rcpp::Rcout << nanoseconds << " " << secs << " " << nanos << std::endl;
+        dm(i, 0) = secs;
+        dm(i, 1) = nanos;
     }
-    return dv;
+    return dm;
 }
 
 // [[Rcpp::export]]
