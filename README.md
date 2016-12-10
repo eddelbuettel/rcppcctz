@@ -17,17 +17,17 @@ This package wraps CCTZ for use by R via [Rcpp](http://dirk.eddelbuettel.com/cod
 
 #### Difference between Timezones
 
+```r
 R> # simple call: difference now
 R> tzDiff("America/New_York", "Europe/London", Sys.time())
 [1] 5
-
 R> # tabulate difference for every week of the year
 R> table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
 +                                        as.POSIXct(as.Date("2016-01-01") + d*7))))
 
  4  5 
  3 50 
-
+```
 
 #### Shifting Timezone
 
@@ -38,7 +38,7 @@ R> toTz(Sys.time(), "America/New_York", "Europe/London")
 [1] "2016-12-10 17:15:04.20370 CST"
 R> # this redoes the 'Armstrong on the moon in NYC and Sydney' example
 R> # note that the default print method will print the return object in _your local time_
-R> toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), "America/New_York", "Australia/Sydney", verbose=TRUE)
+R> toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), "America/New_York", "Australia/Sydney", TRUE)
 1969-07-20 22:56:00 -0400
 1969-07-21 12:56:00 +1000
 [1] "1969-07-20 21:56:00 CDT"
@@ -60,8 +60,9 @@ R> formatDatetime(now)            # current (UTC) time, in full precision RFC333
 R> formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
 [1] "2016-12-10T13:23:03.327956-05:00"
 R> formatDatetime(now + 0:4)	   # vectorised
-[1] "2016-12-10T18:23:03.327956+00:00" "2016-12-10T18:23:04.327956+00:00" "2016-12-10T18:23:05.327956+00:00" 
-[4] "2016-12-10T18:23:06.327956+00:00" "2016-12-10T18:23:07.327956+00:00"
+[1] "2016-12-10T18:23:03.327956+00:00" "2016-12-10T18:23:04.327956+00:00" 
+[3] "2016-12-10T18:23:05.327956+00:00" "2016-12-10T18:23:06.327956+00:00"
+[5] "2016-12-10T18:23:07.327956+00:00"
 R>
 
 R> ds <- getOption("digits.secs")
@@ -88,7 +89,7 @@ may work.
 
 ### Status
 
-Now on [CRAN](https://cran.r-project.org/package=RcppCCTZ). Builds cleanly,
+On [CRAN](https://cran.r-project.org/package=RcppCCTZ), builds and tests cleanly,
 and the example functions are accessible from R.
 
 ### Author
