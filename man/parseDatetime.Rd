@@ -2,23 +2,23 @@
 % Please edit documentation in R/RcppExports.R
 \name{parseDatetime}
 \alias{parseDatetime}
-\title{Parse a Datetime object from a string}
+\title{Parse a Datetime vector from a string vector}
 \usage{
-parseDatetime(txt, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez", tzstr = "UTC")
+parseDatetime(svec, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez", tzstr = "UTC")
 }
 \arguments{
-\item{txt}{A string from which a datetime is to be parsed}
-
 \item{fmt}{A string with the format, which is based on \code{strftime} with some
 extensions; see the CCTZ documentation for details.}
 
 \item{tzstr}{The local timezone for the desired format}
+
+\item{txt}{A string vector from which a Datetime vector is to be parsed}
 }
 \value{
-A Datetime object
+A Datetime vector object
 }
 \description{
-Parse a Datetime object
+Parse a Datetime vector
 }
 \details{
 An alternative to \code{as.POSIXct} based on the CCTZ library
@@ -29,6 +29,8 @@ options(digits.secs=6) # max value
 parseDatetime("2016-12-07 10:11:12",        "\%Y-\%m-\%d \%H:\%M:\%S");   # full seconds
 parseDatetime("2016-12-07 10:11:12.123456", "\%Y-\%m-\%d \%H:\%M:\%E*S"); # fractional seconds
 parseDatetime("2016-12-07T10:11:12.123456-00:00")  ## default RFC3339 format
+now <- trunc(Sys.time())
+parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 options(digits.secs=ds)
 }
 \author{

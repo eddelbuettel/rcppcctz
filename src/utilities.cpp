@@ -124,51 +124,58 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
 }
 
 
-//' Format a Datetime object
+//' Format a Datetime vector
 //'
 //' An alternative to \code{format.POSIXct} based on the CCTZ library
 //'
-//' @title Format a Datetime object as string
-//' @param dt A Datetime object to be formatted
+//' @title Format a Datetime vector as a string vector
+//' @param dt A Datetime vector object to be formatted
 //' @param fmt A string with the format, which is based on \code{strftime} with some
 //'   extensions; see the CCTZ documentation for details.
 //' @param lcltzstr The local timezone object for creation the CCTZ timepoint
 //' @param tgttzstr The target timezone for the desired format
-//' @return A string with the requested format of the datetime object
+//' @return A string vector with the requested format of the datetime objects
 //' @author Dirk Eddelbuettel
 //' @examples
 //' now <- Sys.time()
 //' formatDatetime(now)            # current (UTC) time, in full precision RFC3339
 //' formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
+//' formatDatetime(now + 0:4)	   # vectorised
 // [[Rcpp::export]]
-std::string formatDatetime(Rcpp::Datetime dt,
-                           std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
-                           std::string lcltzstr = "UTC",
-                           std::string tgttzstr = "UTC") {
+Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
+                                     std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
+                                     std::string lcltzstr = "UTC",
+                                     std::string tgttzstr = "UTC") {
          
     cctz::time_zone tgttz, lcltz;
     load_time_zone(tgttzstr, &tgttz);
     load_time_zone(lcltzstr, &lcltz);
 
-    cctz::time_point<sc::microseconds> tp =
-        cctz::convert(cctz::civil_second(dt.getYear(), dt.getMonth(), dt.getDay(),
-                                         dt.getHours(), dt.getMinutes(), dt.getSeconds()), lcltz)
-        + sc::microseconds(dt.getMicroSeconds());
+    auto n = dtv.size();
+    Rcpp::CharacterVector cv(n);
+    for (auto i=0; i<n; i++) {
+        Rcpp::Datetime dt = dtv(i);
+        cctz::time_point<sc::microseconds> tp =
+            cctz::convert(cctz::civil_second(dt.getYear(), dt.getMonth(), dt.getDay(),
+                                             dt.getHours(), dt.getMinutes(), dt.getSeconds()), lcltz)
+            + sc::microseconds(dt.getMicroSeconds());
     
-    std::string res = cctz::format(fmt, tp, tgttz);
-    return res;
+        std::string res = cctz::format(fmt, tp, tgttz);
+        cv(i) = res;
+    }
+    return cv;
 }
 
-//' Parse a Datetime object
+//' Parse a Datetime vector
 //'
 //' An alternative to \code{as.POSIXct} based on the CCTZ library
 //'
-//' @title Parse a Datetime object from a string
-//' @param txt A string from which a datetime is to be parsed
+//' @title Parse a Datetime vector from a string vector
+//' @param txt A string vector from which a Datetime vector is to be parsed
 //' @param fmt A string with the format, which is based on \code{strftime} with some
 //'   extensions; see the CCTZ documentation for details.
 //' @param tzstr The local timezone for the desired format
-//' @return A Datetime object
+//' @return A Datetime vector object
 //' @author Dirk Eddelbuettel
 //' @examples
 //' ds <- getOption("digits.secs")
@@ -176,25 +183,34 @@ std::string formatDatetime(Rcpp::Datetime dt,
 //' parseDatetime("2016-12-07 10:11:12",        "%Y-%m-%d %H:%M:%S");   # full seconds
 //' parseDatetime("2016-12-07 10:11:12.123456", "%Y-%m-%d %H:%M:%E*S"); # fractional seconds
 //' parseDatetime("2016-12-07T10:11:12.123456-00:00")  ## default RFC3339 format
+//' now <- trunc(Sys.time())
+//' parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 //' options(digits.secs=ds)
 // [[Rcpp::export]]
-Rcpp::Datetime parseDatetime(std::string txt,
-                             std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
-                             std::string tzstr = "UTC") {
+Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
+                                   std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
+                                   std::string tzstr = "UTC") {
     cctz::time_zone tz;
     load_time_zone(tzstr, &tz);
     sc::system_clock::time_point tp;
-    if (!cctz::parse(fmt, txt, tz, &tp)) return R_NilValue;
-
-    // Rcpp::Rcout << cctz::format(fmt, tp, tz) << std::endl;
-    
     cctz::time_point<cctz::sys_seconds> unix_epoch =
         sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
-
-    // time since epoch, with fractional seconds added back in
-    double dt = (tp - unix_epoch).count() * 1.0e-9;
-    //Rcpp::Rcout << dt << std::endl;
-    return Rcpp::Datetime(dt);
+    
+    auto n = svec.size();
+    Rcpp::DatetimeVector dv(n);
+    for (auto i=0; i<n; i++) {
+        std::string txt(svec(i));
+        
+        if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
+        // Rcpp::Rcout << cctz::format(fmt, tp, tz) << std::endl;
+            
+        // time since epoch, with fractional seconds added back in
+        double dt = (tp - unix_epoch).count() * 1.0e-9;
+        //Rcpp::Rcout << dt << std::endl;
+            
+        dv(i) = Rcpp::Datetime(dt);
+    }
+    return dv;
 }
 
 // [[Rcpp::export]]
@@ -232,4 +248,12 @@ double parseDouble(std::string txt,
     // time since epoch, with fractional seconds added back in
     double dt = (tp - unix_epoch).count() * 1.0e-9;
     return dt;
+}
+
+// [[Rcpp::export]]
+void now() {
+    //  cf http://stackoverflow.com/a/18023064/143305
+    auto now = std::chrono::high_resolution_clock::now();
+    auto nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
+    Rcpp::Rcout << nanos << std::endl;
 }

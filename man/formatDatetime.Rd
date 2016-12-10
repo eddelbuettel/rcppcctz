@@ -2,26 +2,26 @@
 % Please edit documentation in R/RcppExports.R
 \name{formatDatetime}
 \alias{formatDatetime}
-\title{Format a Datetime object as string}
+\title{Format a Datetime vector as a string vector}
 \usage{
-formatDatetime(dt, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez", lcltzstr = "UTC",
+formatDatetime(dtv, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez", lcltzstr = "UTC",
   tgttzstr = "UTC")
 }
 \arguments{
-\item{dt}{A Datetime object to be formatted}
-
 \item{fmt}{A string with the format, which is based on \code{strftime} with some
 extensions; see the CCTZ documentation for details.}
 
 \item{lcltzstr}{The local timezone object for creation the CCTZ timepoint}
 
 \item{tgttzstr}{The target timezone for the desired format}
+
+\item{dt}{A Datetime vector object to be formatted}
 }
 \value{
-A string with the requested format of the datetime object
+A string vector with the requested format of the datetime objects
 }
 \description{
-Format a Datetime object
+Format a Datetime vector
 }
 \details{
 An alternative to \code{format.POSIXct} based on the CCTZ library
@@ -30,6 +30,7 @@ An alternative to \code{format.POSIXct} based on the CCTZ library
 now <- Sys.time()
 formatDatetime(now)            # current (UTC) time, in full precision RFC3339
 formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
+formatDatetime(now + 0:4)	   # vectorised
 }
 \author{
 Dirk Eddelbuettel

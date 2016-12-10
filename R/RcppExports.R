@@ -80,36 +80,37 @@ toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
     .Call('RcppCCTZ_toTz', PACKAGE = 'RcppCCTZ', dt, tzfrom, tzto, verbose)
 }
 
-#' Format a Datetime object
+#' Format a Datetime vector
 #'
 #' An alternative to \code{format.POSIXct} based on the CCTZ library
 #'
-#' @title Format a Datetime object as string
-#' @param dt A Datetime object to be formatted
+#' @title Format a Datetime vector as a string vector
+#' @param dt A Datetime vector object to be formatted
 #' @param fmt A string with the format, which is based on \code{strftime} with some
 #'   extensions; see the CCTZ documentation for details.
 #' @param lcltzstr The local timezone object for creation the CCTZ timepoint
 #' @param tgttzstr The target timezone for the desired format
-#' @return A string with the requested format of the datetime object
+#' @return A string vector with the requested format of the datetime objects
 #' @author Dirk Eddelbuettel
 #' @examples
 #' now <- Sys.time()
 #' formatDatetime(now)            # current (UTC) time, in full precision RFC3339
 #' formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
-formatDatetime <- function(dt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
-    .Call('RcppCCTZ_formatDatetime', PACKAGE = 'RcppCCTZ', dt, fmt, lcltzstr, tgttzstr)
+#' formatDatetime(now + 0:4)	   # vectorised
+formatDatetime <- function(dtv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
+    .Call('RcppCCTZ_formatDatetime', PACKAGE = 'RcppCCTZ', dtv, fmt, lcltzstr, tgttzstr)
 }
 
-#' Parse a Datetime object
+#' Parse a Datetime vector
 #'
 #' An alternative to \code{as.POSIXct} based on the CCTZ library
 #'
-#' @title Parse a Datetime object from a string
-#' @param txt A string from which a datetime is to be parsed
+#' @title Parse a Datetime vector from a string vector
+#' @param txt A string vector from which a Datetime vector is to be parsed
 #' @param fmt A string with the format, which is based on \code{strftime} with some
 #'   extensions; see the CCTZ documentation for details.
 #' @param tzstr The local timezone for the desired format
-#' @return A Datetime object
+#' @return A Datetime vector object
 #' @author Dirk Eddelbuettel
 #' @examples
 #' ds <- getOption("digits.secs")
@@ -117,9 +118,11 @@ formatDatetime <- function(dt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC",
 #' parseDatetime("2016-12-07 10:11:12",        "%Y-%m-%d %H:%M:%S");   # full seconds
 #' parseDatetime("2016-12-07 10:11:12.123456", "%Y-%m-%d %H:%M:%E*S"); # fractional seconds
 #' parseDatetime("2016-12-07T10:11:12.123456-00:00")  ## default RFC3339 format
+#' now <- trunc(Sys.time())
+#' parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 #' options(digits.secs=ds)
-parseDatetime <- function(txt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
-    .Call('RcppCCTZ_parseDatetime', PACKAGE = 'RcppCCTZ', txt, fmt, tzstr)
+parseDatetime <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
+    .Call('RcppCCTZ_parseDatetime', PACKAGE = 'RcppCCTZ', svec, fmt, tzstr)
 }
 
 formatDouble <- function(nt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
@@ -128,5 +131,9 @@ formatDouble <- function(nt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", t
 
 parseDouble <- function(txt, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
     .Call('RcppCCTZ_parseDouble', PACKAGE = 'RcppCCTZ', txt, fmt, tzstr)
+}
+
+now <- function() {
+    invisible(.Call('RcppCCTZ_now', PACKAGE = 'RcppCCTZ'))
 }
 
