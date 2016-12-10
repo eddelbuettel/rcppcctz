@@ -6,7 +6,7 @@ Rcpp bindings for [CCTZ](https://github.com/google/cctz)
 
 [CCTZ](https://github.com/google/cctz) (C++ Time Zone) is an excellent (yet small) C++11 library for
 translating between absolute times and civil times using the rules defined by a time zone. See its
-[repository](https://github.com/google/cctz) (as well as code) for very detailed documentations.
+[repository](https://github.com/google/cctz) (as well as code) for very detailed documentation.
 [CCTZ](https://github.com/google/cctz) is being developed by Google but not an officially endorsed product.
 
 ### What is RcppCCTZ?

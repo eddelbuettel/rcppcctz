@@ -8,14 +8,14 @@ formatDatetime(dtv, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez", lcltzstr = "UTC",
   tgttzstr = "UTC")
 }
 \arguments{
+\item{dtv}{A Datetime vector object to be formatted}
+
 \item{fmt}{A string with the format, which is based on \code{strftime} with some
 extensions; see the CCTZ documentation for details.}
 
 \item{lcltzstr}{The local timezone object for creation the CCTZ timepoint}
 
 \item{tgttzstr}{The target timezone for the desired format}
-
-\item{dt}{A Datetime vector object to be formatted}
 }
 \value{
 A string vector with the requested format of the datetime objects

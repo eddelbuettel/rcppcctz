@@ -7,12 +7,12 @@
 parseDatetime(svec, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez", tzstr = "UTC")
 }
 \arguments{
+\item{svec}{A string vector from which a Datetime vector is to be parsed}
+
 \item{fmt}{A string with the format, which is based on \code{strftime} with some
 extensions; see the CCTZ documentation for details.}
 
 \item{tzstr}{The local timezone for the desired format}
-
-\item{txt}{A string vector from which a Datetime vector is to be parsed}
 }
 \value{
 A Datetime vector object
