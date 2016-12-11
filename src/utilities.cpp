@@ -126,7 +126,9 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
 
 //' Format a Datetime vector
 //'
-//' An alternative to \code{format.POSIXct} based on the CCTZ library
+//' An alternative to \code{format.POSIXct} based on the CCTZ library. The
+//' \code{formatDouble} variant uses two vectors for seconds since the epoch 
+//' and fractional nanoseconds, respectively, to provide fuller resolution.
 //'
 //' @title Format a Datetime vector as a string vector
 //' @param dtv A Datetime vector object to be formatted
@@ -175,7 +177,8 @@ Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
 //' @param fmt A string with the format, which is based on \code{strftime} with some
 //'   extensions; see the CCTZ documentation for details.
 //' @param tzstr The local timezone for the desired format
-//' @return A Datetime vector object
+//' @return A Datetime vector object for \code{parseDatetime}, a numeric matrix with
+//' two columns for seconds and nanoseconds for \code{parseDouble}
 //' @author Dirk Eddelbuettel
 //' @examples
 //' ds <- getOption("digits.secs")
@@ -213,6 +216,10 @@ Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
     return dv;
 }
 
+//' @rdname formatDatetime
+//' @param secv A numeric vector with seconds since the epoch
+//' @param nanov A numeric vector with nanoseconds since the epoch,
+//' complementing \code{secv}.
 // [[Rcpp::export]]
 Rcpp::CharacterVector formatDouble(Rcpp::NumericVector secv,
                                    Rcpp::NumericVector nanov,
@@ -239,6 +246,7 @@ Rcpp::CharacterVector formatDouble(Rcpp::NumericVector secv,
     return cv;
 }
 
+//' @rdname parseDatetime
 // [[Rcpp::export]]
 Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec,
                                 std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",

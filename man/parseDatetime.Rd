@@ -2,9 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{parseDatetime}
 \alias{parseDatetime}
+\alias{parseDouble}
 \title{Parse a Datetime vector from a string vector}
 \usage{
 parseDatetime(svec, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez", tzstr = "UTC")
+
+parseDouble(svec, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez", tzstr = "UTC")
 }
 \arguments{
 \item{svec}{A string vector from which a Datetime vector is to be parsed}
@@ -15,7 +18,8 @@ extensions; see the CCTZ documentation for details.}
 \item{tzstr}{The local timezone for the desired format}
 }
 \value{
-A Datetime vector object
+A Datetime vector object for \code{parseDatetime}, a numeric matrix with
+two columns for seconds and nanoseconds for \code{parseDouble}
 }
 \description{
 Parse a Datetime vector

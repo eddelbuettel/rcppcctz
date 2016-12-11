@@ -1,3 +1,12 @@
+2016-12-11  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.1.0
+
+	* src/utilities.cpp (formatDouble, parseDouble): Document and export
+	* man/formatDatetime.Rd: Ditto
+	* man/parseDatetime.Rd: Ditto
+	* NAMESPACE: Ditto
+
 2016-12-10  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Expanded and added examples section

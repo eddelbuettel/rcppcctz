@@ -6,6 +6,8 @@ export("toTz",
        "tzDiff",
        "formatDatetime",
        "parseDatetime",
+       "formatDouble",
+       "parseDouble",
        #
        "example0",
        "example1",

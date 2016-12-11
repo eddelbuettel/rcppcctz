@@ -82,7 +82,9 @@ toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
 
 #' Format a Datetime vector
 #'
-#' An alternative to \code{format.POSIXct} based on the CCTZ library
+#' An alternative to \code{format.POSIXct} based on the CCTZ library. The
+#' \code{formatDouble} variant uses two vectors for seconds since the epoch 
+#' and fractional nanoseconds, respectively, to provide fuller resolution.
 #'
 #' @title Format a Datetime vector as a string vector
 #' @param dtv A Datetime vector object to be formatted
@@ -110,7 +112,8 @@ formatDatetime <- function(dtv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC"
 #' @param fmt A string with the format, which is based on \code{strftime} with some
 #'   extensions; see the CCTZ documentation for details.
 #' @param tzstr The local timezone for the desired format
-#' @return A Datetime vector object
+#' @return A Datetime vector object for \code{parseDatetime}, a numeric matrix with
+#' two columns for seconds and nanoseconds for \code{parseDouble}
 #' @author Dirk Eddelbuettel
 #' @examples
 #' ds <- getOption("digits.secs")
@@ -125,10 +128,15 @@ parseDatetime <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
     .Call('RcppCCTZ_parseDatetime', PACKAGE = 'RcppCCTZ', svec, fmt, tzstr)
 }
 
+#' @rdname formatDatetime
+#' @param secv A numeric vector with seconds since the epoch
+#' @param nanov A numeric vector with nanoseconds since the epoch,
+#' complementing \code{secv}.
 formatDouble <- function(secv, nanov, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
     .Call('RcppCCTZ_formatDouble', PACKAGE = 'RcppCCTZ', secv, nanov, fmt, lcltzstr, tgttzstr)
 }
 
+#' @rdname parseDatetime
 parseDouble <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
     .Call('RcppCCTZ_parseDouble', PACKAGE = 'RcppCCTZ', svec, fmt, tzstr)
 }
