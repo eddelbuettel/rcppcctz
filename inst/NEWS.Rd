@@ -1,11 +1,13 @@
 \name{NEWS}
 \title{News for Package \pkg{RcppCCTZ}}
 
-\section{Changes in version 0.0.6 (2016-xx-yy)}{
+\section{Changes in version 0.1.0 (2016-12-11)}{
   \itemize{
-    \item Synchronized with small \code{CCTZ} upstream change.
-    \item New parsing and formating helpers from/to string vector
-    \item Updated documentation.
+    \item Synchronized with \code{CCTZ} upstream.
+    \item New parsing and formating helpers for Datetime vectors
+    \item New parsing and formating helpers for (two) \code{double}
+    vectors representing full \code{std::chrono} nanosecond resolutions
+    \item Updated documentation and examples.
   }
 }
 
