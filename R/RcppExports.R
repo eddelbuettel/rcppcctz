@@ -132,8 +132,8 @@ parseDatetime <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
 #' @param secv A numeric vector with seconds since the epoch
 #' @param nanov A numeric vector with nanoseconds since the epoch,
 #' complementing \code{secv}.
-formatDouble <- function(secv, nanov, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
-    .Call('RcppCCTZ_formatDouble', PACKAGE = 'RcppCCTZ', secv, nanov, fmt, lcltzstr, tgttzstr)
+formatDouble <- function(secv, nanov, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tgttzstr = "UTC") {
+    .Call('RcppCCTZ_formatDouble', PACKAGE = 'RcppCCTZ', secv, nanov, fmt, tgttzstr)
 }
 
 #' @rdname parseDatetime

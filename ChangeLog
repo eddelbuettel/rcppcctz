@@ -1,3 +1,10 @@
+2016-12-17  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/utilities.cpp (formatDouble): Removed unused argument lcltzstr
+	* src/RcppExports.cpp (formatDouble): Idem
+	* R/RcppExports.R (formatDouble): Idem
+	* man/formatDatetime.Rd: Idem 
+
 2016-12-12  Dirk Eddelbuettel  <edd@debian.org>
 
 	* inst/NEWS.Rd: Post-release update for 0.1.0

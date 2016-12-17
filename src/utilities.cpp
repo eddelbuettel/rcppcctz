@@ -224,12 +224,10 @@ Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
 Rcpp::CharacterVector formatDouble(Rcpp::NumericVector secv,
                                    Rcpp::NumericVector nanov,
                                    std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
-                                   std::string lcltzstr = "UTC",
                                    std::string tgttzstr = "UTC") {
          
-    cctz::time_zone tgttz, lcltz;
+    cctz::time_zone tgttz;
     load_time_zone(tgttzstr, &tgttz);
-    load_time_zone(lcltzstr, &lcltz);
 
     auto n = secv.size();
     Rcpp::CharacterVector cv(n);

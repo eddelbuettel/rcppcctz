@@ -9,7 +9,7 @@ formatDatetime(dtv, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez", lcltzstr = "UTC",
   tgttzstr = "UTC")
 
 formatDouble(secv, nanov, fmt = "\%Y-\%m-\%dT\%H:\%M:\%E*S\%Ez",
-  lcltzstr = "UTC", tgttzstr = "UTC")
+  tgttzstr = "UTC")
 }
 \arguments{
 \item{dtv}{A Datetime vector object to be formatted}
