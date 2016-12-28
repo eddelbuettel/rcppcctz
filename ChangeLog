@@ -1,9 +1,22 @@
+2016-12-28  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: No longer exclude Windows
+
+	* src/time_zone_libc.cc (cctz): Define OFFSET() and ABBR() macros
+	for MinGW
+	* src/time_zone_info.cc (cctz): Account for MinGW
+	* src/time_zone_format.cc (cctz): Idem, empty strptime use for now
+
+	* R/init.R: On Windows set TZDIR to zoneinfo from R
+
+	* src/Makevars.win: Added
+
 2016-12-17  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/utilities.cpp (formatDouble): Removed unused argument lcltzstr
 	* src/RcppExports.cpp (formatDouble): Idem
 	* R/RcppExports.R (formatDouble): Idem
-	* man/formatDatetime.Rd: Idem 
+	* man/formatDatetime.Rd: Idem
 
 2016-12-12  Dirk Eddelbuettel  <edd@debian.org>
 

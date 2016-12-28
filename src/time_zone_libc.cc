@@ -34,6 +34,9 @@
 #elif defined(__sun)
 # define OFFSET(tm) ((tm).tm_isdst > 0 ? altzone : timezone)
 # define ABBR(tm)   (tzname[(tm).tm_isdst > 0])
+#elif defined(__MINGW32__) || defined(__MINGW64__)
+# define OFFSET(tm) (_timezone + ((tm).tm_isdst > 0 ? 60 * 60 : 0))
+# define ABBR(tm)   (_tzname[(tm).tm_isdst > 0])
 #elif defined(_WIN32) || defined(_WIN64)
 static long get_timezone() {
   long seconds;
