@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #if !defined(HAS_STRPTIME)
-# if !defined(_MSC_VER)
+# if !( defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__) )
 #  define HAS_STRPTIME 1  // assume everyone has strptime() except windows
 # endif
 #endif
@@ -39,6 +39,9 @@ namespace detail {
 namespace {
 
 #if !HAS_STRPTIME
+# if defined(__MINGW32__) || defined(__MINGW64__)  
+  // TODO
+# else
 // Build a strptime() using C++11's std::get_time().
 char* strptime(const char* s, const char* fmt, std::tm* tm) {
   std::istringstream input(s);
@@ -46,6 +49,7 @@ char* strptime(const char* s, const char* fmt, std::tm* tm) {
   if (input.fail()) return nullptr;
   return const_cast<char*>(s) + input.tellg();
 }
+#endif
 #endif
 
 std::tm ToTM(const time_zone::absolute_lookup& al) {
@@ -496,7 +500,11 @@ const char* ParseSubSeconds(const char* dp,
 // Parses a string into a std::tm using strptime(3).
 const char* ParseTM(const char* dp, const char* fmt, std::tm* tm) {
   if (dp != nullptr) {
+#if defined(__MINGW32__) || defined(__MINGW64__)
+    dp = nullptr;
+#else
     dp = strptime(dp, fmt, tm);
+#endif    
   }
   return dp;
 }

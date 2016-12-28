@@ -51,7 +51,7 @@ namespace {
 // Convert errnum to a message, using buf[buflen] if necessary.
 // buf must be non-null, and buflen non-zero.
 char* errmsg(int errnum, char* buf, size_t buflen) {
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(WIN32) || defined(__WIN32) || defined(__WIN32__)
   strerror_s(buf, buflen, errnum);
   return buf;
 #elif defined(__APPLE__)
