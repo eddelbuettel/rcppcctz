@@ -92,6 +92,30 @@
 
 namespace std_backport
 {
+template <class T>
+class fake_unique_ptr
+{
+private:
+    T* p_;
+    
+public:
+    fake_unique_ptr() : p_(NULL) {}
+    fake_unique_ptr(T *p) : p_(p) {}
+    
+    ~fake_unique_ptr()
+    {
+        if (p_) free(p_);
+    }
+    
+    T *get() { return p_; }
+    
+    void reset(T *p)
+    {
+        if (p_) free(p_);
+        p_ = p;
+    }
+};
+
 template <class InputIterator, class ForwardIterator, class Ctype>
 ForwardIterator
 scan_keyword(InputIterator& b, InputIterator e,
@@ -106,17 +130,18 @@ scan_keyword(InputIterator& b, InputIterator e,
     const unsigned char does_match = '\2';
     unsigned char statbuf[100];
     unsigned char* status = statbuf;
-    unsigned char* stat_hold = NULL;
+    fake_unique_ptr< unsigned char > stat_hold;
     
     if (nkw > sizeof(statbuf))
     {
         status = (unsigned char*)malloc(nkw);
+        
         if (status == 0)
         {
-            free(stat_hold);
             throw std::bad_alloc();
         }
-        stat_hold =status;
+        
+        stat_hold.reset(status);
     }
     size_t n_might_match = nkw;  // At this point, any keyword might match
     size_t n_does_match = 0;       // but none of them definitely do
@@ -205,7 +230,6 @@ scan_keyword(InputIterator& b, InputIterator e,
         err |= std::ios_base::failbit;
     }
     
-    free (stat_hold);
     return kb;
 }
 
