@@ -529,11 +529,7 @@ const char* ParseSubSeconds(const char* dp,
 // Parses a string into a std::tm using strptime(3).
 const char* ParseTM(const char* dp, const char* fmt, std::tm* tm) {
   if (dp != nullptr) {
-#if defined(__MINGW32__) || defined(__MINGW64__)
-    dp = nullptr;
-#else
     dp = RcppCCTZ::strptime(dp, fmt, tm);
-#endif    
   }
   return dp;
 }
