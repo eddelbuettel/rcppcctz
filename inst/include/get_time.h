@@ -89,6 +89,7 @@
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
+#include <iterator>
 
 namespace std_backport
 {
@@ -270,50 +271,89 @@ class time_get_c_storage
 {
 protected:
     typedef std::basic_string<CharT> string_type;
-
+    
+    mutable string_type am_pm_[2];
+    
+    void set_locale(const std::locale& loc) const;
     virtual const string_type* am_pm() const;
     virtual const string_type& c() const;
     virtual const string_type& r() const;
     virtual const string_type& x() const;
     virtual const string_type& X() const;
 
+public:
     ~time_get_c_storage() {}
 };
 
-static
-std::string*
-init_am_pm()
+template<>
+void time_get_c_storage<char>::set_locale(const std::locale& loc) const
 {
-    static std::string am_pm[2];
-    am_pm[0]  = "AM";
-    am_pm[1]  = "PM";
-    return am_pm;
+    std::basic_ostringstream<char> os;
+    const std::time_put<char> &tp = std::use_facet< std::time_put<char> >(loc);
+    
+    std::tm tm;
+    tm.tm_sec = 0;
+    tm.tm_min = 0;
+    tm.tm_hour = 11;
+    tm.tm_mday = 0;
+    tm.tm_mon = 0;
+    tm.tm_year = 0;
+    tm.tm_wday = 0;
+    tm.tm_yday = 0;
+    tm.tm_isdst = -1;
+    
+    std::ostreambuf_iterator<char> out(os);
+    tp.put(out, os, ' ', &tm, 'p');
+    am_pm_[0] = os.str();
+    
+    os.str("");
+    std::ostreambuf_iterator<char> out2(os);
+    tm.tm_hour = 13;
+    tp.put(out2, os, ' ', &tm, 'p');
+    am_pm_[1] = os.str();
 }
 
-static
-std::wstring*
-init_wam_pm()
+template<>
+void time_get_c_storage<wchar_t>::set_locale(const std::locale& loc) const
 {
-    static std::wstring am_pm[2];
-    am_pm[0]  = L"AM";
-    am_pm[1]  = L"PM";
-    return am_pm;
-}
+    std::basic_ostringstream<wchar_t> os;
+    const std::time_put<wchar_t> &tp = std::use_facet< std::time_put< wchar_t > >(loc);
+    
+    std::tm tm;
+    tm.tm_sec = 0;
+    tm.tm_min = 0;
+    tm.tm_hour = 11;
+    tm.tm_mday = 0;
+    tm.tm_mon = 0;
+    tm.tm_year = 0;
+    tm.tm_wday = 0;
+    tm.tm_yday = 0;
+    tm.tm_isdst = -1;
+    
+    std::ostreambuf_iterator<wchar_t> out(os);
+    tp.put(out, os, L' ', &tm, L'p');
+    am_pm_[0] = os.str();
+    
+    os.str(L"");
+    std::ostreambuf_iterator<wchar_t> out2(os);
+    
+    tm.tm_hour = 13;
+    tp.put(out2, os, L' ', &tm, L'p');
+    am_pm_[1] = os.str();
+} 
 
 template <>
 const std::string*
 time_get_c_storage<char>::am_pm() const
 {
-    static const std::string* am_pm = init_am_pm();
-    return am_pm;
+    return am_pm_;
 }
 
 template <>
 const std::wstring*
 time_get_c_storage<wchar_t>::am_pm() const
 {
-    static const std::wstring* am_pm = init_wam_pm();
-    return am_pm;
+    return am_pm_;
 }
 
 template <>
@@ -642,7 +682,6 @@ my_time_get<CharT, InputIterator>::get_am_pm(int& h,
     const string_type* ap = this->am_pm();
     if (ap[0].size() + ap[1].size() == 0)
     {
-        abort();
         err |= std::ios_base::failbit;
         return;
     }
@@ -682,6 +721,7 @@ my_time_get<CharT, InputIterator>::get(iter_type b, iter_type e,
                                       const char_type* fmtb, const char_type* fmte) const
 {
     const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(iob.getloc());
+    time_get_c_storage<CharT>::set_locale(iob.getloc());
     err = std::ios_base::goodbit;
     while (fmtb != fmte && err == std::ios_base::goodbit)
     {
@@ -743,6 +783,7 @@ my_time_get<CharT, InputIterator>::do_get(iter_type b, iter_type e,
 {
     err = std::ios_base::goodbit;
     const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(iob.getloc());
+    
     switch (fmt)
     {
     case 'a':
@@ -797,9 +838,6 @@ my_time_get<CharT, InputIterator>::do_get(iter_type b, iter_type e,
         break;
     case 'p':
         get_am_pm(tm->tm_hour, b, e, err, ct);
-        if (err & std::ios_base::failbit) {
-            abort();              
-        }
         break;
     case 'r':
         {
