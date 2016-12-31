@@ -12,11 +12,19 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+// **************** TAKE THIS OUT ****************
+#define __MINGW64__
+// ***********************************************
+
 #if !defined(HAS_STRPTIME)
 # if !( defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__) )
 #  define HAS_STRPTIME 1  // assume everyone has strptime() except windows
 # endif
 #endif
+
+// **************** TAKE THIS OUT ****************
+#undef __MINGW64__
+// ***********************************************
 
 #include "time_zone.h"
 #include "time_zone_if.h"
@@ -31,27 +39,48 @@
 #if !HAS_STRPTIME
 #include <iomanip>
 #include <sstream>
+#include <get_time.h>
 #endif
+
+namespace RcppCCTZ {
+// **************** TAKE THIS OUT ****************
+#define __MINGW64__
+// ***********************************************
+
+#if !HAS_STRPTIME
+// Build a strptime() using C++11's std::get_time().
+inline char* strptime(const char* s, const char* fmt, std::tm* tm) {
+  std::istringstream input(s);
+
+#if defined(__MINGW32__) || defined(__MINGW64__)
+  input >> std_backport::get_time(tm, fmt);
+#else
+  input >> std::get_time(tm, fmt);
+#endif
+
+  if (input.fail()) return nullptr;
+  
+  if (input.tellg() > 0) {
+      return const_cast<char*>(s) + input.tellg();
+  } else {
+      return const_cast<char*>(s) + strlen(s);
+  }
+}
+#else
+inline char* strptime(const char* s, const char* fmt, std::tm* tm) {
+    ::strptime(s, fmt, tm);
+}
+#endif
+
+// **************** TAKE THIS OUT ****************
+#undef __MINGW64__
+// ***********************************************
+}
 
 namespace cctz {
 namespace detail {
 
 namespace {
-
-#if !HAS_STRPTIME
-# if defined(__MINGW32__) || defined(__MINGW64__)  
-  // TODO
-# else
-// Build a strptime() using C++11's std::get_time().
-char* strptime(const char* s, const char* fmt, std::tm* tm) {
-  std::istringstream input(s);
-  input >> std::get_time(tm, fmt);
-  if (input.fail()) return nullptr;
-  return const_cast<char*>(s) + input.tellg();
-}
-#endif
-#endif
-
 std::tm ToTM(const time_zone::absolute_lookup& al) {
   std::tm tm{};
   tm.tm_sec = al.cs.second();
@@ -503,7 +532,7 @@ const char* ParseTM(const char* dp, const char* fmt, std::tm* tm) {
 #if defined(__MINGW32__) || defined(__MINGW64__)
     dp = nullptr;
 #else
-    dp = strptime(dp, fmt, tm);
+    dp = RcppCCTZ::strptime(dp, fmt, tm);
 #endif    
   }
   return dp;
