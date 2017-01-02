@@ -272,9 +272,8 @@ class time_get_c_storage
 protected:
     typedef std::basic_string<CharT> string_type;
     
-    mutable string_type am_pm_[2];
+    string_type am_pm_[2];
     
-    void set_locale(const std::locale& loc) const;
     virtual const string_type* am_pm() const;
     virtual const string_type& c() const;
     virtual const string_type& r() const;
@@ -282,11 +281,12 @@ protected:
     virtual const string_type& X() const;
 
 public:
+    time_get_c_storage(const std::locale& loc);
     ~time_get_c_storage() {}
 };
 
 template<>
-void time_get_c_storage<char>::set_locale(const std::locale& loc) const
+time_get_c_storage<char>::time_get_c_storage(const std::locale& loc)
 {
     std::basic_ostringstream<char> os;
     const std::time_put<char> &tp = std::use_facet< std::time_put<char> >(loc);
@@ -314,7 +314,7 @@ void time_get_c_storage<char>::set_locale(const std::locale& loc) const
 }
 
 template<>
-void time_get_c_storage<wchar_t>::set_locale(const std::locale& loc) const
+time_get_c_storage<wchar_t>::time_get_c_storage(const std::locale& loc)
 {
     std::basic_ostringstream<wchar_t> os;
     const std::time_put<wchar_t> &tp = std::use_facet< std::time_put< wchar_t > >(loc);
@@ -421,17 +421,19 @@ time_get_c_storage<wchar_t>::r() const
 }
 
 template <class CharT, class InputIterator>
-class my_time_get : public std::time_get<CharT, InputIterator>,
-    public time_get_c_storage<CharT>
+class my_time_get : public time_get_c_storage<CharT>
 {
+private:
+    const std::time_get<CharT, InputIterator> &tg_;
+    
 public:
     typedef CharT                  char_type;
     typedef InputIterator          iter_type;
     typedef std::time_base::dateorder    dateorder;
     typedef std::basic_string<char_type> string_type;
     
-    my_time_get() {}
-    my_time_get(const std::time_get<CharT, InputIterator>& tg)
+    my_time_get(const std::locale& loc) : time_get_c_storage<CharT>(loc),
+        tg_(std::use_facet< std::time_get<CharT, InputIterator> >(loc))
     {
     }
     
@@ -721,7 +723,7 @@ my_time_get<CharT, InputIterator>::get(iter_type b, iter_type e,
                                       const char_type* fmtb, const char_type* fmte) const
 {
     const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(iob.getloc());
-    time_get_c_storage<CharT>::set_locale(iob.getloc());
+
     err = std::ios_base::goodbit;
     while (fmtb != fmte && err == std::ios_base::goodbit)
     {
@@ -788,12 +790,12 @@ my_time_get<CharT, InputIterator>::do_get(iter_type b, iter_type e,
     {
     case 'a':
     case 'A':
-        b = std::time_get<CharT, InputIterator>::get_weekday(b, e, iob, err, tm);
+        b = tg_.get_weekday(b, e, iob, err, tm);
         break;
     case 'b':
     case 'B':
     case 'h':
-        b = std::time_get<CharT, InputIterator>::get_monthname(b, e, iob, err, tm);
+        b = tg_.get_monthname(b, e, iob, err, tm);
         break;
     case 'c':
         {
@@ -864,7 +866,7 @@ my_time_get<CharT, InputIterator>::do_get(iter_type b, iter_type e,
         get_weekday(tm->tm_wday, b, e, err, ct);
         break;
     case 'x':
-        return my_time_get< char_type, iter_type >::do_get_date(b, e, iob, err, tm);
+        return tg_.get_date(b, e, iob, err, tm);
     case 'X':
         {
         const string_type& fm = this->X();
@@ -921,7 +923,7 @@ operator>>(std::basic_istream<CharT, Traits>& is, const iom_t9<CharT>& x)
             typedef std::istreambuf_iterator<CharT, Traits> _Ip;
             typedef my_time_get<CharT, _Ip> _Fp;
             std::ios_base::iostate err = std::ios_base::goodbit;
-            const _Fp& tf = std::use_facet<std::time_get<CharT, _Ip> >(is.getloc());
+            const _Fp tf(is.getloc());
             tf.get(_Ip(is), _Ip(), is, err, x.tm_,
                      x.fmt_, x.fmt_ + Traits::length(x.fmt_));
             is.setstate(err);
