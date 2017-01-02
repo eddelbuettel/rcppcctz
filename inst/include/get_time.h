@@ -421,7 +421,7 @@ time_get_c_storage<wchar_t>::r() const
 }
 
 template <class CharT, class InputIterator>
-class my_time_get : public time_get_c_storage<CharT>
+class time_parser : public time_get_c_storage<CharT>
 {
 private:
     const std::time_get<CharT, InputIterator> &tg_;
@@ -432,7 +432,7 @@ public:
     typedef std::time_base::dateorder    dateorder;
     typedef std::basic_string<char_type> string_type;
     
-    my_time_get(const std::locale& loc) : time_get_c_storage<CharT>(loc),
+    time_parser(const std::locale& loc) : time_get_c_storage<CharT>(loc),
         tg_(std::use_facet< std::time_get<CharT, InputIterator> >(loc))
     {
     }
@@ -507,7 +507,7 @@ private:
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_day(int& d,
+time_parser<CharT, InputIterator>::get_day(int& d,
                                             iter_type& b, iter_type e,
                                             std::ios_base::iostate& err,
                                             const std::ctype<char_type>& ct) const
@@ -523,7 +523,7 @@ my_time_get<CharT, InputIterator>::get_day(int& d,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_month(int& m,
+time_parser<CharT, InputIterator>::get_month(int& m,
                                               iter_type& b, iter_type e,
                                               std::ios_base::iostate& err,
                                               const std::ctype<char_type>& ct) const
@@ -539,7 +539,7 @@ my_time_get<CharT, InputIterator>::get_month(int& m,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_year(int& y,
+time_parser<CharT, InputIterator>::get_year(int& y,
                                              iter_type& b, iter_type e,
                                              std::ios_base::iostate& err,
                                              const std::ctype<char_type>& ct) const
@@ -557,7 +557,7 @@ my_time_get<CharT, InputIterator>::get_year(int& y,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_year4(int& y,
+time_parser<CharT, InputIterator>::get_year4(int& y,
                                               iter_type& b, iter_type e,
                                               std::ios_base::iostate& err,
                                               const std::ctype<char_type>& ct) const
@@ -569,7 +569,7 @@ my_time_get<CharT, InputIterator>::get_year4(int& y,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_hour(int& h,
+time_parser<CharT, InputIterator>::get_hour(int& h,
                                              iter_type& b, iter_type e,
                                              std::ios_base::iostate& err,
                                              const std::ctype<char_type>& ct) const
@@ -585,7 +585,7 @@ my_time_get<CharT, InputIterator>::get_hour(int& h,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_12_hour(int& h,
+time_parser<CharT, InputIterator>::get_12_hour(int& h,
                                                 iter_type& b, iter_type e,
                                                 std::ios_base::iostate& err,
                                                 const std::ctype<char_type>& ct) const
@@ -601,7 +601,7 @@ my_time_get<CharT, InputIterator>::get_12_hour(int& h,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_minute(int& m,
+time_parser<CharT, InputIterator>::get_minute(int& m,
                                                iter_type& b, iter_type e,
                                                std::ios_base::iostate& err,
                                                const std::ctype<char_type>& ct) const
@@ -617,7 +617,7 @@ my_time_get<CharT, InputIterator>::get_minute(int& m,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_second(int& s,
+time_parser<CharT, InputIterator>::get_second(int& s,
                                                iter_type& b, iter_type e,
                                                std::ios_base::iostate& err,
                                                const std::ctype<char_type>& ct) const
@@ -633,7 +633,7 @@ my_time_get<CharT, InputIterator>::get_second(int& s,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_weekday(int& w,
+time_parser<CharT, InputIterator>::get_weekday(int& w,
                                                 iter_type& b, iter_type e,
                                                 std::ios_base::iostate& err,
                                                 const std::ctype<char_type>& ct) const
@@ -647,7 +647,7 @@ my_time_get<CharT, InputIterator>::get_weekday(int& w,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_day_year_num(int& d,
+time_parser<CharT, InputIterator>::get_day_year_num(int& d,
                                                      iter_type& b, iter_type e,
                                                      std::ios_base::iostate& err,
                                                      const std::ctype<char_type>& ct) const
@@ -664,7 +664,7 @@ my_time_get<CharT, InputIterator>::get_day_year_num(int& d,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_white_space(iter_type& b, iter_type e,
+time_parser<CharT, InputIterator>::get_white_space(iter_type& b, iter_type e,
                                                     std::ios_base::iostate& err,
                                                     const std::ctype<char_type>& ct) const
 {
@@ -676,7 +676,7 @@ my_time_get<CharT, InputIterator>::get_white_space(iter_type& b, iter_type e,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_am_pm(int& h,
+time_parser<CharT, InputIterator>::get_am_pm(int& h,
                                               iter_type& b, iter_type e,
                                               std::ios_base::iostate& err,
                                               const std::ctype<char_type>& ct) const
@@ -696,7 +696,7 @@ my_time_get<CharT, InputIterator>::get_am_pm(int& h,
 
 template <class CharT, class InputIterator>
 void
-my_time_get<CharT, InputIterator>::get_percent(iter_type& b, iter_type e,
+time_parser<CharT, InputIterator>::get_percent(iter_type& b, iter_type e,
                                                 std::ios_base::iostate& err,
                                                 const std::ctype<char_type>& ct) const
 {
@@ -717,7 +717,7 @@ my_time_get<CharT, InputIterator>::get_percent(iter_type& b, iter_type e,
 
 template <class CharT, class InputIterator>
 InputIterator
-my_time_get<CharT, InputIterator>::get(iter_type b, iter_type e,
+time_parser<CharT, InputIterator>::get(iter_type b, iter_type e,
                                       std::ios_base& iob,
                                       std::ios_base::iostate& err, tm* tm,
                                       const char_type* fmtb, const char_type* fmte) const
@@ -778,7 +778,7 @@ my_time_get<CharT, InputIterator>::get(iter_type b, iter_type e,
 
 template <class CharT, class InputIterator>
 InputIterator
-my_time_get<CharT, InputIterator>::do_get(iter_type b, iter_type e,
+time_parser<CharT, InputIterator>::do_get(iter_type b, iter_type e,
                                          std::ios_base& iob,
                                          std::ios_base::iostate& err, tm* tm,
                                          char fmt, char) const
@@ -921,7 +921,7 @@ operator>>(std::basic_istream<CharT, Traits>& is, const iom_t9<CharT>& x)
         if (s)
         {
             typedef std::istreambuf_iterator<CharT, Traits> _Ip;
-            typedef my_time_get<CharT, _Ip> _Fp;
+            typedef time_parser<CharT, _Ip> _Fp;
             std::ios_base::iostate err = std::ios_base::goodbit;
             const _Fp tf(is.getloc());
             tf.get(_Ip(is), _Ip(), is, err, x.tm_,
