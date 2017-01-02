@@ -68,25 +68,14 @@ void example1() {
 
 // [[Rcpp::export]]
 int example2() {
-    // **************** TAKE THIS OUT ****************
-    const std::string civil_string = "2015-09-22 09:35:00AM";
-    // ***********************************************
-    
-    // **************** UNCOMMENT THIS ****************
-    //const std::string civil_string = "2015-09-22 09:35:00";
-    // ************************************************
+    const std::string civil_string = "2015-09-22 09:35:00";
 
     cctz::time_zone lax;
     load_time_zone("America/Los_Angeles", &lax);
     std::chrono::system_clock::time_point tp;
     
-    // **************** TAKE THIS OUT ****************
     const bool ok = cctz::parse("%Y-%m-%d %H:%M:%S%p", civil_string, lax, &tp);
-    // ***********************************************
     
-    // **************** UNCOMMENT THIS ****************
-    //const bool ok = cctz::parse("%Y-%m-%d %H:%M:%S%p", civil_string, lax, &tp);
-    // ************************************************
     if (!ok) return -1;
 
     const auto now = std::chrono::system_clock::now();
