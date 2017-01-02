@@ -60,7 +60,9 @@ inline char* strptime(const char* s, const char* fmt, std::tm* tm) {
 inline char* strptime(const char* s, const char* fmt, std::tm* tm) {
     ::strptime(s, fmt, tm);
 }
+#endif
 }
+
 
 namespace cctz {
 namespace detail {
