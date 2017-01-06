@@ -12,6 +12,8 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+#define __MINGW64__
+
 #if !defined(HAS_STRPTIME)
 # if !( defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__) )
 #  define HAS_STRPTIME 1  // assume everyone has strptime() except windows
@@ -28,18 +30,23 @@
 #include <ctime>
 #include <limits>
 #include <vector>
+
 #if !HAS_STRPTIME
 #include <iomanip>
 #include <sstream>
+#if defined(__MINGW32__) || defined(__MINGW64__)
 #include <get_time.h>
 #endif
+#endif
 
-namespace RcppCCTZ {
-
+namespace cctz {
+namespace detail {
 #if !HAS_STRPTIME
 
 // Build a strptime() using C++11's std::get_time().
-inline char* strptime(const char* s, const char* fmt, std::tm* tm) {
+inline char* strptime(const char* s, const char* fmt, std::tm* tm)
+{
+  std::cout << "in my strptime." << std::endl;
   std::istringstream input(s);
 
 #if defined(__MINGW32__) || defined(__MINGW64__)
@@ -56,16 +63,16 @@ inline char* strptime(const char* s, const char* fmt, std::tm* tm) {
       return const_cast<char*>(s) + strlen(s);
   }
 }
+
 #else
-inline char* strptime(const char* s, const char* fmt, std::tm* tm) {
+
+inline char* inline char* strptime(const char* s, const char* fmt, std::tm* tm)
+{
     ::strptime(s, fmt, tm);
 }
+
 #endif
-}
-
-
-namespace cctz {
-namespace detail {
+#undef __MINGW64__
 
 namespace {
 std::tm ToTM(const time_zone::absolute_lookup& al) {
@@ -516,7 +523,7 @@ const char* ParseSubSeconds(const char* dp,
 // Parses a string into a std::tm using strptime(3).
 const char* ParseTM(const char* dp, const char* fmt, std::tm* tm) {
   if (dp != nullptr) {
-    dp = RcppCCTZ::strptime(dp, fmt, tm);
+    dp = cctz::detail::strptime(dp, fmt, tm);
   }
   return dp;
 }

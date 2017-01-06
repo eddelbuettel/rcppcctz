@@ -74,7 +74,7 @@ int example2() {
     load_time_zone("America/Los_Angeles", &lax);
     std::chrono::system_clock::time_point tp;
     
-    const bool ok = cctz::parse("%Y-%m-%d %H:%M:%S%p", civil_string, lax, &tp);
+    const bool ok = cctz::parse("%Y-%m-%d %H:%M:%S", civil_string, lax, &tp);
     
     if (!ok) return -1;
 
