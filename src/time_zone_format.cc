@@ -12,8 +12,6 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#define __MINGW64__
-
 #if !defined(HAS_STRPTIME)
 # if !( defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__) )
 #  define HAS_STRPTIME 1  // assume everyone has strptime() except windows
@@ -72,7 +70,6 @@ inline char* inline char* strptime(const char* s, const char* fmt, std::tm* tm)
 }
 
 #endif
-#undef __MINGW64__
 
 namespace {
 std::tm ToTM(const time_zone::absolute_lookup& al) {

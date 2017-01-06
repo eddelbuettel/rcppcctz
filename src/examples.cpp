@@ -19,11 +19,11 @@ void example0() {
 
     std::tm tm_utc;
     gmtime_r(&now, &tm_utc);
-    Rcpp::Rcout << Format("UTC: %F %T\n", tm_utc);
+    Rcpp::Rcout << Format("UTC: %Y-%m-%d %H:%M:%S\n", tm_utc);
 
     std::tm tm_local;
     localtime_r(&now, &tm_local);
-    Rcpp::Rcout << Format("Local: %F %T\n", tm_local);
+    Rcpp::Rcout << Format("Local: %Y-%m-%d %H:%M:%S\n", tm_local);
 }
 
 // from examples/hello.cc
@@ -36,11 +36,11 @@ Rcpp::CharacterVector helloMoon(bool verbose=false) {
 
     // Neil Armstrong first walks on the moon
     const auto tp = cctz::convert(cctz::civil_second(1969, 7, 20, 22, 56, 0), nyc);
-    const std::string s1 = cctz::format("%F %T %z", tp, nyc);
+    const std::string s1 = cctz::format("%Y-%m-%d %H:%M:%S %z", tp, nyc);
     if (verbose) Rcpp::Rcout << s1 << "\n";
 
     // That time in Sydney
-    const std::string s2 = cctz::format("%F %T %z", tp, syd);
+    const std::string s2 = cctz::format("%Y-%m-%d %H:%M:%S %z", tp, syd);
     if (verbose) Rcpp::Rcout << s2 << "\n";
     
     return Rcpp::CharacterVector::create(Rcpp::Named("New_York") = s1,
@@ -61,8 +61,8 @@ void example1() {
     cctz::time_zone nyc;
     load_time_zone("America/New_York", &nyc);
 
-    Rcpp::Rcout << cctz::format("Talk starts at %T %z (%Z)\n", tp, lax);
-    Rcpp::Rcout << cctz::format("Talk starts at %T %z (%Z)\n", tp, nyc);
+    Rcpp::Rcout << cctz::format("Talk starts at %H:%M:%S %z (%Z)\n", tp, lax);
+    Rcpp::Rcout << cctz::format("Talk starts at %H:%M:%S %z (%Z)\n", tp, nyc);
 
 }
 
@@ -95,8 +95,8 @@ void example3() {
     // First day of month, 6 months from now.
     const auto then = cctz::convert(cctz::civil_month(cs) + 6, lax);
     
-    Rcpp::Rcout << cctz::format("Now: %F %T %z\n", now, lax);
-    Rcpp::Rcout << cctz::format("6mo: %F %T %z\n", then, lax);
+    Rcpp::Rcout << cctz::format("Now: %Y-%m-%d %H:%M:%S %z\n", now, lax);
+    Rcpp::Rcout << cctz::format("6mo: %Y-%m-%d %H:%M:%S %z\n", then, lax);
 }
 
 
@@ -112,8 +112,8 @@ void example4() {
     load_time_zone("America/Los_Angeles", &lax);
     const auto now = std::chrono::system_clock::now();
     const auto day = FloorDay(now, lax);
-    Rcpp::Rcout << cctz::format("Now: %F %T %z\n", now, lax);
-    Rcpp::Rcout << cctz::format("Day: %F %T %z\n", day, lax);
+    Rcpp::Rcout << cctz::format("Now: %Y-%m-%d %H:%M:%S %z\n", now, lax);
+    Rcpp::Rcout << cctz::format("Day: %Y-%m-%d %H:%M:%S %z\n", day, lax);
 }
 
 
@@ -132,4 +132,3 @@ void exampleFormat() {
 
     Rcpp::Rcout << "15 digit precision on subsecond time: " << txt << std::endl;    
 }
-
