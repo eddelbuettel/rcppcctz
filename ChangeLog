@@ -1,9 +1,20 @@
 2017-01-07  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Roll minor version
+
 	* tests/simpleTests.R: Simple unit tests
 	* tests/simpleTests.Rout.save: Reference output
 
 	* R/init.R (.onAttach): Only show Windows message in interactive mode
+
+	* src/examples.cpp: Use Windows format strings on Windows
+
+2017-01-07  Daniel C. Dillon  <dcdillon@gmail.com>
+
+	* inst/include/get_time.h: Ported from C++ library to fill in for the
+	missing strptime on Windows with g++ 4.* as used by Rtools
+	* src/time_zone_format.cc: Use ported routine
+	* src/examples.cpp: Use Windows format strings on Windows
 
 2016-12-28  Dirk Eddelbuettel  <edd@debian.org>
 
