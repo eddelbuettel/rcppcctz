@@ -1,3 +1,10 @@
+2017-01-07  Dirk Eddelbuettel  <edd@debian.org>
+
+	* tests/simpleTests.R: Simple unit tests
+	* tests/simpleTests.Rout.save: Reference output
+
+	* R/init.R (.onAttach): Only show Windows message in interactive mode
+
 2016-12-28  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: No longer exclude Windows

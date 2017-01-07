@@ -42,9 +42,7 @@ namespace detail {
 #if !HAS_STRPTIME
 
 // Build a strptime() using C++11's std::get_time().
-inline char* strptime(const char* s, const char* fmt, std::tm* tm)
-{
-  std::cout << "in my strptime." << std::endl;
+inline char* strptime(const char* s, const char* fmt, std::tm* tm) {
   std::istringstream input(s);
 
 #if defined(__MINGW32__) || defined(__MINGW64__)
@@ -64,8 +62,7 @@ inline char* strptime(const char* s, const char* fmt, std::tm* tm)
 
 #else
 
-inline char* strptime(const char* s, const char* fmt, std::tm* tm)
-{
+inline char* strptime(const char* s, const char* fmt, std::tm* tm) {
     return ::strptime(s, fmt, tm);
 }
 

@@ -8,6 +8,14 @@
 
 namespace sc = std::chrono; 	// shorthand
 
+#if !defined(__MINGW32__) && !defined(__MINGW64__)
+ #define RCPPCCTZ_TIME "%T"
+ #define RCPPCCTZ_DATE_TIME "%F %T"
+#else
+ #define RCPPCCTZ_TIME "%H:%M:%S"
+ #define RCPPCCTZ_DATE_TIME "%Y-%m-%d %H:%M:%S"
+#endif
+
 //' Difference between two given timezones at a specified date.
 //'
 //' Time zone offsets vary by date, and this helper function computes
@@ -45,7 +53,7 @@ double tzDiff(const std::string tzfrom,
                                                       dt.getMinutes(),
                                                       dt.getSeconds()),
                                    tz1);
-    if (verbose) Rcpp::Rcout << cctz::format("%F %T %z", tp1, tz1) << std::endl;
+    if (verbose) Rcpp::Rcout << cctz::format(RCPPCCTZ_DATE_TIME " %z", tp1, tz1) << std::endl;
 
     const auto tp2 = cctz::convert(cctz::civil_second(dt.getYear(),
                                                       dt.getMonth(),
@@ -54,7 +62,7 @@ double tzDiff(const std::string tzfrom,
                                                       dt.getMinutes(),
                                                       dt.getSeconds()),
                                    tz2);
-    if (verbose) Rcpp::Rcout << cctz::format("%F %T %z", tp2, tz2) << std::endl;
+    if (verbose) Rcpp::Rcout << cctz::format(RCPPCCTZ_DATE_TIME " %z", tp2, tz2) << std::endl;
 
     sc::hours d = sc::duration_cast<sc::hours>(tp1-tp2);
     if (verbose) Rcpp::Rcout << "Difference: " << d.count() << std::endl;
@@ -107,8 +115,8 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
                                                      dt.getMinutes(),
                                                      dt.getSeconds()),
                                   tz1);
-    if (verbose) Rcpp::Rcout << cctz::format("%F %T %z", tp, tz1) << std::endl;
-    if (verbose) Rcpp::Rcout << cctz::format("%F %T %z", tp, tz2) << std::endl;
+    if (verbose) Rcpp::Rcout << cctz::format(RCPPCCTZ_DATE_TIME " %z", tp, tz1) << std::endl;
+    if (verbose) Rcpp::Rcout << cctz::format(RCPPCCTZ_DATE_TIME " %z", tp, tz2) << std::endl;
 
     // create a civil-time object from time-point and new timezone
     const auto ct = cctz::convert(tp, tz2);
