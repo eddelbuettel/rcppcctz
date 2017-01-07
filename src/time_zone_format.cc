@@ -28,30 +28,50 @@
 #include <ctime>
 #include <limits>
 #include <vector>
+
 #if !HAS_STRPTIME
 #include <iomanip>
 #include <sstream>
+#if defined(__MINGW32__) || defined(__MINGW64__)
+#include <get_time.h>
+#endif
 #endif
 
 namespace cctz {
 namespace detail {
+#if !HAS_STRPTIME
+
+// Build a strptime() using C++11's std::get_time().
+inline char* strptime(const char* s, const char* fmt, std::tm* tm)
+{
+  std::cout << "in my strptime." << std::endl;
+  std::istringstream input(s);
+
+#if defined(__MINGW32__) || defined(__MINGW64__)
+  input >> std_backport::get_time(tm, fmt);
+#else
+  input >> std::get_time(tm, fmt);
+#endif
+
+  if (input.fail()) return nullptr;
+  
+  if (input.tellg() > 0) {
+      return const_cast<char*>(s) + input.tellg();
+  } else {
+      return const_cast<char*>(s) + strlen(s);
+  }
+}
+
+#else
+
+inline char* strptime(const char* s, const char* fmt, std::tm* tm)
+{
+    ::strptime(s, fmt, tm);
+}
+
+#endif
 
 namespace {
-
-#if !HAS_STRPTIME
-# if defined(__MINGW32__) || defined(__MINGW64__)  
-  // TODO
-# else
-// Build a strptime() using C++11's std::get_time().
-char* strptime(const char* s, const char* fmt, std::tm* tm) {
-  std::istringstream input(s);
-  input >> std::get_time(tm, fmt);
-  if (input.fail()) return nullptr;
-  return const_cast<char*>(s) + input.tellg();
-}
-#endif
-#endif
-
 std::tm ToTM(const time_zone::absolute_lookup& al) {
   std::tm tm{};
   tm.tm_sec = al.cs.second();
@@ -500,11 +520,7 @@ const char* ParseSubSeconds(const char* dp,
 // Parses a string into a std::tm using strptime(3).
 const char* ParseTM(const char* dp, const char* fmt, std::tm* tm) {
   if (dp != nullptr) {
-#if defined(__MINGW32__) || defined(__MINGW64__)
-    dp = nullptr;
-#else
-    dp = strptime(dp, fmt, tm);
-#endif    
+    dp = cctz::detail::strptime(dp, fmt, tm);
   }
   return dp;
 }
