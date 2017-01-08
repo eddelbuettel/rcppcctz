@@ -1,5 +1,20 @@
 \name{NEWS}
 \title{News for Package \pkg{RcppCCTZ}}
+\newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
+\newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
+
+\section{Changes in version 0.2.0 (2017-01-08)}{
+  \itemize{
+    \item Windows compilation was enabled by defining \code{OFFSET()} and
+    \code{ABBR()} for MinGW (\ghpr{10} partially addressing \ghit{9})
+    \item Windows use completed with backport of \code{std::get_time}
+    from LLVM's libc++ to enable \code{strptime} semantics (Dan Dillon
+    in \ghpr{11} completing \ghit{9})
+    \item Timezone information on Windows is supplied via R's own copy
+    of zoneinfo with \code{TZDIR} set (also \ghpr{10})
+    \item The interface to \code{formatDouble} was cleaned up
+  }
+}
 
 \section{Changes in version 0.1.0 (2016-12-11)}{
   \itemize{
