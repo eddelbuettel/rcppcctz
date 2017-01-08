@@ -93,6 +93,12 @@ toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
 #' @param lcltzstr The local timezone object for creation the CCTZ timepoint
 #' @param tgttzstr The target timezone for the desired format
 #' @return A string vector with the requested format of the datetime objects
+#' @section Note:
+#' Windows is now supported via the \code{g++-4.9} compiler, but note
+#' that it provides an \emph{incomplete} C++11 library. This means we had
+#' to port a time parsing routine, and that string formatting is more
+#' limited. As one example, CCTZ frequently uses \code{"\%F \%T"} which do
+#' not work on Windows; one has to use \code{"\%Y-\%m-\%d \%H:\%M:\%S"}.
 #' @author Dirk Eddelbuettel
 #' @examples
 #' now <- Sys.time()

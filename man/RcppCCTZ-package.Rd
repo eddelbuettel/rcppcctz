@@ -23,8 +23,13 @@
 }
 \details{
   CCTZ requires a valid timezone library as well as recent-enough
-  compiler to cope with C++11.  This means that Windows is currently not
-  supported..
+  compiler to cope with C++11.
+
+  Windows is now supported via the \code{g++-4.9} compiler, but note
+  that it provides an \emph{incomplete} C++11 library. This means we had
+  to port a time parsing routine, and that string formatting is more
+  limited. As one example, CCTZ frequently uses \code{"\%F \%T"} which do
+  not work on Windows; one has to use \code{"\%Y-\%m-\%d \%H:\%M:\%S"}.
 }
 \author{
   Dirk Eddelbuettel wrote the package; Bradley White and Greg Miller

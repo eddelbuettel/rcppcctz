@@ -1,3 +1,13 @@
+2017-01-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/examples.cpp: Reverted all format strings back to the older
+	'sprintf' style formatters to be compatible with g++-4.9
+	* src/utilities.cpp: Idem; also updated documentation
+
+	* man/RcppCCTZ-package.Rd: Documented Windows behaviour of
+	strftime formatters and lack of support for '%F %T'
+	* man/formatDatetime.Rd: Idem
+
 2017-01-07  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
