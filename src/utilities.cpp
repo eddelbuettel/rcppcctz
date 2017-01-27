@@ -272,8 +272,8 @@ Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec,
         if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
 
         auto nanoseconds = (tp - unix_epoch).count();
-        double secs = std::trunc(nanoseconds / 1.0e9);
-        auto nanos = nanoseconds - static_cast<int64_t>(secs * 1e9);
+        auto secs = nanoseconds / 1000000000;
+        auto nanos = nanoseconds - secs * 1000000000;
         //Rcpp::Rcout << nanoseconds << " " << secs << " " << nanos << std::endl;
         dm(i, 0) = secs;
         dm(i, 1) = nanos;
