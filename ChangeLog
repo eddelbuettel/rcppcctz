@@ -1,3 +1,10 @@
+2017-01-27  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor release and date
+
+	* src/utilities.cpp (parseDouble): Correct conversion to seconds
+	and nanoseconds as suggested by Leonardo Silvestri in #12
+
 2017-01-08  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.0
