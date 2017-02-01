@@ -1,3 +1,11 @@
+2017-01-31  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor release and date;
+	another update on required C++ compiler version
+
+	* .travis.yml: Switch to using run.sh for Travis CI; no longer need
+	to install g++-4.9 as 'trusty' used; also switches to https fetch
+
 2017-01-29  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION: Made need for modern C++ compiler more explicit in
