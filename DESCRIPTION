@@ -1,8 +1,8 @@
 Package: RcppCCTZ
 Type: Package
 Title: 'Rcpp' Bindings for the 'CCTZ' Library
-Version: 0.2.0.1
-Date: 2017-01-29
+Version: 0.2.0.2
+Date: 2017-01-31
 Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: 'Rcpp' Access to the 'CCTZ' timezone library is provided. 'CCTZ' is
@@ -15,9 +15,9 @@ Imports: Rcpp (>= 0.11.0)
 LinkingTo: Rcpp
 SystemRequirements: A 64-bit POSIX OS such as Linux or OS X with IANA time
  zone data in /usr/share/zoneinfo as well as a recent-enough C++11 compiler
- (such as g++-4.9 or later). On Windows the zoneinfo included with R is used;
- and time parsing support is enabled via a backport of std::get_time from the
- LLVM libc++ library.
+ (such as g++-4.9 or later which preferred, g++-4.8 works too). On Windows
+ the zoneinfo included with R is used; and time parsing support is enabled
+ via a backport of std::get_time from the LLVM libc++ library.
 URL: https://github.com/eddelbuettel/rcppcctz
 BugReports: https://github.com/eddelbuettel/rcppcctz/issues
 RoxygenNote: 5.0.1
