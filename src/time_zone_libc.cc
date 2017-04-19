@@ -12,60 +12,80 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+#if defined(_WIN32) || defined(_WIN64)
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include "time_zone_libc.h"
 
 #include <chrono>
-#include <cstdint>
 #include <ctime>
+#include <tuple>
+#include <utility>
 
-// Define OFFSET(tm) and ABBR(tm) for your platform to return the UTC
-// offset and zone abbreviation after a call to localtime_r().
-#if defined(linux)
-# if defined(__USE_BSD) || defined(__USE_MISC)
-#  define OFFSET(tm) ((tm).tm_gmtoff)
-#  define ABBR(tm)   ((tm).tm_zone)
-# else
-#  define OFFSET(tm) ((tm).__tm_gmtoff)
-#  define ABBR(tm)   ((tm).__tm_zone)
-# endif
-#elif defined(__APPLE__)
-# define OFFSET(tm) ((tm).tm_gmtoff)
-# define ABBR(tm)   ((tm).tm_zone)
-#elif defined(__sun)
-# define OFFSET(tm) ((tm).tm_isdst > 0 ? altzone : timezone)
-# define ABBR(tm)   (tzname[(tm).tm_isdst > 0])
-#elif defined(__MINGW32__) || defined(__MINGW64__)
-# define OFFSET(tm) (_timezone + ((tm).tm_isdst > 0 ? 60 * 60 : 0))
-# define ABBR(tm)   (_tzname[(tm).tm_isdst > 0])
-#elif defined(_WIN32) || defined(_WIN64)
-static long get_timezone() {
-  long seconds;
-  _get_timezone(&seconds);
-  return seconds;
-}
-static std::string get_tzname(int index) {
-  char time_zone_name[32] = {0};
-  size_t size_in_bytes = sizeof time_zone_name;
-  _get_tzname(&size_in_bytes, time_zone_name, size_in_bytes, index);
-  return time_zone_name;
-}
-# define OFFSET(tm) (get_timezone() + ((tm).tm_isdst > 0 ? 60 * 60 : 0))
-# define ABBR(tm)   (get_tzname((tm).tm_isdst > 0))
-#else
-# define OFFSET(tm) (timezone + ((tm).tm_isdst > 0 ? 60 * 60 : 0))
-# define ABBR(tm)   (tzname[(tm).tm_isdst > 0])
-#endif
+#include "civil_time.h"
+#include "time_zone.h"
 
 namespace cctz {
 
-TimeZoneLibC::TimeZoneLibC(const std::string& name) {
-  local_ = (name == "localtime");
-  if (!local_) {
-    // TODO: Support "UTC-05:00", for example.
-    offset_ = 0;
-    abbr_ = "UTC";
-  }
+namespace {
+
+// .first is seconds east of UTC; .second is the time-zone abbreviation.
+using OffsetAbbr = std::pair<int, const char*>;
+
+// Defines a function that can be called as follows:
+//
+//   std::tm tm = ...;
+//   OffsetAbbr off_abbr = get_offset_abbr(tm);
+//
+#if defined(_WIN32) || defined(_WIN64)
+// Uses the globals: '_timezone', '_dstbias' and '_tzname'.
+OffsetAbbr get_offset_abbr(const std::tm& tm) {
+  const bool is_dst = tm.tm_isdst > 0;
+  const int off = _timezone + (is_dst ? _dstbias : 0);
+  const char* abbr = _tzname[is_dst];
+  return {off, abbr};
 }
+#elif defined(__sun)
+// Uses the globals: 'timezone', 'altzone' and 'tzname'.
+OffsetAbbr get_offset_abbr(const std::tm& tm) {
+  const bool is_dst = tm.tm_isdst > 0;
+  const int off = is_dst ? altzone : timezone;
+  const char* abbr = tzname[is_dst];
+  return {off, abbr};
+}
+#elif defined(__native_client__) || defined(__myriad2__) || defined(__asmjs__)
+// Uses the globals: 'timezone' and 'tzname'.
+OffsetAbbr get_offset_abbr(const std::tm& tm) {
+  const bool is_dst = tm.tm_isdst > 0;
+  const int off = _timezone + (is_dst ? 60 * 60 : 0);
+  const char* abbr = tzname[is_dst];
+  return {off, abbr};
+}
+#else
+//
+// Returns an OffsetAbbr using std::tm fields with various spellings.
+//
+#if !defined(tm_gmtoff) && !defined(tm_zone)
+template <typename T>
+OffsetAbbr get_offset_abbr(const T& tm, decltype(&T::tm_gmtoff) = nullptr,
+                           decltype(&T::tm_zone) = nullptr) {
+  return {tm.tm_gmtoff, tm.tm_zone};
+}
+#endif  // !defined(tm_gmtoff) && !defined(tm_zone)
+#if !defined(__tm_gmtoff) && !defined(__tm_zone)
+template <typename T>
+OffsetAbbr get_offset_abbr(const T& tm, decltype(&T::__tm_gmtoff) = nullptr,
+                           decltype(&T::__tm_zone) = nullptr) {
+  return {tm.__tm_gmtoff, tm.__tm_zone};
+}
+#endif  // !defined(__tm_gmtoff) && !defined(__tm_zone)
+#endif
+
+}  // namespace
+
+TimeZoneLibC::TimeZoneLibC(const std::string& name)
+    : local_(name == "localtime") {}
 
 time_zone::absolute_lookup TimeZoneLibC::BreakTime(
     const time_point<sys_seconds>& tp) const {
@@ -78,18 +98,16 @@ time_zone::absolute_lookup TimeZoneLibC::BreakTime(
 #else
     localtime_r(&t, &tm);
 #endif
-    al.offset = OFFSET(tm);
-    al.abbr = ABBR(tm);
+    std::tie(al.offset, al.abbr) = get_offset_abbr(tm);
   } else {
 #if defined(_WIN32) || defined(_WIN64)
     gmtime_s(&tm, &t);
 #else
     gmtime_r(&t, &tm);
 #endif
-    al.offset = offset_;
-    al.abbr = abbr_;
+    al.offset = 0;
+    al.abbr = "UTC";
   }
-  // TODO: Eliminate redundant normalization.
   al.cs = civil_second(tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
                        tm.tm_hour, tm.tm_min, tm.tm_sec);
   al.is_dst = tm.tm_isdst > 0;

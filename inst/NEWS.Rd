@@ -3,6 +3,15 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
+\section{Changes in version 0.2.1 (2017-xx-yy)}{
+  \itemize{
+    \item Synchronized with upstream CCTZ
+    \item A parsing issue was correct thanks to a hint by Leonardo
+    Silvestri (\ghpr{14} fixing \ghit{12})
+    \item The Travis script was updated to using \code{run.sh}
+  }
+}
+
 \section{Changes in version 0.2.0 (2017-01-08)}{
   \itemize{
     \item Windows compilation was enabled by defining \code{OFFSET()} and
