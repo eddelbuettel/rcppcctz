@@ -257,12 +257,8 @@ Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec,
                                 std::string tzstr = "UTC") {
     cctz::time_zone tz;
     load_time_zone(tzstr, &tz);
-    sc::system_clock::time_point tp;
-
+    sc::time_point<sc::system_clock, sc::nanoseconds> tp;
     // Rcpp::Rcout << cctz::format(fmt, tp, tz) << std::endl;
-
-    cctz::time_point<cctz::sys_seconds> unix_epoch =
-        sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
 
     auto n = svec.size();
     Rcpp::NumericMatrix dm(n, 2);
@@ -271,7 +267,7 @@ Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec,
     
         if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
 
-        auto nanoseconds = (tp - unix_epoch).count();
+        auto nanoseconds = tp.time_since_epoch().count();
         auto secs = nanoseconds / 1000000000;
         auto nanos = nanoseconds - secs * 1000000000;
         //Rcpp::Rcout << nanoseconds << " " << secs << " " << nanos << std::endl;
@@ -284,7 +280,7 @@ Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec,
 // [[Rcpp::export]]
 void now() {
     //  cf http://stackoverflow.com/a/18023064/143305
-    auto now = std::chrono::high_resolution_clock::now();
-    auto nanos = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
+    auto now = sc::high_resolution_clock::now();
+    auto nanos = sc::duration_cast<sc::nanoseconds>(now.time_since_epoch()).count();
     Rcpp::Rcout << nanos << std::endl;
 }

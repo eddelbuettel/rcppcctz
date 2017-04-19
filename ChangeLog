@@ -2,6 +2,9 @@
 
 	* DESCRIPTION (Version, Date): Roll minor release and date;
 
+	* src/utilities.cpp (parseDouble): Instantiate time_point explicitly
+	for nanosecond use which seems needed on macOS (thanks, Leonardo!)
+
 	* inst/include/civil_time_detail.h: Sync'ed with upstream
         * inst/include/time_zone.h: Idem
         * inst/include/time_zone_if.h: Idem
