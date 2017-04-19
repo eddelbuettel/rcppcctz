@@ -37,4 +37,3 @@ table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
 \author{
 Dirk Eddelbuettel
 }
-

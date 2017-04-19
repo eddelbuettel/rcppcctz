@@ -45,6 +45,7 @@ to port a time parsing routine, and that string formatting is more
 limited. As one example, CCTZ frequently uses \code{"\%F \%T"} which do
 not work on Windows; one has to use \code{"\%Y-\%m-\%d \%H:\%M:\%S"}.
 }
+
 \examples{
 now <- Sys.time()
 formatDatetime(now)            # current (UTC) time, in full precision RFC3339
@@ -54,4 +55,3 @@ formatDatetime(now + 0:4)	   # vectorised
 \author{
 Dirk Eddelbuettel
 }
-

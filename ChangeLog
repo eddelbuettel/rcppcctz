@@ -24,6 +24,12 @@
 
 	* inst/include/src/cctz.h: Removed as removed upstream
 
+2017-02-04  Dirk Eddelbuettel  <edd@max.eddelbuettel.com>
+
+	* DESCRIPTION (Date, Version): Release 0.2.1
+
+	* inst/NEWS.Rd: Updated
+
 2017-01-31  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor release and date;

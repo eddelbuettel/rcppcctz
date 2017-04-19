@@ -40,4 +40,3 @@ format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"),
 \author{
 Dirk Eddelbuettel
 }
-

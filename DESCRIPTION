@@ -1,7 +1,7 @@
 Package: RcppCCTZ
 Type: Package
 Title: 'Rcpp' Bindings for the 'CCTZ' Library
-Version: 0.2.0.3
+Version: 0.2.1.1
 Date: 2017-04-19
 Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
@@ -20,4 +20,4 @@ SystemRequirements: A 64-bit POSIX OS such as Linux or OS X with IANA time
  via a backport of std::get_time from the LLVM libc++ library.
 URL: https://github.com/eddelbuettel/rcppcctz
 BugReports: https://github.com/eddelbuettel/rcppcctz/issues
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

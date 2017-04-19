@@ -40,4 +40,3 @@ options(digits.secs=ds)
 \author{
 Dirk Eddelbuettel
 }
-

@@ -3,12 +3,19 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
-\section{Changes in version 0.2.1 (2017-xx-yy)}{
+\section{Changes in version 0.2.2 (2017-xx-yy)}{
   \itemize{
     \item Synchronized with upstream CCTZ
-    \item A parsing issue was correct thanks to a hint by Leonardo
-    Silvestri (\ghpr{14} fixing \ghit{12})
-    \item The Travis script was updated to using \code{run.sh}
+  }
+}
+\section{Changes in version 0.2.1 (2017-02-04)}{
+  \itemize{
+    \item Conversion from timepoint to two \code{double} values now
+    rounds correctly (\ghpr{14} closing \ghit{12}, with thanks to
+    Leonardo)
+    \item The Description was expanded to stress the need for a modern
+    C++11 compiler; g++-4.8 (as on 'trusty' eg in Travis CI) works
+    \item Travis CI is now driven via \code{run.sh} from our fork
   }
 }
 
