@@ -18,7 +18,9 @@
 #include <memory>
 #include <string>
 
+#include "civil_time.h"
 #include "time_zone.h"
+#include "time_zone_if.h"
 #include "time_zone_info.h"
 
 namespace cctz {
@@ -35,6 +37,9 @@ class time_zone::Impl {
 
   // Dereferences the time_zone to obtain its Impl.
   static const time_zone::Impl& get(const time_zone& tz);
+
+  // The primary key is the time-zone ID (e.g., "America/New_York").
+  const std::string& name() const { return name_; }
 
   // Breaks a time_point down to civil-time components in this time zone.
   time_zone::absolute_lookup BreakTime(

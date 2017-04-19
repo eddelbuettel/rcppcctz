@@ -15,7 +15,11 @@
 #include "time_zone_impl.h"
 
 #include <mutex>
+#include <string>
 #include <unordered_map>
+#include <utility>
+
+#include "time_zone_fixed.h"
 
 namespace cctz {
 
@@ -36,9 +40,12 @@ time_zone time_zone::Impl::UTC() {
 }
 
 bool time_zone::Impl::LoadTimeZone(const std::string& name, time_zone* tz) {
-  // First check for UTC.
-  if (name.compare("UTC") == 0) {
-    *tz = time_zone(UTCImpl());
+  const time_zone::Impl* const utc_impl = UTCImpl();
+
+  // First check for UTC (which is never a key in time_zone_map).
+  auto offset = sys_seconds::zero();
+  if (FixedOffsetFromName(name, &offset) && offset == sys_seconds::zero()) {
+    *tz = time_zone(utc_impl);
     return true;
   }
 
@@ -50,7 +57,7 @@ bool time_zone::Impl::LoadTimeZone(const std::string& name, time_zone* tz) {
       TimeZoneImplByName::const_iterator itr = time_zone_map->find(name);
       if (itr != time_zone_map->end()) {
         *tz = time_zone(itr->second);
-        return itr->second != UTCImpl();
+        return itr->second != utc_impl;
       }
     }
   }
@@ -59,21 +66,19 @@ bool time_zone::Impl::LoadTimeZone(const std::string& name, time_zone* tz) {
   std::lock_guard<std::mutex> lock(time_zone_mutex);
   if (time_zone_map == nullptr) time_zone_map = new TimeZoneImplByName;
   const Impl*& impl = (*time_zone_map)[name];
-  bool fallback_utc = false;
   if (impl == nullptr) {
     // The first thread in loads the new time zone.
     Impl* new_impl = new Impl(name);
     new_impl->zone_ = TimeZoneIf::Load(new_impl->name_);
     if (new_impl->zone_ == nullptr) {
       delete new_impl;  // free the nascent Impl
-      impl = UTCImpl();  // and fallback to UTC
-      fallback_utc = true;
+      impl = utc_impl;  // and fallback to UTC
     } else {
       impl = new_impl;  // install new time zone
     }
   }
   *tz = time_zone(impl);
-  return !fallback_utc;
+  return impl != utc_impl;
 }
 
 const time_zone::Impl& time_zone::Impl::get(const time_zone& tz) {

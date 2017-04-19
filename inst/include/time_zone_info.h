@@ -16,72 +16,46 @@
 #define CCTZ_TIME_ZONE_INFO_H_
 
 #include <atomic>
+#include <cstddef>
 #include <cstdint>
-#include <cstdio>
 #include <string>
 #include <vector>
 
 #include "civil_time.h"
+#include "time_zone.h"
 #include "time_zone_if.h"
 #include "tzfile.h"
+#include "zone_info_source.h"
 
 namespace cctz {
 
-// A zone-independent date/time. A DateTime represents a "Y/M/D H:M:S"
-// as an offset in seconds from some epoch DateTime, without taking into
-// account the value of, or changes in any time_zone's UTC offset (i.e., as
-// if the date/time was in UTC). This allows "Y/M/D H:M:S" values to be
-// quickly ordered by offset (although this may not be the same ordering as
-// their corresponding times in a time_zone). But, if two DateTimes are not
-// separated by a UTC-offset change in some time_zone, then the number of
-// seconds between them can be computed as a simple difference of offsets.
-//
-// Note: Because the DateTime epoch does not correspond to the time_point
-// epoch (even if only because of the unknown UTC offset) there can be valid
-// times that will not be representable as DateTimes when DateTime only has
-// the same number of "seconds" bits. We accept this at the moment (so as
-// to avoid extended arithmetic) and lose a little range as a result.
-struct DateTime {
-  std::int64_t offset;  // seconds from some epoch DateTime
-  void Assign(const civil_second& cs);
-};
-
-inline bool operator<(const DateTime& lhs, const DateTime& rhs) {
-  return lhs.offset < rhs.offset;
-}
-
-// The difference between two DateTimes in seconds. Requires that all
-// intervening DateTimes share the same UTC offset (i.e., no transitions).
-inline std::int64_t operator-(const DateTime& lhs, const DateTime& rhs) {
-  return lhs.offset - rhs.offset;
-}
-
 // A transition to a new UTC offset.
 struct Transition {
-  std::int64_t unix_time;   // the instant of this transition
-  uint8_t type_index;       // index of the transition type
-  DateTime date_time;       // local date/time of transition
-  DateTime prev_date_time;  // local date/time one second earlier
+  std::int_least64_t unix_time;   // the instant of this transition
+  std::uint_least8_t type_index;  // index of the transition type
+  civil_second civil_sec;         // local civil time of transition
+  civil_second prev_civil_sec;    // local civil time one second earlier
 
   struct ByUnixTime {
     inline bool operator()(const Transition& lhs, const Transition& rhs) const {
       return lhs.unix_time < rhs.unix_time;
     }
   };
-  struct ByDateTime {
+  struct ByCivilTime {
     inline bool operator()(const Transition& lhs, const Transition& rhs) const {
-      return lhs.date_time < rhs.date_time;
+      return lhs.civil_sec < rhs.civil_sec;
     }
   };
 };
 
 // The characteristics of a particular transition.
 struct TransitionType {
-  int32_t utc_offset;  // the new prevailing UTC offset
-  bool is_dst;         // did we move into daylight-saving time
-  uint8_t abbr_index;  // index of the new abbreviation
+  std::int_least32_t utc_offset;  // the new prevailing UTC offset
+  civil_second civil_max;         // max convertible civil time for offset
+  civil_second civil_min;         // min convertible civil time for offset
+  bool is_dst;                    // did we move into daylight-saving time
+  std::uint_least8_t abbr_index;  // index of the new abbreviation
 };
-
 
 // A time zone backed by the IANA Time Zone Database (zoneinfo).
 class TimeZoneInfo : public TimeZoneIf {
@@ -101,43 +75,47 @@ class TimeZoneInfo : public TimeZoneIf {
 
  private:
   struct Header {  // counts of:
-    int32_t timecnt;     // transition times
-    int32_t typecnt;     // transition types
-    int32_t charcnt;     // zone abbreviation characters
-    int32_t leapcnt;     // leap seconds (we expect none)
-    int32_t ttisstdcnt;  // UTC/local indicators (unused)
-    int32_t ttisgmtcnt;  // standard/wall indicators (unused)
+    std::size_t timecnt;     // transition times
+    std::size_t typecnt;     // transition types
+    std::size_t charcnt;     // zone abbreviation characters
+    std::size_t leapcnt;     // leap seconds (we expect none)
+    std::size_t ttisstdcnt;  // UTC/local indicators (unused)
+    std::size_t ttisgmtcnt;  // standard/wall indicators (unused)
 
-    void Build(const tzhead& tzh);
-    size_t DataLength(size_t time_len) const;
+    bool Build(const tzhead& tzh);
+    std::size_t DataLength(std::size_t time_len) const;
   };
 
   void CheckTransition(const std::string& name, const TransitionType& tt,
-                       int32_t offset, bool is_dst,
+                       std::int_fast32_t offset, bool is_dst,
                        const std::string& abbr) const;
-  bool EquivTransitions(uint8_t tt1_index, uint8_t tt2_index) const;
+  bool EquivTransitions(std::uint_fast8_t tt1_index,
+                        std::uint_fast8_t tt2_index) const;
   void ExtendTransitions(const std::string& name, const Header& hdr);
 
-  void ResetToBuiltinUTC(int seconds);
-  bool Load(const std::string& name, FILE* fp);
+  bool ResetToBuiltinUTC(const sys_seconds& offset);
+  bool Load(const std::string& name, ZoneInfoSource* zip);
 
   // Helpers for BreakTime() and MakeTime() respectively.
-  time_zone::absolute_lookup LocalTime(std::int64_t unix_time,
+  time_zone::absolute_lookup LocalTime(std::int_fast64_t unix_time,
                                        const TransitionType& tt) const;
   time_zone::civil_lookup TimeLocal(const civil_second& cs,
-                                    std::int64_t offset) const;
+                                    cctz::year_t c4_shift) const;
 
-  std::vector<Transition> transitions_;  // ordered by unix_time and date_time
+  std::vector<Transition> transitions_;  // ordered by unix_time and civil_sec
   std::vector<TransitionType> transition_types_;  // distinct transition types
-  int default_transition_type_;  // for before the first transition
+  std::uint_fast8_t default_transition_type_;  // for before first transition
   std::string abbreviations_;  // all the NUL-terminated abbreviations
 
   std::string future_spec_;  // for after the last zic transition
   bool extended_;            // future_spec_ was used to generate transitions
-  std::int64_t last_year_;   // the final year of the generated transitions
+  cctz::year_t last_year_;   // the final year of the generated transitions
 
-  mutable std::atomic<size_t> local_time_hint_;  // BreakTime() search hint
-  mutable std::atomic<size_t> time_local_hint_;  // MakeTime() search hint
+  // We remember the transitions found during the last BreakTime() and
+  // MakeTime() calls. If the next request is for the same transition we
+  // will avoid re-searching.
+  mutable std::atomic<std::size_t> local_time_hint_ = {};  // BreakTime() hint
+  mutable std::atomic<std::size_t> time_local_hint_ = {};  // MakeTime() hint
 };
 
 }  // namespace cctz
