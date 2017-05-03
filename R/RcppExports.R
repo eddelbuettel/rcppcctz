@@ -49,6 +49,7 @@ exampleFormat <- function() {
 #' # tabulate difference for every week of the year
 #' table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
 #'                                       as.POSIXct(as.Date("2016-01-01") + d*7))))
+#' @export
 tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
     .Call('RcppCCTZ_tzDiff', PACKAGE = 'RcppCCTZ', tzfrom, tzto, dt, verbose)
 }
@@ -76,6 +77,7 @@ tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
 #' format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), 
 #'             "America/New_York", "Australia/Sydney", verbose=TRUE), 
 #'        tz="Australia/Sydney")
+#' @export
 toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
     .Call('RcppCCTZ_toTz', PACKAGE = 'RcppCCTZ', dt, tzfrom, tzto, verbose)
 }
@@ -105,6 +107,7 @@ toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
 #' formatDatetime(now)            # current (UTC) time, in full precision RFC3339
 #' formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
 #' formatDatetime(now + 0:4)	   # vectorised
+#' @export
 formatDatetime <- function(dtv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
     .Call('RcppCCTZ_formatDatetime', PACKAGE = 'RcppCCTZ', dtv, fmt, lcltzstr, tgttzstr)
 }
@@ -130,6 +133,7 @@ formatDatetime <- function(dtv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC"
 #' now <- trunc(Sys.time())
 #' parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 #' options(digits.secs=ds)
+#' @export
 parseDatetime <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
     .Call('RcppCCTZ_parseDatetime', PACKAGE = 'RcppCCTZ', svec, fmt, tzstr)
 }
@@ -138,11 +142,13 @@ parseDatetime <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
 #' @param secv A numeric vector with seconds since the epoch
 #' @param nanov A numeric vector with nanoseconds since the epoch,
 #' complementing \code{secv}.
+#' @export
 formatDouble <- function(secv, nanov, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tgttzstr = "UTC") {
     .Call('RcppCCTZ_formatDouble', PACKAGE = 'RcppCCTZ', secv, nanov, fmt, tgttzstr)
 }
 
 #' @rdname parseDatetime
+#' @export
 parseDouble <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
     .Call('RcppCCTZ_parseDouble', PACKAGE = 'RcppCCTZ', svec, fmt, tzstr)
 }

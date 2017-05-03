@@ -19,13 +19,12 @@ format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"),
        tz="Australia/Sydney")
 
 
-#example0()	# uses localtime, hard to compare against
-example1()
-example2()
-#example3()     # idem
-#example4()     # idem
-helloMoon()
-
-exampleFormat()
+## RcppCCTZ:::example0()	# uses localtime, hard to compare against
+RcppCCTZ:::example1()
+RcppCCTZ:::example2()
+## RcppCCTZ:::example3()     # idem
+## RcppCCTZ:::example4()     # idem
+RcppCCTZ:::helloMoon()
+RcppCCTZ:::exampleFormat()
 
 tzDiff("America/New_York", "Europe/London", now)

@@ -28,6 +28,7 @@ namespace sc = std::chrono; 	// shorthand
 //' # tabulate difference for every week of the year
 //' table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
 //'                                       as.POSIXct(as.Date("2016-01-01") + d*7))))
+//' @export
 // [[Rcpp::export]]
 double tzDiff(const std::string tzfrom,
               const std::string tzto,
@@ -86,6 +87,7 @@ double tzDiff(const std::string tzfrom,
 //' format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), 
 //'             "America/New_York", "Australia/Sydney", verbose=TRUE), 
 //'        tz="Australia/Sydney")
+//' @export
 // [[Rcpp::export]]
 Rcpp::Datetime toTz(Rcpp::Datetime dt,
                     const std::string tzfrom,
@@ -123,7 +125,6 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
     return Rcpp::Datetime(newdt);
 }
 
-
 //' Format a Datetime vector
 //'
 //' An alternative to \code{format.POSIXct} based on the CCTZ library. The
@@ -149,6 +150,7 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
 //' formatDatetime(now)            # current (UTC) time, in full precision RFC3339
 //' formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
 //' formatDatetime(now + 0:4)	   # vectorised
+//' @export
 // [[Rcpp::export]]
 Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
                                      std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
@@ -195,6 +197,7 @@ Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
 //' now <- trunc(Sys.time())
 //' parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 //' options(digits.secs=ds)
+//' @export
 // [[Rcpp::export]]
 Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
                                    std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
@@ -226,6 +229,7 @@ Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
 //' @param secv A numeric vector with seconds since the epoch
 //' @param nanov A numeric vector with nanoseconds since the epoch,
 //' complementing \code{secv}.
+//' @export
 // [[Rcpp::export]]
 Rcpp::CharacterVector formatDouble(Rcpp::NumericVector secv,
                                    Rcpp::NumericVector nanov,
@@ -251,6 +255,7 @@ Rcpp::CharacterVector formatDouble(Rcpp::NumericVector secv,
 }
 
 //' @rdname parseDatetime
+//' @export
 // [[Rcpp::export]]
 Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec,
                                 std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
