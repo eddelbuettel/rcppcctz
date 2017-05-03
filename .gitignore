@@ -5,3 +5,13 @@
 src/*.o
 src/*.so
 src/*.dll
+TAGS
+*.DS_Store
+*~
+tmp*
+.Rhistory
+.RData
+TAGS
+revdep/
+CRAN_notes.md
+announcement.md
