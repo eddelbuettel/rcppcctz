@@ -39,3 +39,7 @@ NULL
         Sys.setenv("TZDIR"=file.path(R.home(), "share", "zoneinfo"))
     }
 }
+
+.onUnload <- function (libpath) {
+    library.dynam.unload("RcppCCTZ", libpath)
+}
