@@ -112,14 +112,12 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
 
     // create a civil-time object from time-point and new timezone
     const auto ct = cctz::convert(tp, tz2);
-
-    cctz::time_point<cctz::sys_seconds> ntp = cctz::convert(ct, tz2);
-    cctz::time_point<cctz::sys_seconds> unix_epoch =
-        sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
-
-    // time since epoch, with fractional seconds added back in
-    double newdt = (ntp - unix_epoch).count() + remainder;
+    if (verbose) Rcpp::Rcout << ct << std::endl;
     
+    cctz::time_point<cctz::sys_seconds> ntp = cctz::convert(ct, tz2);
+    // time since epoch, with fractional seconds added back in
+    double newdt = ntp.time_since_epoch().count() + remainder;
+
     return Rcpp::Datetime(newdt);
 }
 
