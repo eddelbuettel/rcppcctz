@@ -157,3 +157,7 @@ now <- function() {
     invisible(.Call('RcppCCTZ_now', PACKAGE = 'RcppCCTZ'))
 }
 
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call('RcppCCTZ_RcppExport_registerCCallable', PACKAGE = 'RcppCCTZ')
+})

@@ -1,7 +1,7 @@
 // -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// [[Rcpp::interfaces(r, cpp)]]
 
 #include <Rcpp.h>
-
 #include "civil_time.h"
 #include "time_zone.h"
 #include "time_zone_if.h"
