@@ -1,3 +1,21 @@
+2017-06-19  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.2.3
+
+	* R/init.R (.onLoad): Renamed from .onAttach, set TZDIR only if
+	unset, removed the (conditional on intreactive mode) message,
+
+	* README.md: Use alternate for img.shields.io GPL-2+ badge
+
+	* src/RcppExports.cpp (R_init_anytime): Registration now here
+	* src/init.c: Deleted as calls now made in RcppExports.cpp
+	* R/RcppExports.R: Updated by Rcpp 0.12.11 as well
+
+2017-05-03  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/utilities.cpp: The epoch offset is now calculated more
+	directly using a member function
+
 2017-04-20  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.2

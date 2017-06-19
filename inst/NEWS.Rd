@@ -3,7 +3,16 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
-\section{Changes in version 0.2.2 (2017-xx-yy)}{
+\section{Changes in version 0.2.3 (2017-06-19)}{
+  \itemize{
+    \item On Windows, the \code{TZDIR} environment variable is now set
+    in \code{.onLoad()}
+    \item Replaced \code{init.c} with registration code inside of
+    \code{RcppExports.cpp} thanks to Rcpp 0.12.11.
+  }
+}
+
+\section{Changes in version 0.2.2 (2017-04-20)}{
   \itemize{
     \item Synchronized with upstream CCTZ
     \item The \code{time_point} object is instantiated explicitly for

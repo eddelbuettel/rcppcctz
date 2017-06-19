@@ -1,6 +1,6 @@
 
-R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
-Copyright (C) 2016 The R Foundation for Statistical Computing
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -40,6 +40,7 @@ Type 'q()' to quit R.
 +        tz="Australia/Sydney")
 1969-07-20 22:56:00 -0400
 1969-07-21 12:56:00 +1000
+1969-07-21T12:56:00
 [1] "1969-07-21 12:56:00"
 > 
 > 
@@ -64,4 +65,4 @@ Talk running long!
 > 
 > proc.time()
    user  system elapsed 
-  0.296   0.772   0.247 
+  0.276   0.312   0.294 

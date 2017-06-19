@@ -2,31 +2,31 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 example0 <- function() {
-    invisible(.Call('RcppCCTZ_example0', PACKAGE = 'RcppCCTZ'))
+    invisible(.Call(RcppCCTZ_example0))
 }
 
 helloMoon <- function(verbose = FALSE) {
-    .Call('RcppCCTZ_helloMoon', PACKAGE = 'RcppCCTZ', verbose)
+    .Call(RcppCCTZ_helloMoon, verbose)
 }
 
 example1 <- function() {
-    invisible(.Call('RcppCCTZ_example1', PACKAGE = 'RcppCCTZ'))
+    invisible(.Call(RcppCCTZ_example1))
 }
 
 example2 <- function() {
-    .Call('RcppCCTZ_example2', PACKAGE = 'RcppCCTZ')
+    .Call(RcppCCTZ_example2)
 }
 
 example3 <- function() {
-    invisible(.Call('RcppCCTZ_example3', PACKAGE = 'RcppCCTZ'))
+    invisible(.Call(RcppCCTZ_example3))
 }
 
 example4 <- function() {
-    invisible(.Call('RcppCCTZ_example4', PACKAGE = 'RcppCCTZ'))
+    invisible(.Call(RcppCCTZ_example4))
 }
 
 exampleFormat <- function() {
-    invisible(.Call('RcppCCTZ_exampleFormat', PACKAGE = 'RcppCCTZ'))
+    invisible(.Call(RcppCCTZ_exampleFormat))
 }
 
 #' Difference between two given timezones at a specified date.
@@ -50,7 +50,7 @@ exampleFormat <- function() {
 #' table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
 #'                                       as.POSIXct(as.Date("2016-01-01") + d*7))))
 tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
-    .Call('RcppCCTZ_tzDiff', PACKAGE = 'RcppCCTZ', tzfrom, tzto, dt, verbose)
+    .Call(RcppCCTZ_tzDiff, tzfrom, tzto, dt, verbose)
 }
 
 #' Change from one given timezone to another.
@@ -77,7 +77,7 @@ tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
 #'             "America/New_York", "Australia/Sydney", verbose=TRUE), 
 #'        tz="Australia/Sydney")
 toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
-    .Call('RcppCCTZ_toTz', PACKAGE = 'RcppCCTZ', dt, tzfrom, tzto, verbose)
+    .Call(RcppCCTZ_toTz, dt, tzfrom, tzto, verbose)
 }
 
 #' Format a Datetime vector
@@ -106,7 +106,7 @@ toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
 #' formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
 #' formatDatetime(now + 0:4)	   # vectorised
 formatDatetime <- function(dtv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
-    .Call('RcppCCTZ_formatDatetime', PACKAGE = 'RcppCCTZ', dtv, fmt, lcltzstr, tgttzstr)
+    .Call(RcppCCTZ_formatDatetime, dtv, fmt, lcltzstr, tgttzstr)
 }
 
 #' Parse a Datetime vector
@@ -131,7 +131,7 @@ formatDatetime <- function(dtv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC"
 #' parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 #' options(digits.secs=ds)
 parseDatetime <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
-    .Call('RcppCCTZ_parseDatetime', PACKAGE = 'RcppCCTZ', svec, fmt, tzstr)
+    .Call(RcppCCTZ_parseDatetime, svec, fmt, tzstr)
 }
 
 #' @rdname formatDatetime
@@ -139,15 +139,15 @@ parseDatetime <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
 #' @param nanov A numeric vector with nanoseconds since the epoch,
 #' complementing \code{secv}.
 formatDouble <- function(secv, nanov, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tgttzstr = "UTC") {
-    .Call('RcppCCTZ_formatDouble', PACKAGE = 'RcppCCTZ', secv, nanov, fmt, tgttzstr)
+    .Call(RcppCCTZ_formatDouble, secv, nanov, fmt, tgttzstr)
 }
 
 #' @rdname parseDatetime
 parseDouble <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
-    .Call('RcppCCTZ_parseDouble', PACKAGE = 'RcppCCTZ', svec, fmt, tzstr)
+    .Call(RcppCCTZ_parseDouble, svec, fmt, tzstr)
 }
 
 now <- function() {
-    invisible(.Call('RcppCCTZ_now', PACKAGE = 'RcppCCTZ'))
+    invisible(.Call(RcppCCTZ_now))
 }
 

@@ -1,4 +1,4 @@
-## RcppCCTZ [![Build Status](https://travis-ci.org/eddelbuettel/rcppcctz.svg)](https://travis-ci.org/eddelbuettel/rcppcctz) [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ) [![Downloads](http://cranlogs.r-pkg.org/badges/RcppCCTZ?color=brightgreen)](http://www.r-pkg.org/pkg/RcppCCTZ)
+## RcppCCTZ [![Build Status](https://travis-ci.org/eddelbuettel/rcppcctz.svg)](https://travis-ci.org/eddelbuettel/rcppcctz) [![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ) [![Downloads](http://cranlogs.r-pkg.org/badges/RcppCCTZ?color=brightgreen)](http://www.r-pkg.org/pkg/RcppCCTZ)
 
 Rcpp bindings for [CCTZ](https://github.com/google/cctz)
 
