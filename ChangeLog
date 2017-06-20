@@ -1,3 +1,9 @@
+2017-06-20  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/time_tool.cc: #ifdef away the unused main()
+
+	* .travis.yml (group): Added as required by Travis CI
+
 2017-06-19  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.3
