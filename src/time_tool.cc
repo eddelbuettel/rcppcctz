@@ -188,6 +188,7 @@ bool LooksLikeNegOffset(const char* s) {
   return false;
 }
 
+#ifdef REALLY_USE_MAIN_FUNCTION
 int main(int argc, char** argv) {
   const std::string prog = argv[0] ? Basename(argv[0]) : "time_tool";
 
@@ -260,3 +261,4 @@ int main(int argc, char** argv) {
   /*std::cerr*/ Rcpp::Rcerr << args << ": Malformed time spec\n";
   return 1;
 }
+#endif // REALLY_USE_MAIN_FUNCTION
