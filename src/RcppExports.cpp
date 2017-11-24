@@ -72,14 +72,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // tzDiff
-double tzDiff(const std::string tzfrom, const std::string tzto, Rcpp::Datetime dt, bool verbose);
+Rcpp::NumericVector tzDiff(const std::string tzfrom, const std::string tzto, Rcpp::RObject dt, bool verbose);
 RcppExport SEXP _RcppCCTZ_tzDiff(SEXP tzfromSEXP, SEXP tztoSEXP, SEXP dtSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string >::type tzfrom(tzfromSEXP);
     Rcpp::traits::input_parameter< const std::string >::type tzto(tztoSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Datetime >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type dt(dtSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     rcpp_result_gen = Rcpp::wrap(tzDiff(tzfrom, tzto, dt, verbose));
     return rcpp_result_gen;
@@ -163,21 +163,6 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP RcppCCTZ_example0();
-RcppExport SEXP RcppCCTZ_example1();
-RcppExport SEXP RcppCCTZ_example2();
-RcppExport SEXP RcppCCTZ_example3();
-RcppExport SEXP RcppCCTZ_example4();
-RcppExport SEXP RcppCCTZ_exampleFormat();
-RcppExport SEXP RcppCCTZ_formatDatetime(SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP RcppCCTZ_formatDouble(SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP RcppCCTZ_helloMoon(SEXP);
-RcppExport SEXP RcppCCTZ_now();
-RcppExport SEXP RcppCCTZ_parseDatetime(SEXP, SEXP, SEXP);
-RcppExport SEXP RcppCCTZ_parseDouble(SEXP, SEXP, SEXP);
-RcppExport SEXP RcppCCTZ_toTz(SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP RcppCCTZ_tzDiff(SEXP, SEXP, SEXP, SEXP);
-
 static const R_CallMethodDef CallEntries[] = {
     {"_RcppCCTZ_example0", (DL_FUNC) &_RcppCCTZ_example0, 0},
     {"_RcppCCTZ_helloMoon", (DL_FUNC) &_RcppCCTZ_helloMoon, 1},
@@ -193,20 +178,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppCCTZ_formatDouble", (DL_FUNC) &_RcppCCTZ_formatDouble, 4},
     {"_RcppCCTZ_parseDouble", (DL_FUNC) &_RcppCCTZ_parseDouble, 3},
     {"_RcppCCTZ_now", (DL_FUNC) &_RcppCCTZ_now, 0},
-    {"RcppCCTZ_example0",       (DL_FUNC) &RcppCCTZ_example0,       0},
-    {"RcppCCTZ_example1",       (DL_FUNC) &RcppCCTZ_example1,       0},
-    {"RcppCCTZ_example2",       (DL_FUNC) &RcppCCTZ_example2,       0},
-    {"RcppCCTZ_example3",       (DL_FUNC) &RcppCCTZ_example3,       0},
-    {"RcppCCTZ_example4",       (DL_FUNC) &RcppCCTZ_example4,       0},
-    {"RcppCCTZ_exampleFormat",  (DL_FUNC) &RcppCCTZ_exampleFormat,  0},
-    {"RcppCCTZ_formatDatetime", (DL_FUNC) &RcppCCTZ_formatDatetime, 4},
-    {"RcppCCTZ_formatDouble",   (DL_FUNC) &RcppCCTZ_formatDouble,   4},
-    {"RcppCCTZ_helloMoon",      (DL_FUNC) &RcppCCTZ_helloMoon,      1},
-    {"RcppCCTZ_now",            (DL_FUNC) &RcppCCTZ_now,            0},
-    {"RcppCCTZ_parseDatetime",  (DL_FUNC) &RcppCCTZ_parseDatetime,  3},
-    {"RcppCCTZ_parseDouble",    (DL_FUNC) &RcppCCTZ_parseDouble,    3},
-    {"RcppCCTZ_toTz",           (DL_FUNC) &RcppCCTZ_toTz,           4},
-    {"RcppCCTZ_tzDiff",         (DL_FUNC) &RcppCCTZ_tzDiff,         4},
     {NULL, NULL, 0}
 };
 

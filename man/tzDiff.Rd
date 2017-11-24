@@ -11,7 +11,7 @@ tzDiff(tzfrom, tzto, dt, verbose = FALSE)
 
 \item{tzto}{The second time zone as a character vector.}
 
-\item{dt}{A Datetime object specifying when the difference is to be computed.}
+\item{dt}{A Date or Datetime object specifying when the difference is to be computed.}
 
 \item{verbose}{A boolean toggle indicating whether more verbose operations
 are desired, default is \code{FALSE}.}
