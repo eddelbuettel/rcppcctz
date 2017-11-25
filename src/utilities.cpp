@@ -40,6 +40,7 @@ Rcpp::NumericVector tzDiff(const std::string tzfrom,
                            bool verbose=false) {
     
     cctz::time_zone tz1, tz2;
+    
     if (!cctz::load_time_zone(tzfrom, &tz1)) Rcpp::stop("Bad 'from' timezone");
     if (!cctz::load_time_zone(tzto, &tz2))   Rcpp::stop("Bad 'to' timezone");
     
@@ -49,8 +50,8 @@ Rcpp::NumericVector tzDiff(const std::string tzfrom,
         auto dtv = Rcpp::as<Rcpp::DateVector>(dt);
         res = Rcpp::NumericVector(dtv.size());
         std::transform(dtv.begin(), dtv.end(), res.begin(), 
-                       [&tz1, &tz2, verbose](Rcpp::Date& dt){
-                           Rcpp::Datetime dtt(dt * SECS_PER_DAY);
+                       [&tz1, &tz2, verbose](double dtval){
+                           Rcpp::Datetime dtt(dtval * SECS_PER_DAY);
                            return tzDiffAtomic(tz1, tz2, dtt, verbose);
                        });
         
@@ -58,7 +59,10 @@ Rcpp::NumericVector tzDiff(const std::string tzfrom,
         auto dtv = Rcpp::as<Rcpp::DatetimeVector>(dt);
         res = Rcpp::NumericVector(dtv.size());
         std::transform(dtv.begin(), dtv.end(), res.begin(), 
-                       [&tz1, &tz2, verbose](Rcpp::Datetime& dt){return tzDiffAtomic(tz1, tz2, dt, verbose);});
+                       [&tz1, &tz2, verbose](double dtval){
+                           Rcpp::Datetime dtt(dtval);
+                           return tzDiffAtomic(tz1, tz2, dtt, verbose);
+                        });
         
     } else Rcpp::stop("Unhandled date class");
     
