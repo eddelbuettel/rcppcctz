@@ -37,7 +37,7 @@ exampleFormat <- function() {
 #' @title Return difference between two time zones at a given date.
 #' @param tzfrom The first time zone as a character vector.
 #' @param tzto The second time zone as a character vector.
-#' @param dt A Date or Datetime object specifying when the difference is to be computed.
+#' @param dt A Datetime object specifying when the difference is to be computed.
 #' @param verbose A boolean toggle indicating whether more verbose operations
 #' are desired, default is \code{FALSE}.
 #' @return A numeric value with the difference (in hours) between the first and

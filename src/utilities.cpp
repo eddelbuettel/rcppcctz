@@ -11,7 +11,6 @@ namespace sc = std::chrono; 	// shorthand
 
 double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, const Rcpp::Datetime& dt, bool verbose);
 
-#define SECS_PER_DAY 86400.0
 
 //' Difference between two given timezones at a specified date.
 //'
@@ -21,7 +20,7 @@ double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, cons
 //' @title Return difference between two time zones at a given date.
 //' @param tzfrom The first time zone as a character vector.
 //' @param tzto The second time zone as a character vector.
-//' @param dt A Date or Datetime object specifying when the difference is to be computed.
+//' @param dt A Datetime object specifying when the difference is to be computed.
 //' @param verbose A boolean toggle indicating whether more verbose operations
 //' are desired, default is \code{FALSE}.
 //' @return A numeric value with the difference (in hours) between the first and
@@ -36,7 +35,7 @@ double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, cons
 // [[Rcpp::export]]
 Rcpp::NumericVector tzDiff(const std::string tzfrom,
                            const std::string tzto,
-                           Rcpp::RObject dt,
+                           const Rcpp::NumericVector& dt,
                            bool verbose=false) {
     
     cctz::time_zone tz1, tz2;
@@ -46,19 +45,9 @@ Rcpp::NumericVector tzDiff(const std::string tzfrom,
     
     Rcpp::NumericVector res;
     
-    if (dt.inherits("Date")) {
-        auto dtv = Rcpp::as<Rcpp::DateVector>(dt);
-        res = Rcpp::NumericVector(dtv.size());
-        std::transform(dtv.begin(), dtv.end(), res.begin(), 
-                       [&tz1, &tz2, verbose](double dtval){
-                           Rcpp::Datetime dtt(dtval * SECS_PER_DAY);
-                           return tzDiffAtomic(tz1, tz2, dtt, verbose);
-                       });
-        
-    } else if (dt.inherits("POSIXct")) {
-        auto dtv = Rcpp::as<Rcpp::DatetimeVector>(dt);
-        res = Rcpp::NumericVector(dtv.size());
-        std::transform(dtv.begin(), dtv.end(), res.begin(), 
+    if (dt.inherits("POSIXct")) {
+        res = Rcpp::NumericVector(dt.size());
+        std::transform(dt.begin(), dt.end(), res.begin(), 
                        [&tz1, &tz2, verbose](double dtval){
                            Rcpp::Datetime dtt(dtval);
                            return tzDiffAtomic(tz1, tz2, dtt, verbose);

@@ -72,14 +72,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // tzDiff
-Rcpp::NumericVector tzDiff(const std::string tzfrom, const std::string tzto, Rcpp::RObject dt, bool verbose);
+Rcpp::NumericVector tzDiff(const std::string tzfrom, const std::string tzto, const Rcpp::NumericVector& dt, bool verbose);
 RcppExport SEXP _RcppCCTZ_tzDiff(SEXP tzfromSEXP, SEXP tztoSEXP, SEXP dtSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string >::type tzfrom(tzfromSEXP);
     Rcpp::traits::input_parameter< const std::string >::type tzto(tztoSEXP);
-    Rcpp::traits::input_parameter< Rcpp::RObject >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type dt(dtSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
     rcpp_result_gen = Rcpp::wrap(tzDiff(tzfrom, tzto, dt, verbose));
     return rcpp_result_gen;
