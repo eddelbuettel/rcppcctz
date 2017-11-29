@@ -3,6 +3,15 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
+\section{Changes in version 0.2.4 (2017-11-19)}{
+  \itemize{
+    \item The \code{tzDiff} function now supports a vector argument
+    (\ghpr{24}).
+    \item An unused \code{main()} was \code{#ifdef}'ed away to please
+    another compiler/OS combination.
+  }
+}
+
 \section{Changes in version 0.2.3 (2017-06-19)}{
   \itemize{
     \item On Windows, the \code{TZDIR} environment variable is now set
