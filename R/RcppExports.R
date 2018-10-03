@@ -44,11 +44,13 @@ exampleFormat <- function() {
 #' second time zone at the given date
 #' @author Dirk Eddelbuettel
 #' @examples
+#' \dontrun{
 #' # simple call: difference now
 #' tzDiff("America/New_York", "Europe/London", Sys.time())
 #' # tabulate difference for every week of the year
 #' table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
 #'                                       as.POSIXct(as.Date("2016-01-01") + d*7))))
+#' }
 tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
     .Call(`_RcppCCTZ_tzDiff`, tzfrom, tzto, dt, verbose)
 }
@@ -68,6 +70,7 @@ tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
 #' incoming object (and its timezone) shifted to the target timezone.
 #' @author Dirk Eddelbuettel
 #' @examples
+#' \dontrun{
 #' toTz(Sys.time(), "America/New_York", "Europe/London")
 #' # this redoes the 'Armstrong on the moon in NYC and Sydney' example
 #' # note that the default print method will print the return object in _your local time_
@@ -76,6 +79,7 @@ tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
 #' format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), 
 #'             "America/New_York", "Australia/Sydney", verbose=TRUE), 
 #'        tz="Australia/Sydney")
+#' }
 toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
     .Call(`_RcppCCTZ_toTz`, dt, tzfrom, tzto, verbose)
 }
@@ -101,10 +105,12 @@ toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
 #' not work on Windows; one has to use \code{"\%Y-\%m-\%d \%H:\%M:\%S"}.
 #' @author Dirk Eddelbuettel
 #' @examples
+#' \dontrun{
 #' now <- Sys.time()
 #' formatDatetime(now)            # current (UTC) time, in full precision RFC3339
 #' formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
 #' formatDatetime(now + 0:4)	   # vectorised
+#' }
 formatDatetime <- function(dtv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC", tgttzstr = "UTC") {
     .Call(`_RcppCCTZ_formatDatetime`, dtv, fmt, lcltzstr, tgttzstr)
 }
@@ -122,6 +128,7 @@ formatDatetime <- function(dtv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC"
 #' two columns for seconds and nanoseconds for \code{parseDouble}
 #' @author Dirk Eddelbuettel
 #' @examples
+#' \dontrun{
 #' ds <- getOption("digits.secs")
 #' options(digits.secs=6) # max value
 #' parseDatetime("2016-12-07 10:11:12",        "%Y-%m-%d %H:%M:%S");   # full seconds
@@ -130,6 +137,7 @@ formatDatetime <- function(dtv, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", lcltzstr = "UTC"
 #' now <- trunc(Sys.time())
 #' parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 #' options(digits.secs=ds)
+#' }
 parseDatetime <- function(svec, fmt = "%Y-%m-%dT%H:%M:%E*S%Ez", tzstr = "UTC") {
     .Call(`_RcppCCTZ_parseDatetime`, svec, fmt, tzstr)
 }

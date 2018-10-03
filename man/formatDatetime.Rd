@@ -47,10 +47,12 @@ not work on Windows; one has to use \code{"\%Y-\%m-\%d \%H:\%M:\%S"}.
 }
 
 \examples{
+\dontrun{
 now <- Sys.time()
 formatDatetime(now)            # current (UTC) time, in full precision RFC3339
 formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
 formatDatetime(now + 0:4)	   # vectorised
+}
 }
 \author{
 Dirk Eddelbuettel
