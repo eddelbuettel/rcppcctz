@@ -26,11 +26,13 @@ double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, cons
 //' second time zone at the given date
 //' @author Dirk Eddelbuettel
 //' @examples
+//' \dontrun{
 //' # simple call: difference now
 //' tzDiff("America/New_York", "Europe/London", Sys.time())
 //' # tabulate difference for every week of the year
 //' table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
 //'                                       as.POSIXct(as.Date("2016-01-01") + d*7))))
+//' }
 // [[Rcpp::export]]
 Rcpp::NumericVector tzDiff(const std::string tzfrom,
                            const std::string tzto,
@@ -99,6 +101,7 @@ double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, cons
 //' incoming object (and its timezone) shifted to the target timezone.
 //' @author Dirk Eddelbuettel
 //' @examples
+//' \dontrun{
 //' toTz(Sys.time(), "America/New_York", "Europe/London")
 //' # this redoes the 'Armstrong on the moon in NYC and Sydney' example
 //' # note that the default print method will print the return object in _your local time_
@@ -107,6 +110,7 @@ double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, cons
 //' format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), 
 //'             "America/New_York", "Australia/Sydney", verbose=TRUE), 
 //'        tz="Australia/Sydney")
+//' }
 // [[Rcpp::export]]
 Rcpp::Datetime toTz(Rcpp::Datetime dt,
                     const std::string tzfrom,
@@ -164,10 +168,12 @@ Rcpp::Datetime toTz(Rcpp::Datetime dt,
 //' not work on Windows; one has to use \code{"\%Y-\%m-\%d \%H:\%M:\%S"}.
 //' @author Dirk Eddelbuettel
 //' @examples
+//' \dontrun{
 //' now <- Sys.time()
 //' formatDatetime(now)            # current (UTC) time, in full precision RFC3339
 //' formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
 //' formatDatetime(now + 0:4)	   # vectorised
+//' }
 // [[Rcpp::export]]
 Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
                                      std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
@@ -206,6 +212,7 @@ Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
 //' two columns for seconds and nanoseconds for \code{parseDouble}
 //' @author Dirk Eddelbuettel
 //' @examples
+//' \dontrun{
 //' ds <- getOption("digits.secs")
 //' options(digits.secs=6) # max value
 //' parseDatetime("2016-12-07 10:11:12",        "%Y-%m-%d %H:%M:%S");   # full seconds
@@ -214,6 +221,7 @@ Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
 //' now <- trunc(Sys.time())
 //' parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 //' options(digits.secs=ds)
+//' }
 // [[Rcpp::export]]
 Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
                                    std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",

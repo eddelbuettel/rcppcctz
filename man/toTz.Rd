@@ -28,6 +28,7 @@ Time zone offsets vary by date, and this helper function converts
 a Datetime object from one given timezone to another.
 }
 \examples{
+\dontrun{
 toTz(Sys.time(), "America/New_York", "Europe/London")
 # this redoes the 'Armstrong on the moon in NYC and Sydney' example
 # note that the default print method will print the return object in _your local time_
@@ -36,6 +37,7 @@ toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), "America/New_York", "Australia/Syd
 format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), 
             "America/New_York", "Australia/Sydney", verbose=TRUE), 
        tz="Australia/Sydney")
+}
 }
 \author{
 Dirk Eddelbuettel

@@ -28,11 +28,13 @@ Time zone offsets vary by date, and this helper function computes
 the difference (in hours) between two time zones for a given date time.
 }
 \examples{
+\dontrun{
 # simple call: difference now
 tzDiff("America/New_York", "Europe/London", Sys.time())
 # tabulate difference for every week of the year
 table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
                                       as.POSIXct(as.Date("2016-01-01") + d*7))))
+}
 }
 \author{
 Dirk Eddelbuettel
