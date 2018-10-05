@@ -18,8 +18,8 @@
 #include <memory>
 #include <string>
 
-#include "civil_time.h"
-#include "time_zone.h"
+#include "cctz/civil_time.h"
+#include "cctz/time_zone.h"
 #include "time_zone_if.h"
 #include "time_zone_info.h"
 
@@ -35,15 +35,18 @@ class time_zone::Impl {
   // some other kind of error occurs. Note that loading "UTC" never fails.
   static bool LoadTimeZone(const std::string& name, time_zone* tz);
 
-  // Dereferences the time_zone to obtain its Impl.
-  static const time_zone::Impl& get(const time_zone& tz);
+  // Clears the map of cached time zones.  Primarily for use in benchmarks
+  // that gauge the performance of loading/parsing the time-zone data.
+  static void ClearTimeZoneMapTestOnly();
 
   // The primary key is the time-zone ID (e.g., "America/New_York").
-  const std::string& name() const { return name_; }
+  const std::string& Name() const {
+    // TODO: It would nice if the zoneinfo data included the zone name.
+    return name_;
+  }
 
   // Breaks a time_point down to civil-time components in this time zone.
-  time_zone::absolute_lookup BreakTime(
-      const time_point<sys_seconds>& tp) const {
+  time_zone::absolute_lookup BreakTime(const time_point<seconds>& tp) const {
     return zone_->BreakTime(tp);
   }
 
@@ -53,6 +56,22 @@ class time_zone::Impl {
   time_zone::civil_lookup MakeTime(const civil_second& cs) const {
     return zone_->MakeTime(cs);
   }
+
+  // Finds the time of the next/previous offset change in this time zone.
+  bool NextTransition(const time_point<seconds>& tp,
+                      time_zone::civil_transition* trans) const {
+    return zone_->NextTransition(tp, trans);
+  }
+  bool PrevTransition(const time_point<seconds>& tp,
+                      time_zone::civil_transition* trans) const {
+    return zone_->PrevTransition(tp, trans);
+  }
+
+  // Returns an implementation-defined version string for this time zone.
+  std::string Version() const { return zone_->Version(); }
+
+  // Returns an implementation-defined description of this time zone.
+  std::string Description() const { return zone_->Description(); }
 
  private:
   explicit Impl(const std::string& name);

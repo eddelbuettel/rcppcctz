@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #if defined(_WIN32) || defined(_WIN64)
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS 1
 #endif
 
 #include "time_zone_libc.h"
@@ -23,8 +23,8 @@
 #include <tuple>
 #include <utility>
 
-#include "civil_time.h"
-#include "time_zone.h"
+#include "cctz/civil_time.h"
+#include "cctz/time_zone.h"
 
 namespace cctz {
 
@@ -54,7 +54,8 @@ OffsetAbbr get_offset_abbr(const std::tm& tm) {
   const char* abbr = tzname[is_dst];
   return {off, abbr};
 }
-#elif defined(__native_client__) || defined(__myriad2__) || defined(__asmjs__)
+#elif defined(__native_client__) || defined(__myriad2__) || \
+    defined(__EMSCRIPTEN__)
 // Uses the globals: 'timezone' and 'tzname'.
 OffsetAbbr get_offset_abbr(const std::tm& tm) {
   const bool is_dst = tm.tm_isdst > 0;
@@ -88,7 +89,7 @@ TimeZoneLibC::TimeZoneLibC(const std::string& name)
     : local_(name == "localtime") {}
 
 time_zone::absolute_lookup TimeZoneLibC::BreakTime(
-    const time_point<sys_seconds>& tp) const {
+    const time_point<seconds>& tp) const {
   time_zone::absolute_lookup al;
   std::time_t t = ToUnixSeconds(tp);
   std::tm tm;
@@ -134,6 +135,24 @@ time_zone::civil_lookup TimeZoneLibC::MakeTime(const civil_second& cs) const {
   cl.kind = time_zone::civil_lookup::UNIQUE;
   cl.pre = cl.trans = cl.post = FromUnixSeconds(t);
   return cl;
+}
+
+bool TimeZoneLibC::NextTransition(const time_point<seconds>& tp,
+                                  time_zone::civil_transition* trans) const {
+  return false;
+}
+
+bool TimeZoneLibC::PrevTransition(const time_point<seconds>& tp,
+                                  time_zone::civil_transition* trans) const {
+  return false;
+}
+
+std::string TimeZoneLibC::Version() const {
+  return std::string();  // unknown
+}
+
+std::string TimeZoneLibC::Description() const {
+  return local_ ? "localtime" : "UTC";
 }
 
 }  // namespace cctz

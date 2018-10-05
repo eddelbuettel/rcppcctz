@@ -1,2 +1,2 @@
 
-rm -f src/*.o src/*.so src/*.dylib src/*~ *~
+rm -f src/*.o src/*.so src/*.dylib src/*~ *~ src/*.d

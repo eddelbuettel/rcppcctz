@@ -14,7 +14,6 @@
 
 // A command-line tool for exercising the CCTZ library.
 
-#include <getopt.h>
 #include <algorithm>
 #include <cctype>
 #include <chrono>
@@ -22,18 +21,19 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <string>
 
-#include "civil_time.h"
-#include "time_zone.h"
+#include "cctz/civil_time.h"
+#include "cctz/time_zone.h"
 
 #include <Rcpp.h>
 
 // Pulls in the aliases from cctz for brevity.
 template <typename D>
 using time_point = cctz::time_point<D>;
-using sys_seconds = cctz::sys_seconds;
+using seconds = cctz::seconds;
 
 // parse() specifiers for command-line time arguments.
 const char* const kFormats[] = {
@@ -59,11 +59,11 @@ const char* const kFormats[] = {
   nullptr
 };
 
-bool ParseTimeSpec(const std::string& args, time_point<sys_seconds>* when) {
+bool ParseTimeSpec(const std::string& args, time_point<seconds>* when) {
   const cctz::time_zone ignored{};
   for (const char* const* fmt = kFormats; *fmt != NULL; ++fmt) {
-    const std::string format = std::string(*fmt) + " %Ez";
-    time_point<sys_seconds> tp;
+    const std::string format = std::string(*fmt) + " %E*z";
+    time_point<seconds> tp;
     if (cctz::parse(format, args, ignored, &tp)) {
       *when = tp;
       return true;
@@ -72,12 +72,12 @@ bool ParseTimeSpec(const std::string& args, time_point<sys_seconds>* when) {
   return false;
 }
 
-bool ParseBreakdownSpec(const std::string& args, cctz::time_zone zone,
-                        cctz::civil_second* when) {
+bool ParseCivilSpec(const std::string& args, cctz::civil_second* when) {
+  const cctz::time_zone utc = cctz::utc_time_zone();
   for (const char* const* fmt = kFormats; *fmt != NULL; ++fmt) {
-    time_point<sys_seconds> tp;
-    if (cctz::parse(*fmt, args, zone, &tp)) {
-      *when = cctz::convert(tp, zone);
+    time_point<seconds> tp;
+    if (cctz::parse(*fmt, args, utc, &tp)) {
+      *when = cctz::convert(tp, utc);
       return true;
     }
   }
@@ -85,7 +85,7 @@ bool ParseBreakdownSpec(const std::string& args, cctz::time_zone zone,
 }
 
 // The FormatTime() specifier for output.
-const char* const kFormat = "%Y-%m-%d %H:%M:%S %Ez (%Z)";
+const char* const kFormat = "%Y-%m-%d %H:%M:%S %E*z (%Z)";
 
 const char* WeekDayName(cctz::weekday wd) {
   switch (wd) {
@@ -100,8 +100,7 @@ const char* WeekDayName(cctz::weekday wd) {
   return "XXX";
 }
 
-std::string FormatTimeInZone(time_point<sys_seconds> when,
-                             cctz::time_zone zone) {
+std::string FormatTimeInZone(time_point<seconds> when, cctz::time_zone zone) {
   std::ostringstream oss;
   oss << std::setw(33) << std::left << cctz::format(kFormat, when, zone);
   cctz::time_zone::absolute_lookup al = zone.lookup(when);
@@ -114,7 +113,14 @@ std::string FormatTimeInZone(time_point<sys_seconds> when,
   return oss.str();
 }
 
-void InstantInfo(const std::string& label, time_point<sys_seconds> when,
+void ZoneInfo(const std::string& label, cctz::time_zone tz) {
+  std::string version = tz.version();
+  if (version.empty()) version = "<unknown>";
+  Rcpp::Rcout << label << tz.name() << " [ver=" << version << " "
+            << tz.description() << "]\n";
+}
+
+void InstantInfo(const std::string& label, time_point<seconds> when,
                  cctz::time_zone zone) {
   const cctz::time_zone utc = cctz::utc_time_zone();  // might == zone
   const std::string time_label = "time_t";
@@ -123,39 +129,39 @@ void InstantInfo(const std::string& label, time_point<sys_seconds> when,
   int width = static_cast<int>(
       2 + std::max(std::max(time_label.size(), utc_label.size()),
                    zone_label.size()));
-  /* std::cout */ Rcpp::Rcout << label << " {\n";
-  /* std::cout */ Rcpp::Rcout << std::setw(width) << std::right << time_label << ": ";
-  /* std::cout */ Rcpp::Rcout << std::setw(10) << format("%s", when, utc);
-  /* std::cout */ Rcpp::Rcout << "\n";
-  /* std::cout */ Rcpp::Rcout << std::setw(width) << std::right << utc_label << ": ";
-  /* std::cout */ Rcpp::Rcout << FormatTimeInZone(when, utc) << "\n";
-  /* std::cout */ Rcpp::Rcout << std::setw(width) << std::right << zone_label << ": ";
-  /* std::cout */ Rcpp::Rcout << FormatTimeInZone(when, zone) << "\n";
-  /* std::cout */ Rcpp::Rcout << "}\n";
+  Rcpp::Rcout << label << " {\n";
+  Rcpp::Rcout << std::setw(width) << std::right << time_label << ": ";
+  Rcpp::Rcout << std::setw(10) << cctz::format("%s", when, utc);
+  Rcpp::Rcout << "\n";
+  Rcpp::Rcout << std::setw(width) << std::right << utc_label << ": ";
+  Rcpp::Rcout << FormatTimeInZone(when, utc) << "\n";
+  Rcpp::Rcout << std::setw(width) << std::right << zone_label << ": ";
+  Rcpp::Rcout << FormatTimeInZone(when, zone) << "\n";
+  Rcpp::Rcout << "}\n";
 }
 
 // Report everything we know about a cctz::civil_second (YMDHMS).
-int BreakdownInfo(const cctz::civil_second& cs, cctz::time_zone zone) {
-  /* std::cout */ Rcpp::Rcout << "tz: " << zone.name() << "\n";
+int CivilInfo(const cctz::civil_second& cs, cctz::time_zone zone) {
+  ZoneInfo("tz: ", zone);
   cctz::time_zone::civil_lookup cl = zone.lookup(cs);
   switch (cl.kind) {
     case cctz::time_zone::civil_lookup::UNIQUE: {
-      /* std::cout */ Rcpp::Rcout << "kind: UNIQUE\n";
+      Rcpp::Rcout << "kind: UNIQUE\n";
       InstantInfo("when", cl.pre, zone);
       break;
     }
     case cctz::time_zone::civil_lookup::SKIPPED: {
-      /* std::cout */ Rcpp::Rcout << "kind: SKIPPED\n";
+      Rcpp::Rcout << "kind: SKIPPED\n";
       InstantInfo("post", cl.post, zone);  // might == trans-1
-      InstantInfo("trans-1", cl.trans - std::chrono::seconds(1), zone);
+      InstantInfo("trans-1", cl.trans - seconds(1), zone);
       InstantInfo("trans", cl.trans, zone);
       InstantInfo("pre", cl.pre, zone);  // might == trans
       break;
     }
     case cctz::time_zone::civil_lookup::REPEATED: {
-      /* std::cout */ Rcpp::Rcout << "kind: REPEATED\n";
+      Rcpp::Rcout << "kind: REPEATED\n";
       InstantInfo("pre", cl.pre, zone);  // might == trans-1
-      InstantInfo("trans-1", cl.trans - std::chrono::seconds(1), zone);
+      InstantInfo("trans-1", cl.trans - seconds(1), zone);
       InstantInfo("trans", cl.trans, zone);
       InstantInfo("post", cl.post, zone);  // might == trans
       break;
@@ -164,11 +170,65 @@ int BreakdownInfo(const cctz::civil_second& cs, cctz::time_zone zone) {
   return 0;
 }
 
-// Report everything we know about a time_point<sys_seconds>.
-int TimeInfo(time_point<sys_seconds> when, cctz::time_zone zone) {
-  /* std::cout */ Rcpp::Rcout << "tz: " << zone.name() << "\n";
-  /* std::cout */ Rcpp::Rcout << "kind: UNIQUE\n";
+// Report everything we know about a time_point<seconds>.
+int TimeInfo(time_point<seconds> when, cctz::time_zone zone) {
+  ZoneInfo("tz: ", zone);
+  Rcpp::Rcout << "kind: UNIQUE\n";
   InstantInfo("when", when, zone);
+  return 0;
+}
+
+// Report everything we know about a time_zone.
+int ZoneDump(bool zdump, cctz::time_zone zone,
+             cctz::year_t lo_year, cctz::year_t hi_year) {
+  const cctz::time_zone utc = cctz::utc_time_zone();
+  if (zdump) {
+    Rcpp::Rcout << zone.name() << "  "
+              << std::numeric_limits<seconds::rep>::min()
+              << " = NULL\n";
+    Rcpp::Rcout << zone.name() << "  "
+              << std::numeric_limits<seconds::rep>::min() + 86400
+              << " = NULL\n";
+  } else {
+    ZoneInfo("", zone);
+  }
+
+  auto tp = cctz::convert(cctz::civil_second(lo_year, 1, 1, 0, 0, -1), zone);
+  cctz::time_zone::civil_transition trans;
+  while (zone.next_transition(tp, &trans)) {
+    if (trans.from.year() >= hi_year && trans.to.year() >= hi_year) break;
+    tp = zone.lookup(trans.to).trans;
+    if (!zdump) Rcpp::Rcout << "\n";
+    for (int count_down = 1; count_down >= 0; --count_down) {
+      auto ttp = tp - seconds(count_down);
+      if (zdump) {
+        Rcpp::Rcout << zone.name() << "  " << cctz::format("%c UT", ttp, utc)
+                  << " = " << cctz::format("%c %Z", ttp, zone);
+      } else {
+        Rcpp::Rcout << std::setw(10) << std::chrono::system_clock::to_time_t(ttp);
+        Rcpp::Rcout << " = " << cctz::format(kFormat, ttp, utc);
+        Rcpp::Rcout << " = " << cctz::format(kFormat, ttp, zone);
+      }
+      auto al = zone.lookup(ttp);
+      if (zdump) {
+        Rcpp::Rcout << " isdst=" << (al.is_dst ? '1' : '0')
+                  << " gmtoff=" << al.offset << "\n";
+      } else {
+        const char* wd = WeekDayName(get_weekday(cctz::civil_day(al.cs)));
+        Rcpp::Rcout << " [wd=" << wd << " dst=" << (al.is_dst ? 'T' : 'F')
+                  << " off=" << al.offset << "]\n";
+      }
+    }
+  }
+
+  if (zdump) {
+    Rcpp::Rcout << zone.name() << "  "
+              << std::numeric_limits<seconds::rep>::max() - 86400
+              << " = NULL\n";
+    Rcpp::Rcout << zone.name() << "  "
+              << std::numeric_limits<seconds::rep>::max()
+              << " = NULL\n";
+  }
   return 0;
 }
 
@@ -188,13 +248,46 @@ bool LooksLikeNegOffset(const char* s) {
   return false;
 }
 
-#ifdef REALLY_USE_MAIN_FUNCTION
+#if REALLY_USE_MAIN
+// Parses [<lo-year>,]<hi-year>.
+bool ParseYearRange(bool zdump, const std::string& args,
+                    cctz::year_t* lo_year, cctz::year_t* hi_year) {
+  std::size_t pos = 0;
+  std::size_t digit_pos = pos + (args[pos] == '-' ? 1 : 0);
+  if (digit_pos >= args.size() || !std::isdigit(args[digit_pos])) {
+    return false;
+  }
+  const cctz::year_t first = std::stoll(args, &pos);
+  if (pos == args.size()) {
+    *lo_year = (zdump ? -292277022656 : first);
+    *hi_year = (zdump ? first : first + 1);
+    return true;
+  }
+  if (args[pos] != ' ' || ++pos == args.size()) {
+    // Any comma was already converted to a space.
+    return false;
+  }
+  digit_pos = pos + (args[pos] == '-' ? 1 : 0);
+  if (digit_pos >= args.size() || !std::isdigit(args[digit_pos])) {
+    return false;
+  }
+  const std::string rem = args.substr(pos);
+  const cctz::year_t second = std::stoll(rem, &pos);
+  if (pos == rem.size()) {
+    *lo_year = first;
+    *hi_year = (zdump ? second : second + 1);
+    return true;
+  }
+  return false;
+}
+
 int main(int argc, char** argv) {
-  const std::string prog = argv[0] ? Basename(argv[0]) : "time_tool";
+  const char* argv0 = (argc > 0) ? (argc--, *argv++) : (argc = 0, "time_tool");
+  const std::string prog = Basename(argv0);
 
   // Escape arguments that look like negative offsets so that they
   // don't look like flags.
-  for (int i = 1; i < argc; ++i) {
+  for (int i = 0; i < argc; ++i) {
     if (strcmp(argv[i], "--") == 0) break;
     if (LooksLikeNegOffset(argv[i])) {
       char* buf = new char[strlen(argv[i] + 2)];
@@ -204,31 +297,90 @@ int main(int argc, char** argv) {
     }
   }
 
-  // Determine the time zone.
+  // Determine the time zone and other options.
   cctz::time_zone zone = cctz::local_time_zone();
-  for (;;) {
-    static option opts[] = {
-        {"tz", required_argument, nullptr, 'z'},
-        {nullptr, 0, nullptr, 0},
-    };
-    int c = getopt_long(argc, argv, "z:", opts, nullptr);
-    if (c == -1) break;
-    switch (c) {
-      case 'z':
-        if (!cctz::load_time_zone(optarg, &zone)) {
-          /*std::cerr*/ Rcpp::Rcerr << optarg << ": Unrecognized time zone\n";
+  bool zone_dump = (prog == "zone_dump");
+  bool zdump = false;  // Use zdump(8) format.
+  int optind = 0;
+  int opterr = 0;
+  for (; optind < argc && opterr == 0; ++optind) {
+    const char* opt = argv[optind];
+    if (*opt++ != '-') break;
+    if (*opt != '-') {  // short options
+      while (char c = *opt++) {
+        if (c == 'z') {
+          if (*opt != '\0') {
+            if (!cctz::load_time_zone(opt, &zone)) {
+              std::cerr << opt << ": Unrecognized time zone\n";
+              return 1;
+            }
+            break;
+          }
+          if (optind + 1 == argc) {
+            std::cerr << argv0 << ": option requires an argument -- 'z'\n";
+            ++opterr;
+            break;
+          }
+          if (!cctz::load_time_zone(argv[++optind], &zone)) {
+            std::cerr << argv[optind] << ": Unrecognized time zone\n";
+            return 1;
+          }
+        } else if (c == 'D') {
+          zdump = true;
+        } else if (c == 'd') {
+          zone_dump = true;
+        } else {
+          std::cerr << argv0 << ": invalid option -- '" << c << "'\n";
+          ++opterr;
+          break;
+        }
+      }
+    } else {  // long options
+      if (*++opt == '\0') {  // "--"
+        ++optind;
+        break;
+      }
+      if (strcmp(opt, "tz") == 0) {
+        if (optind + 1 == argc) {
+          std::cerr << argv0 << ": option '--tz' requires an argument\n";
+          ++opterr;
+        } else {
+          if (!cctz::load_time_zone(argv[++optind], &zone)) {
+            std::cerr << argv[optind] << ": Unrecognized time zone\n";
+            return 1;
+          }
+        }
+      } else if (strncmp(opt, "tz=", 3) == 0) {
+        if (!cctz::load_time_zone(opt + 3, &zone)) {
+          std::cerr << (opt + 3) << ": Unrecognized time zone\n";
           return 1;
         }
-        break;
-      default:
-        /*std::cerr*/ Rcpp::Rcerr << "Usage: " << prog << " [--tz=<zone>] [<time-spec>]\n";
-        return 1;
+      } else if (strcmp(opt, "zdump") == 0) {
+        zdump = true;
+      } else if (strcmp(opt, "zone_dump") == 0) {
+        zone_dump = true;
+      } else {
+        std::cerr << argv0 << ": unrecognized option '--" << opt << "'\n";
+        ++opterr;
+      }
     }
+  }
+  if (opterr != 0) {
+    std::cerr << "Usage: " << prog << " [--tz=<zone>]";
+    if (prog == "zone_dump") {
+      std::cerr << " [[<lo-year>,]<hi-year>|<time-spec>]\n";
+      std::cerr << "  Default years are last year and next year,"
+                << " respectively.\n";
+    } else {
+      std::cerr << " [<time-spec>]\n";
+    }
+    std::cerr << "  Default <time-spec> is 'now'.\n";
+    return 1;
   }
 
   // Determine the time point.
-  time_point<sys_seconds> tp = std::chrono::time_point_cast<sys_seconds>(
-      std::chrono::system_clock::now());
+  time_point<seconds> tp =
+      std::chrono::time_point_cast<seconds>(std::chrono::system_clock::now());
   std::string args;
   for (int i = optind; i < argc; ++i) {
     if (i != optind) args += " ";
@@ -244,21 +396,31 @@ int main(int argc, char** argv) {
       std::size_t end;
       const time_t t = std::stoll(spec, &end);
       if (end == spec.size()) {
-        tp = std::chrono::time_point_cast<cctz::sys_seconds>(
-                 std::chrono::system_clock::from_time_t(0)) +
-             sys_seconds(t);
+        tp = std::chrono::time_point_cast<seconds>(
+            std::chrono::system_clock::from_time_t(t));
         have_time = true;
       }
     }
   }
   cctz::civil_second when = cctz::convert(tp, zone);
-  bool have_break_down = !have_time && ParseBreakdownSpec(args, zone, &when);
+  bool have_civil = !have_time && ParseCivilSpec(args, &when);
 
-  // Show results.
-  if (have_break_down) return BreakdownInfo(when, zone);
+  if (zone_dump || zdump) {
+    cctz::year_t lo_year = (zdump ? -292277026596 : when.year());
+    cctz::year_t hi_year = (zdump ? 292277026596 : when.year() + 1);
+    if (!args.empty() && !ParseYearRange(zdump, args, &lo_year, &hi_year)) {
+      if (!have_time && !have_civil) {
+        std::cerr << args << ": Malformed year range\n";
+        return 1;
+      }
+    }
+    return ZoneDump(zdump, zone, lo_year, hi_year);
+  }
+
+  if (have_civil) return CivilInfo(when, zone);
   if (have_time || args.empty()) return TimeInfo(tp, zone);
 
-  /*std::cerr*/ Rcpp::Rcerr << args << ": Malformed time spec\n";
+  std::cerr << args << ": Malformed time spec\n";
   return 1;
 }
-#endif // REALLY_USE_MAIN_FUNCTION
+#endif
