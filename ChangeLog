@@ -1,3 +1,12 @@
+2018-10-05  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/time_zone_format.cc: Restore Windows build by also recognising
+	MinGW / Rools (so that the contributed src/get_time.h is used)
+	* src/zone_info_source.cc (cctz_extension): Idem, and prevent attempt
+	to link ZoneInfoSourceFactory
+
+	* .Rbuildignore: Ignore (source) tarballs in top-level directory
+
 2018-10-04  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/*: Synchronized with upstream CCTZ
@@ -13,6 +22,10 @@
 	* parseDatetime.Rd: Idem
 	* toTz.Rd: Idem
 	* tzDiff.Rd: Idem
+
+2018-03-17  Elliott Sales de Andrade  <quantum.analyst@gmail.com>
+
+	* src/utilities.cpp: Remove one unnecessary #include
 
 2017-11-29  Dirk Eddelbuettel  <edd@debian.org>
 

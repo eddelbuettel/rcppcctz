@@ -40,7 +40,7 @@ std::unique_ptr<cctz::ZoneInfoSource> DefaultFactory(
 // A "weak" definition for cctz_extension::zone_info_source_factory.
 // The user may override this with their own "strong" definition (see
 // zone_info_source.h).
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) && !(defined(__MINGW32__) || defined(__MINGW64__))
 extern ZoneInfoSourceFactory zone_info_source_factory;
 extern ZoneInfoSourceFactory default_factory;
 ZoneInfoSourceFactory default_factory = DefaultFactory;
@@ -59,7 +59,7 @@ ZoneInfoSourceFactory default_factory = DefaultFactory;
 #if !defined(__has_attribute)
 #define __has_attribute(x) 0
 #endif
-#if __has_attribute(weak) || defined(__GNUC__)
+#if (__has_attribute(weak) || defined(__GNUC__)) && !(defined(__MINGW32__) || defined(__MINGW64__))
 ZoneInfoSourceFactory zone_info_source_factory
     __attribute__((weak)) = DefaultFactory;
 #else
