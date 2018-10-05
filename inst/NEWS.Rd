@@ -3,12 +3,17 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
-\section{Changes in version 0.2.4 (2017-11-19)}{
+\section{Changes in version 0.2.4 (2018-10-xx)}{
   \itemize{
-    \item The \code{tzDiff} function now supports a vector argument
-    (\ghpr{24}).
     \item An unused \code{main()} was \code{#ifdef}'ed away to please
     another compiler/OS combination.
+    \item The \code{tzDiff} function now supports a vector argument
+    (\ghpr{24}).
+    \item An unnecessary \code{#include} was removed (\ghpr{25}).
+    \item Some tests are not conditioning on Solaris to not fail there
+    (\ghpr{26}).
+    \item The CCTZ code was updated to the newest upstream version
+    (\ghpr{27}). 
   }
 }
 

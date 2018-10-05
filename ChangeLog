@@ -1,5 +1,7 @@
 2018-10-05  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Roll minor version
+
 	* src/time_zone_format.cc: Restore Windows build by also recognising
 	MinGW / Rools (so that the contributed src/get_time.h is used)
 	* src/zone_info_source.cc (cctz_extension): Idem, and prevent attempt
