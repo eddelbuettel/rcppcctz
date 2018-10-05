@@ -43,8 +43,8 @@ bool time_zone::Impl::LoadTimeZone(const std::string& name, time_zone* tz) {
   const time_zone::Impl* const utc_impl = UTCImpl();
 
   // First check for UTC (which is never a key in time_zone_map).
-  auto offset = sys_seconds::zero();
-  if (FixedOffsetFromName(name, &offset) && offset == sys_seconds::zero()) {
+  auto offset = seconds::zero();
+  if (FixedOffsetFromName(name, &offset) && offset == seconds::zero()) {
     *tz = time_zone(utc_impl);
     return true;
   }
@@ -81,13 +81,13 @@ bool time_zone::Impl::LoadTimeZone(const std::string& name, time_zone* tz) {
   return impl != utc_impl;
 }
 
-const time_zone::Impl& time_zone::Impl::get(const time_zone& tz) {
-  if (tz.impl_ == nullptr) {
-    // Dereferencing an implicit-UTC time_zone is expected to be
-    // rare, so we don't mind paying a small synchronization cost.
-    return *UTCImpl();
+void time_zone::Impl::ClearTimeZoneMapTestOnly() {
+  std::lock_guard<std::mutex> lock(time_zone_mutex);
+  if (time_zone_map != nullptr) {
+    // Existing time_zone::Impl* entries are in the wild, so we simply
+    // leak them.  Future requests will result in reloading the data.
+    time_zone_map->clear();
   }
-  return *tz.impl_;
 }
 
 time_zone::Impl::Impl(const std::string& name) : name_(name) {}

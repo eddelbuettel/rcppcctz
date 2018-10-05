@@ -1,3 +1,7 @@
+2018-10-04  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/*: Synchronized with upstream CCTZ
+
 2018-10-03  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
