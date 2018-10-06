@@ -1,3 +1,18 @@
+2018-10-06  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Suggests): Add RUnit
+
+	* .travis.yml: Install r-cran-runit
+
+	* tests/doRUnit.R: Add unit test runner
+
+	* inst/unitTests/runit.Format.R: Add a few unit tests
+	* inst/unitTests/runit.Parse.R: Idem
+	* inst/unitTests/runit.tz.R: Idem
+
+	* tests/simpleTests.R: Removed in favour of unit test frameworks
+	* tests/simpleTests.Rout: Idem
+
 2018-10-05  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
