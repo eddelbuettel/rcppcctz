@@ -16,17 +16,22 @@
 ## You should have received a copy of the GNU General Public License
 ## along with RcppCCTZ.  If not, see <http://www.gnu.org/licenses/>.
 
+isSolaris <- Sys.info()[["sysname"]] == "SunOS"
+
 test.Format.R <- function() {
 
     timepoint <- ISOdatetime(2010,1,2,3,4,5, tz="UTC")
     txt <- formatDatetime(timepoint, tgttzstr="UTC")
-    checkEquals(txt, "2010-01-02T03:04:05+00:00", msg="formatDatetime default format")
+    if (!isSolaris)
+        checkEquals(txt, "2010-01-02T03:04:05+00:00", msg="formatDatetime default format")
 
     txt <- formatDouble(as.numeric(timepoint), 0, tgttzstr="UTC")
-    checkEquals(txt, "2010-01-02T03:04:05+00:00", msg="formatDatetime as numeric default format")
+    if (!isSolaris)
+        checkEquals(txt, "2010-01-02T03:04:05+00:00", msg="formatDatetime as numeric default format")
 
     txt <- formatDouble(as.numeric(timepoint), 123456789, tgttzstr="UTC")
-    checkEquals(txt, "2010-01-02T03:04:05.123456789+00:00",
-                msg="formatDatetime as numeric plus nano default format")
+    if (!isSolaris)
+        checkEquals(txt, "2010-01-02T03:04:05.123456789+00:00",
+                    msg="formatDatetime as numeric plus nano default format")
 
 }

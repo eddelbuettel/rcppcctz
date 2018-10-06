@@ -16,26 +16,33 @@
 ## You should have received a copy of the GNU General Public License
 ## along with RcppCCTZ.  If not, see <http://www.gnu.org/licenses/>.
 
+isSolaris <- Sys.info()[["sysname"]] == "SunOS"
+
 test.toTz <- function() {
 
     timepoint <- ISOdatetime(2010,1,2,3,4,5)
-    nyc2lon <- toTz(timepoint, "America/New_York", "Europe/London")
-    h <- as.integer(difftime(nyc2lon, timepoint, units="hour"))
-    checkEquals(h, 5L, msg="NYC to London offset")
+    if (!isSolaris) {
+        nyc2lon <- toTz(timepoint, "America/New_York", "Europe/London")
+        h <- as.integer(difftime(nyc2lon, timepoint, units="hour"))
+        checkEquals(h, 5L, msg="NYC to London offset")
+    }
 
     moonland <- ISOdatetime(1969,7,20,22,56,0,tz="UTC")
-    oz <- toTz(moonland, "America/New_York", "Australia/Sydney")
-    txt <- format(oz, tz="Australia/Sydney")
-    checkEquals(txt, "1969-07-21 12:56:00", msg="Neil Armstrong Sydney time")
-
+    if (!isSolaris) {
+        oz <- toTz(moonland, "America/New_York", "Australia/Sydney")
+        txt <- format(oz, tz="Australia/Sydney")
+        checkEquals(txt, "1969-07-21 12:56:00", msg="Neil Armstrong Sydney time")
+    }
 }
 
 test.tzDiff <- function() {
 
     timepoint <- ISOdatetime(2010,1,2,3,4,5)
-    chi2lon <- tzDiff("America/Chicago", "Europe/London", timepoint)
-    checkEquals(chi2lon, 6L, msg="Chicago to London difference")
+    if (!isSolaris) {
+        chi2lon <- tzDiff("America/Chicago", "Europe/London", timepoint)
+        checkEquals(chi2lon, 6L, msg="Chicago to London difference")
 
-    nyc2lon <- tzDiff("America/New_York", "Europe/London", timepoint)
-    checkEquals(nyc2lon, 5L, msg="NYC to London difference")
+        nyc2lon <- tzDiff("America/New_York", "Europe/London", timepoint)
+        checkEquals(nyc2lon, 5L, msg="NYC to London difference")
+    }
 }
