@@ -1,3 +1,14 @@
+2018-10-07  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+	* src/utilities.cpp (parseDatetime): Set the timezone when
+	construction a DatetimeVector
+
+	* inst/unitTests/runit.Format.R: No longer condition on Solaris
+	* inst/unitTests/runit.Parse.R: Idem, but condition on macOS for
+	parsing test; added two more parseDouble() tests
+
 2018-10-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.4

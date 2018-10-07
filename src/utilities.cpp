@@ -233,7 +233,7 @@ Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
         sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
     
     auto n = svec.size();
-    Rcpp::DatetimeVector dv(n);
+    Rcpp::DatetimeVector dv(n, tzstr.c_str());
     for (auto i=0; i<n; i++) {
         std::string txt(svec(i));
         
