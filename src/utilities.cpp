@@ -231,6 +231,9 @@ Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
     sc::system_clock::time_point tp;
     cctz::time_point<cctz::sys_seconds> unix_epoch =
         sc::time_point_cast<cctz::sys_seconds>(sc::system_clock::from_time_t(0));
+
+    // if we wanted a 'start' timer
+    //sc::system_clock::time_point start = sc::high_resolution_clock::now();
     
     auto n = svec.size();
     Rcpp::DatetimeVector dv(n, tzstr.c_str());
@@ -241,11 +244,20 @@ Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
         // Rcpp::Rcout << cctz::format(fmt, tp, tz) << std::endl;
             
         // time since epoch, with fractional seconds added back in
-        double dt = (tp - unix_epoch).count() * 1.0e-9;
-        //Rcpp::Rcout << dt << std::endl;
+        // only microseconds guaranteed to be present
+        double dt = sc::duration_cast<sc::microseconds>(tp - unix_epoch).count() * 1.0e-6;
+        
+        // Rcpp::Rcout << "tp: " << cctz::format(fmt, tp, tz) << "\n"
+        //             << "unix epoch: " << cctz::format(fmt, unix_epoch, tz) << "\n"
+        //             << "(tp - unix.epoch).count(): " << (tp - unix_epoch).count() << "\n"
+        //             << "dt: " << dt << std::endl;
             
         dv(i) = Rcpp::Datetime(dt);
     }
+            
+    // Rcpp::Rcout << "Took: "
+    //             << sc::nanoseconds(sc::high_resolution_clock::now() - start).count() 
+    //             << " nanosec" << " " << std::endl;
     return dv;
 }
 
