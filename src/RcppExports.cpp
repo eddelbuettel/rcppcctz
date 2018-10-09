@@ -86,16 +86,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // toTz
-Rcpp::Datetime toTz(Rcpp::Datetime dt, const std::string tzfrom, const std::string tzto, bool verbose);
-RcppExport SEXP _RcppCCTZ_toTz(SEXP dtSEXP, SEXP tzfromSEXP, SEXP tztoSEXP, SEXP verboseSEXP) {
+Rcpp::DatetimeVector toTz(Rcpp::DatetimeVector dtv, const std::string tzfrom, const std::string tzto, bool verbose);
+RcppExport SEXP _RcppCCTZ_toTz(SEXP dtvSEXP, SEXP tzfromSEXP, SEXP tztoSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::Datetime >::type dt(dtSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DatetimeVector >::type dtv(dtvSEXP);
     Rcpp::traits::input_parameter< const std::string >::type tzfrom(tzfromSEXP);
     Rcpp::traits::input_parameter< const std::string >::type tzto(tztoSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(toTz(dt, tzfrom, tzto, verbose));
+    rcpp_result_gen = Rcpp::wrap(toTz(dtv, tzfrom, tzto, verbose));
     return rcpp_result_gen;
 END_RCPP
 }

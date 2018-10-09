@@ -38,5 +38,12 @@ test.Parse <- function() {
     pt <- parseDouble("2010-01-02 03:04:05.123456", "%Y-%m-%d %H:%M:%E*S")
     checkEquals(as.numeric(timepoint), pt[1,1],  msg="parseDouble microsecs format")
 
+
+    timepoints <- ISOdatetime(2010,1,2,3,4,5, tz="UTC") + 0:9
+    tpvec <- format(timepoints)
+    ptvec <- parseDatetime(tpvec, "%Y-%m-%d %H:%M:%S", "UTC")
+    checkEquals(timepoints, ptvec,  msg="vectorised parseDatetime")
+
     options(digits.secs=ds)
 }
+

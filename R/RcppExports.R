@@ -61,12 +61,12 @@ tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
 #' a Datetime object from one given timezone to another.
 #'
 #' @title Shift datetime object from one timezone to another
-#' @param dt A Datetime object specifying when the difference is to be computed.
+#' @param dtv A DatetimeVector object specifying when the difference is to be computed.
 #' @param tzfrom The first time zone as a character vector.
 #' @param tzto The second time zone as a character vector.
 #' @param verbose A boolean toggle indicating whether more verbose operations
 #' are desired, default is \code{FALSE}.
-#' @return A Datetime object with the given (civil time) determined by the
+#' @return A DatetimeVector object with the given (civil time) determined by the
 #' incoming object (and its timezone) shifted to the target timezone.
 #' @author Dirk Eddelbuettel
 #' @examples
@@ -80,8 +80,8 @@ tzDiff <- function(tzfrom, tzto, dt, verbose = FALSE) {
 #'             "America/New_York", "Australia/Sydney", verbose=TRUE), 
 #'        tz="Australia/Sydney")
 #' }
-toTz <- function(dt, tzfrom, tzto, verbose = FALSE) {
-    .Call(`_RcppCCTZ_toTz`, dt, tzfrom, tzto, verbose)
+toTz <- function(dtv, tzfrom, tzto, verbose = FALSE) {
+    .Call(`_RcppCCTZ_toTz`, dtv, tzfrom, tzto, verbose)
 }
 
 #' Format a Datetime vector
