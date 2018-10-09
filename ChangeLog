@@ -1,3 +1,13 @@
+2018-10-09  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+	* src/utilities.cpp (toTz): Vectorized toTz
+	* man/toTz.Rd: Updated documentation
+
+	* inst/unitTests/runit.Parse.R (test.Parse): Added test for
+	vectorised parse
+
 2018-10-07  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version

@@ -4,10 +4,10 @@
 \alias{toTz}
 \title{Shift datetime object from one timezone to another}
 \usage{
-toTz(dt, tzfrom, tzto, verbose = FALSE)
+toTz(dtv, tzfrom, tzto, verbose = FALSE)
 }
 \arguments{
-\item{dt}{A Datetime object specifying when the difference is to be computed.}
+\item{dtv}{A DatetimeVector object specifying when the difference is to be computed.}
 
 \item{tzfrom}{The first time zone as a character vector.}
 
@@ -17,7 +17,7 @@ toTz(dt, tzfrom, tzto, verbose = FALSE)
 are desired, default is \code{FALSE}.}
 }
 \value{
-A Datetime object with the given (civil time) determined by the
+A DatetimeVector object with the given (civil time) determined by the
 incoming object (and its timezone) shifted to the target timezone.
 }
 \description{
