@@ -1,12 +1,15 @@
 2018-10-11  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
-	
+
 	* inst/unitTests/runit.Format.R (test.Format.R): Added test for
 	format and parse of dual double vector (at highest precision)
 
 	* local/cctz/: Added upstream to repo for easier diff comparison with
 	upstream changes; same directory layout as upstream and now here
+
+	* src/utilities.cpp: Set target timezone in DatetimeVector; relax
+	one \dontrun
 
 2018-10-09  Dirk Eddelbuettel  <edd@debian.org>
 

@@ -104,9 +104,8 @@ double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, cons
 //' \dontrun{
 //' toTz(Sys.time(), "America/New_York", "Europe/London")
 //' # this redoes the 'Armstrong on the moon in NYC and Sydney' example
-//' # note that the default print method will print the return object in _your local time_
 //' toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), "America/New_York", "Australia/Sydney", verbose=TRUE)
-//' # whereas explicitly formating for Sydney time does the right thing
+//' # we can also explicitly format for Sydney time 
 //' format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), 
 //'             "America/New_York", "Australia/Sydney", verbose=TRUE), 
 //'        tz="Australia/Sydney")
@@ -118,7 +117,7 @@ Rcpp::DatetimeVector toTz(Rcpp::DatetimeVector dtv,
                           bool verbose=false) {
 
     size_t n = dtv.size();
-    Rcpp::DatetimeVector rsv(n);
+    Rcpp::DatetimeVector rsv(n, tzto.c_str());
     for (size_t i=0; i<n; i++) {
         Rcpp::Datetime dt = dtv[i];
     
@@ -219,7 +218,6 @@ Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
 //' two columns for seconds and nanoseconds for \code{parseDouble}
 //' @author Dirk Eddelbuettel
 //' @examples
-//' \dontrun{
 //' ds <- getOption("digits.secs")
 //' options(digits.secs=6) # max value
 //' parseDatetime("2016-12-07 10:11:12",        "%Y-%m-%d %H:%M:%S")   # full seconds
@@ -228,7 +226,6 @@ Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
 //' now <- trunc(Sys.time())
 //' parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 //' options(digits.secs=ds)
-//' }
 // [[Rcpp::export]]
 Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
                                    std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
