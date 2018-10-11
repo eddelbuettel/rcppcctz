@@ -29,4 +29,12 @@ test.Format.R <- function() {
     checkEquals(txt, "2010-01-02T03:04:05.123456789+00:00",
                 msg="formatDatetime as numeric plus nano default format")
 
+    timepoint <- ISOdatetime(2010,1,2,3,4,5, tz="UTC")
+    txt <- RcppCCTZ:::formatDouble(rep(timepoint, 3), c(1001, 2002, 3003))
+    vals <- RcppCCTZ:::parseDouble(txt)
+    c1 <- rep(1262401445, 3)
+    c2 <- c(1001, 2002, 3003)
+    checkEquals(vals[,1], c1, msg="First column of parseDouble")
+    checkEquals(vals[,2], c2, msg="Second column of parseDouble")
+
 }
