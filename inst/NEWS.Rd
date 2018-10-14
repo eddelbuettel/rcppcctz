@@ -3,6 +3,18 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
+\section{Changes in version 0.2.5 (2018-10-14)}{
+  \itemize{
+    \item Parsing to \code{Datetime} was corrected on systems that do
+    not have nanosecond support in C++11 chrono (\ghpr{28}).
+    \item \code{DatetimeVector} objects are now created with their
+    timezone attribute when available.
+    \item The \code{toTz} functions is now vectorized (\ghpr{29}).
+    \item More unit tests were added, and some conditioning on Solaris
+    (mostly due to missing timezone info) was removed.
+  }
+}
+
 \section{Changes in version 0.2.4 (2018-10-06)}{
   \itemize{
     \item An unused \code{main()} in \code{src/time_tool.cc} was
