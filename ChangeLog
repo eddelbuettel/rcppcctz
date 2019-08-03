@@ -1,3 +1,16 @@
+2019-08-02  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+	* src/*: Synchronized with upstream CCTZ release 2.3
+	* inst/include/cctz/*: Idem
+	
+	* src/time_zone_format.cc: Carry std::get_time patch forward
+	* src/zone_info_source.cc: Carry forward no linking ZoneInfoSourceFactory
+
+	* local/cctz-20181003/: Renamed from local/cctz to show release date
+	* local/cctz-20190702/: Added
+
 2018-10-14  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.5
@@ -57,7 +70,7 @@
 	* DESCRIPTION (Version, Date): Roll minor version
 
 	* src/time_zone_format.cc: Restore Windows build by also recognising
-	MinGW / Rools (so that the contributed src/get_time.h is used)
+	MinGW / Rtools (so that the contributed src/get_time.h is used)
 	* src/zone_info_source.cc (cctz_extension): Idem, and prevent attempt
 	to link ZoneInfoSourceFactory
 

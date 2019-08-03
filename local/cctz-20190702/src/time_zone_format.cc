@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #if !defined(HAS_STRPTIME)
-# if !defined(_MSC_VER) && !defined(__MINGW32__) && !defined(__MINGW64__)
+# if !defined(_MSC_VER) && !defined(__MINGW32__)
 #  define HAS_STRPTIME 1  // assume everyone has strptime() except windows
 # endif
 #endif
@@ -42,9 +42,6 @@
 #if !HAS_STRPTIME
 #include <iomanip>
 #include <sstream>
-#if defined(__MINGW32__) || defined(__MINGW64__)
-#include "get_time.h"
-#endif
 #endif
 
 #include "cctz/civil_time.h"
@@ -59,11 +56,7 @@ namespace {
 // Build a strptime() using C++11's std::get_time().
 char* strptime(const char* s, const char* fmt, std::tm* tm) {
   std::istringstream input(s);
-#if defined(__MINGW32__) || defined(__MINGW64__)
-  input >> std_backport::get_time(tm, fmt);
-#else
   input >> std::get_time(tm, fmt);
-#endif
   if (input.fail()) return nullptr;
   return const_cast<char*>(s) +
          (input.eof() ? strlen(s) : static_cast<std::size_t>(input.tellg()));
