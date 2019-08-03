@@ -1,3 +1,17 @@
+2019-08-03  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+        * DESCRIPTION (Suggests): Added tinytest
+        * .travis.yml (install): Install tinytest
+
+        * tests/tinytest.R: New test driver using tinytest
+	* test/doRUnit.R: Removed
+
+        * inst/tinytest/test_format.R: Converted from RUnit
+        * inst/tinytest/test_parse.R: Idem
+        * inst/tinytest/test_tz.R: Idem
+	
 2019-08-02  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
