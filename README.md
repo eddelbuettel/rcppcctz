@@ -1,4 +1,4 @@
-## RcppCCTZ [![Build Status](https://travis-ci.org/eddelbuettel/rcppcctz.svg)](https://travis-ci.org/eddelbuettel/rcppcctz) [![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ) [![Downloads](http://cranlogs.r-pkg.org/badges/RcppCCTZ?color=brightgreen)](http://www.r-pkg.org/pkg/RcppCCTZ)
+## RcppCCTZ [![Build Status](https://travis-ci.org/eddelbuettel/rcppcctz.svg)](https://travis-ci.org/eddelbuettel/rcppcctz) [![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ) [![Dependencies](https://tinyverse.netlify.com/badge/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ) [![Downloads](http://cranlogs.r-pkg.org/badges/RcppCCTZ?color=brightgreen)](http://www.r-pkg.org/pkg/RcppCCTZ)
 
 Rcpp bindings for [CCTZ](https://github.com/google/cctz)
 
@@ -91,6 +91,26 @@ may work.
 
 On [CRAN](https://cran.r-project.org/package=RcppCCTZ), builds and tests cleanly,
 and the example functions are accessible from R.
+
+### Installation
+
+The package is now on [CRAN](https://cran.r-project.org) and can be installed
+via a standard
+
+```r
+install.packages("RcppCCTZ")
+```
+
+### Continued Testing
+
+As we rely on the [tinytest](https://cran.r-project.org/package=tinytest) package, the
+already-installed package can also be verified via
+
+```r
+tinytest::test_package("RcppCCTZ")
+```
+
+at any later point.
 
 ### Author
 

@@ -1,6 +1,6 @@
 2019-08-03  Dirk Eddelbuettel  <edd@debian.org>
 
-	* DESCRIPTION (Version, Date): Roll minor version
+	* DESCRIPTION (Version, Date): Release 0.2.6
 
         * DESCRIPTION (Suggests): Added tinytest
         * .travis.yml (install): Install tinytest
@@ -12,6 +12,9 @@
         * inst/tinytest/test_parse.R: Idem
         * inst/tinytest/test_tz.R: Idem
 	
+	* README.md (tinytest): Added dependency badge, add installation
+	paragraph, add continued testing post-installation via tinytest
+
 2019-08-02  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
