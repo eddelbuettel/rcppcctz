@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//   http://www.apache.org/licenses/LICENSE-2.0
+//   https://www.apache.org/licenses/LICENSE-2.0
 //
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,7 +40,13 @@ std::unique_ptr<cctz::ZoneInfoSource> DefaultFactory(
 // A "weak" definition for cctz_extension::zone_info_source_factory.
 // The user may override this with their own "strong" definition (see
 // zone_info_source.h).
-#if defined(_MSC_VER) && !(defined(__MINGW32__) || defined(__MINGW64__))
+#if !defined(__has_attribute)
+#define __has_attribute(x) 0
+#endif
+#if (__has_attribute(weak) || defined(__GNUC__)) && !(defined(__MINGW32__) || defined(__MINGW64__))
+ZoneInfoSourceFactory zone_info_source_factory
+    __attribute__((weak)) = DefaultFactory;
+#elif defined(_MSC_VER) && !defined(_LIBCPP_VERSION)
 extern ZoneInfoSourceFactory zone_info_source_factory;
 extern ZoneInfoSourceFactory default_factory;
 ZoneInfoSourceFactory default_factory = DefaultFactory;
@@ -48,24 +54,16 @@ ZoneInfoSourceFactory default_factory = DefaultFactory;
 #pragma comment( \
     linker,      \
     "/alternatename:?zone_info_source_factory@cctz_extension@@3P6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@3@ABV?$function@$$A6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@@Z@3@@ZA=?default_factory@cctz_extension@@3P6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@3@ABV?$function@$$A6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@@Z@3@@ZA")
-#elif defined(_M_IA_64) || defined(_M_AMD64)
+#elif defined(_M_IA_64) || defined(_M_AMD64) || defined(_M_ARM64)
 #pragma comment( \
     linker,      \
     "/alternatename:?zone_info_source_factory@cctz_extension@@3P6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@3@AEBV?$function@$$A6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@@Z@3@@ZEA=?default_factory@cctz_extension@@3P6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@3@AEBV?$function@$$A6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@@Z@3@@ZEA")
 #else
 #error Unsupported MSVC platform
-#endif
-#else  // _MSC_VER
-#if !defined(__has_attribute)
-#define __has_attribute(x) 0
-#endif
-#if (__has_attribute(weak) || defined(__GNUC__)) && !(defined(__MINGW32__) || defined(__MINGW64__))
-ZoneInfoSourceFactory zone_info_source_factory
-    __attribute__((weak)) = DefaultFactory;
+#endif  // _M_<PLATFORM>
 #else
 // Make it a "strong" definition if we have no other choice.
 ZoneInfoSourceFactory zone_info_source_factory = DefaultFactory;
 #endif
-#endif  // _MSC_VER
 
 }  // namespace cctz_extension
