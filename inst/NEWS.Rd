@@ -3,6 +3,14 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
+\section{Changes in version 0.2.6.1 (2019-09-07)}{
+  \itemize{
+    \item Added function \code{_RcppCCTZ_getOffset} that returns the offset
+    at a speficied time-point for a specified timezone; this function is
+    only callable from C level. 
+  }
+}
+
 \section{Changes in version 0.2.6 (2019-08-03)}{
   \itemize{
     \item Synchronized with upstream CCTZ release 2.3 plus commits
