@@ -1,3 +1,11 @@
+2019-09-07  Leonardo Silvestri <lsilvestri@ztsdb.org>
+
+	* DESCRIPTION (Version, Date): Release 0.2.7
+
+	* src/utilities.cpp: Added function _RcppCCTZ_getOffset to return
+	the offset at a time-point for a specific timezone
+	* src/RcppExports.cpp: Export the above function at C level
+
 2019-08-03  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.6

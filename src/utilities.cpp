@@ -329,10 +329,11 @@ void now() {
 }
 
 
+// return the offset at a given time-point for a given timezone
 template <typename D>
 using time_point = std::chrono::time_point<std::chrono::system_clock, D>;
 using seconds = std::chrono::duration<std::int_fast64_t>;
-int _RcppCCTZ_getOffset(long long s, const char* tzstr) {
+int _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr) {
     // reloading the time zone at each point is inefficient, probably
     // want to try to cache some of this:
     cctz::time_zone tz;

@@ -1,0 +1,4 @@
+Changes in version 0.2.7
+  o Added function '_RcppCCTZ_getOffset' that returns the offset at a
+    speficied time-point for a specified timezone; this function is
+    only callable from C level

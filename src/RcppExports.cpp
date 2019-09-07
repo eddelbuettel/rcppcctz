@@ -165,7 +165,7 @@ END_RCPP
 
 
 // export this function so it can be called at the C level by other packages:
-int _RcppCCTZ_getOffset(long long s, const char* tzstr);
+int _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RcppCCTZ_example0", (DL_FUNC) &_RcppCCTZ_example0, 0},
