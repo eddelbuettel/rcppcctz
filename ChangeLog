@@ -1,6 +1,6 @@
 2019-09-07  Leonardo Silvestri <lsilvestri@ztsdb.org>
 
-	* DESCRIPTION (Version, Date): Release 0.2.7
+	* DESCRIPTION (Version, Date): Roll minor version
 
 	* src/utilities.cpp: Added function _RcppCCTZ_getOffset to return
 	the offset at a time-point for a specific timezone
