@@ -163,6 +163,10 @@ BEGIN_RCPP
 END_RCPP
 }
 
+
+// export this function so it can be called at the C level by other packages:
+int _RcppCCTZ_getOffset(long long s, const char* tzstr);
+
 static const R_CallMethodDef CallEntries[] = {
     {"_RcppCCTZ_example0", (DL_FUNC) &_RcppCCTZ_example0, 0},
     {"_RcppCCTZ_helloMoon", (DL_FUNC) &_RcppCCTZ_helloMoon, 1},
@@ -178,10 +182,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppCCTZ_formatDouble", (DL_FUNC) &_RcppCCTZ_formatDouble, 4},
     {"_RcppCCTZ_parseDouble", (DL_FUNC) &_RcppCCTZ_parseDouble, 3},
     {"_RcppCCTZ_now", (DL_FUNC) &_RcppCCTZ_now, 0},
+    {"_RcppCCTZ_getOffset", (DL_FUNC) &_RcppCCTZ_getOffset, 0},
     {NULL, NULL, 0}
 };
 
 RcppExport void R_init_RcppCCTZ(DllInfo *dll) {
+    R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_getOffset", (DL_FUNC) &_RcppCCTZ_getOffset);
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
