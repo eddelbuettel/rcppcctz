@@ -1,3 +1,13 @@
+2019-11-15  Leonardo Silvestri <lsilvestri@ztsdb.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+	* src/utilities.cpp: Added functions _RcppCCTZ_convertToCivilSecond that
+          converts a time point to the number of seconds since epoch, and
+	  _RcppCCTZ_convertToTimePoint that converts a number of seconds
+          since epoch into a time point
+	* src/RcppExports.cpp: Export the above functions at C level
+
 2019-09-07  Leonardo Silvestri <lsilvestri@ztsdb.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version

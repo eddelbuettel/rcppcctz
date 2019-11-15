@@ -2,6 +2,8 @@
 // Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #include <Rcpp.h>
+#include "cctz/time_zone.h"
+
 
 using namespace Rcpp;
 
@@ -164,8 +166,6 @@ END_RCPP
 }
 
 
-// export this function so it can be called at the C level by other packages:
-int _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RcppCCTZ_example0", (DL_FUNC) &_RcppCCTZ_example0, 0},
@@ -182,12 +182,24 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppCCTZ_formatDouble", (DL_FUNC) &_RcppCCTZ_formatDouble, 4},
     {"_RcppCCTZ_parseDouble", (DL_FUNC) &_RcppCCTZ_parseDouble, 3},
     {"_RcppCCTZ_now", (DL_FUNC) &_RcppCCTZ_now, 0},
-    {"_RcppCCTZ_getOffset", (DL_FUNC) &_RcppCCTZ_getOffset, 0},
     {NULL, NULL, 0}
 };
 
+
+// export these functions so they can be called at the C level by other packages:
+template <typename D>
+using time_point = std::chrono::time_point<std::chrono::system_clock, D>;
+using seconds    = std::chrono::duration<std::int_fast64_t>;
+
+int                 _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr);
+cctz::civil_second  _RcppCCTZ_convertToCivilSecond(const time_point<seconds>& tp, const char* tzstr);
+time_point<seconds> _RcppCCTZ_convertToTimePoint(const cctz::civil_second& cs, const char* tzstr);
+
+  
 RcppExport void R_init_RcppCCTZ(DllInfo *dll) {
     R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_getOffset", (DL_FUNC) &_RcppCCTZ_getOffset);
+    R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_convertToCivilSecond", (DL_FUNC) &_RcppCCTZ_convertToCivilSecond);
+    R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_convertToTimePoint", (DL_FUNC) &_RcppCCTZ_convertToTimePoint);
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

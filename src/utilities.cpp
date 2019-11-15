@@ -333,12 +333,30 @@ void now() {
 template <typename D>
 using time_point = std::chrono::time_point<std::chrono::system_clock, D>;
 using seconds = std::chrono::duration<std::int_fast64_t>;
+
 int _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr) {
-    // reloading the time zone at each point is inefficient, probably
-    // want to try to cache some of this:
+    // timezone caching is done by cctz
     cctz::time_zone tz;
     load_time_zone(tzstr, &tz);
     const auto tp = time_point<seconds>(seconds(s));
     auto abs_lookup = tz.lookup(tp);
     return abs_lookup.offset;
+}
+
+
+cctz::civil_second _RcppCCTZ_convertToCivilSecond(const time_point<seconds>& tp, const char* tzstr) {
+    cctz::time_zone tz;
+    if (!load_time_zone(tzstr, &tz)) {
+        throw std::range_error("Cannot retrieve timezone");
+    }
+    return tz.lookup(tp).cs;
+}
+
+
+time_point<seconds> _RcppCCTZ_convertToTimePoint(const cctz::civil_second& cs, const char* tzstr) {
+    cctz::time_zone tz;
+    if (!load_time_zone(tzstr, &tz)) {
+        throw std::range_error("Cannot retrieve timezone");
+    }
+    return cctz::convert(cs, tz);
 }
