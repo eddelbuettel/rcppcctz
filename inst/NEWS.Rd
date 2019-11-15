@@ -3,6 +3,16 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
+\section{Changes in version 0.2.6.2 (2019-11-15)}{
+  \itemize{
+    \item Added functions \code{_RcppCCTZ_convertToCivilSecond} that
+    converts a time point to the number of seconds since epoch, and
+    \code{_RcppCCTZ_convertToTimePoint} that converts a number of seconds
+    since epoch into a time point; these functions are only callable
+    from C level. 
+  }
+}
+
 \section{Changes in version 0.2.6.1 (2019-09-07)}{
   \itemize{
     \item Added function \code{_RcppCCTZ_getOffset} that returns the offset
