@@ -337,7 +337,9 @@ using seconds = std::chrono::duration<std::int_fast64_t>;
 int _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr) {
     // timezone caching is done by cctz
     cctz::time_zone tz;
-    load_time_zone(tzstr, &tz);
+    if (!load_time_zone(tzstr, &tz)) {
+        throw std::range_error("Cannot retrieve timezone");
+    }
     const auto tp = time_point<seconds>(seconds(s));
     auto abs_lookup = tz.lookup(tp);
     return abs_lookup.offset;

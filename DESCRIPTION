@@ -1,7 +1,7 @@
 Package: RcppCCTZ
 Type: Package
 Title: 'Rcpp' Bindings for the 'CCTZ' Library
-Version: 0.2.6.2
+Version: 0.2.6.3
 Date: 2019-11-15
 Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
