@@ -1,3 +1,10 @@
+2020-03-08  Leonardo Silvestri <lsilvestri@ztsdb.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+	* src/utilities.cpp (_RcppCCTZ_convertToCivilSecond): Throw if
+	timezone not found
+
 2019-11-15  Leonardo Silvestri <lsilvestri@ztsdb.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
@@ -29,7 +36,7 @@
         * inst/tinytest/test_format.R: Converted from RUnit
         * inst/tinytest/test_parse.R: Idem
         * inst/tinytest/test_tz.R: Idem
-	
+
 	* README.md (tinytest): Added dependency badge, add installation
 	paragraph, add continued testing post-installation via tinytest
 
@@ -39,7 +46,7 @@
 
 	* src/*: Synchronized with upstream CCTZ release 2.3
 	* inst/include/cctz/*: Idem
-	
+
 	* src/time_zone_format.cc: Carry std::get_time patch forward
 	* src/zone_info_source.cc: Carry forward no linking ZoneInfoSourceFactory
 
