@@ -349,7 +349,7 @@ int _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr) {
 cctz::civil_second _RcppCCTZ_convertToCivilSecond(const time_point<seconds>& tp, const char* tzstr) {
     cctz::time_zone tz;
     if (!load_time_zone(tzstr, &tz)) {
-        throw std::range_error("Cannot retrieve timezone");
+        Rcpp::stop("Cannot retrieve timezone '%s'.", tzstr);
     }
     return tz.lookup(tp).cs;
 }
