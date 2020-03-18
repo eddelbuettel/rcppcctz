@@ -1,6 +1,10 @@
-## RcppCCTZ [![Build Status](https://travis-ci.org/eddelbuettel/rcppcctz.svg)](https://travis-ci.org/eddelbuettel/rcppcctz) [![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](http://www.gnu.org/licenses/gpl-2.0.html) [![CRAN](http://www.r-pkg.org/badges/version/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ) [![Dependencies](https://tinyverse.netlify.com/badge/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ) [![Downloads](http://cranlogs.r-pkg.org/badges/RcppCCTZ?color=brightgreen)](http://www.r-pkg.org/pkg/RcppCCTZ)
+## RcppCCTZ: Rcpp bindings for [CCTZ](https://github.com/google/cctz)
 
-Rcpp bindings for [CCTZ](https://github.com/google/cctz)
+[![Build Status](https://travis-ci.org/eddelbuettel/rcppcctz.svg)](https://travis-ci.org/eddelbuettel/rcppcctz)
+[![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
+[![CRAN](https://www.r-pkg.org/badges/version/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ)
+[![Dependencies](https://tinyverse.netlify.com/badge/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ)
+[![Downloads](https://cranlogs.r-pkg.org/badges/RcppCCTZ?color=brightgreen)](http://www.r-pkg.org/pkg/RcppCCTZ)
 
 ### What is CCTZ?
 
@@ -25,8 +29,8 @@ R> # tabulate difference for every week of the year
 R> table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
 +                                        as.POSIXct(as.Date("2016-01-01") + d*7))))
 
- 4  5 
- 3 50 
+ 4  5
+ 3 50
 ```
 
 #### Shifting Timezone
@@ -43,8 +47,8 @@ R> toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), "America/New_York", "Australia/
 1969-07-21 12:56:00 +1000
 [1] "1969-07-20 21:56:00 CDT"
 R> # whereas explicitly formating for Sydney time does the right thing
-R> format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), 
-+             "America/New_York", "Australia/Sydney", verbose=TRUE), 
+R> format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"),
++             "America/New_York", "Australia/Sydney", verbose=TRUE),
 +        tz="Australia/Sydney")
 1969-07-20 22:56:00 -0400
 1969-07-21 12:56:00 +1000
@@ -60,7 +64,7 @@ R> formatDatetime(now)            # current (UTC) time, in full precision RFC333
 R> formatDatetime(now, tgttzstr="America/New_York")  # same but in NY
 [1] "2016-12-10T13:23:03.327956-05:00"
 R> formatDatetime(now + 0:4)	   # vectorised
-[1] "2016-12-10T18:23:03.327956+00:00" "2016-12-10T18:23:04.327956+00:00" 
+[1] "2016-12-10T18:23:03.327956+00:00" "2016-12-10T18:23:04.327956+00:00"
 [3] "2016-12-10T18:23:05.327956+00:00" "2016-12-10T18:23:06.327956+00:00"
 [5] "2016-12-10T18:23:07.327956+00:00"
 R>
@@ -78,9 +82,9 @@ R> parseDatetime(formatDatetime(now + 0:4))	   			# vectorised
 [1] "2016-12-10 12:24:25 CST" "2016-12-10 12:24:26 CST" "2016-12-10 12:24:27 CST"
 [4] "2016-12-10 12:24:28 CST" "2016-12-10 12:24:29 CST"
 R> options(digits.secs=ds)
-    
+
 ```
-    
+
 ### Requirements
 
 The [CCTZ](https://github.com/google/cctz) library depends on timezone files typically found in
@@ -119,5 +123,3 @@ Dirk Eddelbuettel
 ### License
 
 GPL (>= 2)
-
-

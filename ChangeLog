@@ -1,3 +1,7 @@
+2020-03-18  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.2.7
+
 2020-03-08  Leonardo Silvestri <lsilvestri@ztsdb.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version
