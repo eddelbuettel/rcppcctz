@@ -5,6 +5,7 @@
 [![CRAN](https://www.r-pkg.org/badges/version/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ)
 [![Dependencies](https://tinyverse.netlify.com/badge/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ)
 [![Downloads](https://cranlogs.r-pkg.org/badges/RcppCCTZ?color=brightgreen)](http://www.r-pkg.org/pkg/RcppCCTZ)
+[![Last Commit](https://img.shields.io/github/last-commit/eddelbuettel/rcppcctz)](https://github.com/eddelbuettel/rcppcctz)
 
 ### What is CCTZ?
 
