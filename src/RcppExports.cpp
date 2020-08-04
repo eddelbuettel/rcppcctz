@@ -195,11 +195,17 @@ int                 _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr);
 cctz::civil_second  _RcppCCTZ_convertToCivilSecond(const time_point<seconds>& tp, const char* tzstr);
 time_point<seconds> _RcppCCTZ_convertToTimePoint(const cctz::civil_second& cs, const char* tzstr);
 
-  
+int _RcppCCTZ_getOffset_nothrow(std::int_fast64_t s, const char* tzstr, int& offset);
+int _RcppCCTZ_convertToCivilSecond_nothrow(const time_point<seconds>& tp, const char* tzstr, cctz::civil_second& cs);
+int _RcppCCTZ_convertToTimePoint_nothrow(const cctz::civil_second& cs, const char* tzstr, time_point<seconds>& tp);
+
 RcppExport void R_init_RcppCCTZ(DllInfo *dll) {
     R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_getOffset", (DL_FUNC) &_RcppCCTZ_getOffset);
     R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_convertToCivilSecond", (DL_FUNC) &_RcppCCTZ_convertToCivilSecond);
     R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_convertToTimePoint", (DL_FUNC) &_RcppCCTZ_convertToTimePoint);
+    R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_getOffset_nothrow", (DL_FUNC) &_RcppCCTZ_getOffset_nothrow);
+    R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_convertToCivilSecond_nothrow", (DL_FUNC) &_RcppCCTZ_convertToCivilSecond_nothrow);
+    R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_convertToTimePoint_nothrow", (DL_FUNC) &_RcppCCTZ_convertToTimePoint_nothrow);
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

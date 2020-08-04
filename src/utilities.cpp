@@ -362,3 +362,41 @@ time_point<seconds> _RcppCCTZ_convertToTimePoint(const cctz::civil_second& cs, c
     }
     return cctz::convert(cs, tz);
 }
+
+
+// The three following functions are as above but they return an error
+// instead of throwing; this is necessary for use of these function
+// with 32-bit Windows, where the throw is uncatchable and will
+// terminate R
+
+int _RcppCCTZ_getOffset_nothrow(std::int_fast64_t s, const char* tzstr, int& offset) {
+    // timezone caching is done by cctz
+    cctz::time_zone tz;
+    if (!load_time_zone(tzstr, &tz)) {
+        return -1;
+    }
+    const auto tp = time_point<seconds>(seconds(s));
+    auto abs_lookup = tz.lookup(tp);
+    offset = abs_lookup.offset;
+    return 0;
+}
+
+
+int _RcppCCTZ_convertToCivilSecond_nothrow(const time_point<seconds>& tp, const char* tzstr, cctz::civil_second& cs) {
+    cctz::time_zone tz;
+    if (!load_time_zone(tzstr, &tz)) {
+        return -1;
+    }
+    cs = tz.lookup(tp).cs;
+    return 0;
+}
+
+
+int _RcppCCTZ_convertToTimePoint_nothrow(const cctz::civil_second& cs, const char* tzstr, time_point<seconds>& tp) {
+    cctz::time_zone tz;
+    if (!load_time_zone(tzstr, &tz)) {
+        return -1;
+    }
+    tp = cctz::convert(cs, tz);
+    return 0;
+}
