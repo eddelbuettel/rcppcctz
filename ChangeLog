@@ -1,10 +1,9 @@
 2020-08-03 Leonardo Silvestri <lsilvestri@ztsdb.org>
 
-	* DESCRIPTION (Version, Date): Roll minor version
+	* DESCRIPTION (Version, Date): Release 0.2.8
 
-	* src/RcppExports.cpp: No-throw versions of callable C functions for Win-32
-	* src/utilities.cpp: Idem
-
+	* src/utilities.cpp: No-throw versions of C functions for Win-32
+	* src/RcppExports.cpp: Idem
 
 2020-05-12  Dirk Eddelbuettel  <edd@debian.org>
 
