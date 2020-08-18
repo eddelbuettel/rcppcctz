@@ -1,3 +1,10 @@
+2020-08-18  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version
+
+	* inst/include/RcppCCTZ_API.h: Add convertToCivilSecond too
+	* src/RcppExports.cpp: Note that one part is 'manual'
+
 2020-08-13  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll minor version

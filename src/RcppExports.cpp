@@ -185,6 +185,10 @@ static const R_CallMethodDef CallEntries[] = {
     {NULL, NULL, 0}
 };
 
+// -- what follows below is hand-edited :-/ and may need to be recovered if compileAttributes()
+//    regenerates this file -- an obviously unsatisfactory solution but we got into some deadlocks
+//    between cctz symbols, what Rcpp::compileAttributes() generates (even with a RcppCCTZ_types.h
+//    header) and the need for clean import header.
 
 // export these functions so they can be called at the C level by other packages:
 template <typename D>
