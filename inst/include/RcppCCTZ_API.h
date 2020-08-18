@@ -23,14 +23,19 @@ extern "C" {
 
 inline int attribute_hidden RcppCCTZ_getOffset_nothrow(std::int_fast64_t s, const char* tzstr, int& offset) {
   typedef int GET_OFFSET_FUN(long long, const char*, int&);
-  static GET_OFFSET_FUN *getOffset = (GET_OFFSET_FUN *) R_GetCCallable("RcppCCTZ", "_RcppCCTZ_getOffset_nothrow" );
+  static GET_OFFSET_FUN *getOffset = (GET_OFFSET_FUN *) R_GetCCallable("RcppCCTZ", "_RcppCCTZ_getOffset_nothrow");
   return getOffset(s, tzstr, offset);
+}
+
+inline int attribute_hidden RcppCCTZ_convertToCivilSecond_nothrow(const cctz::time_point<cctz::seconds>& tp, const char* tzstr, cctz::civil_second& cs) {
+  typedef int CONVERT_TO_CIVILSECOND(const cctz::time_point<cctz::seconds>&, const char*, cctz::civil_second&);
+  static CONVERT_TO_CIVILSECOND *convertToCivilSecond = (CONVERT_TO_CIVILSECOND*) R_GetCCallable("RcppCCTZ", "_RcppCCTZ_convertToCivilSecond_nothrow");
+  return convertToCivilSecond(tp, tzstr, cs);
 }
 
 inline int attribute_hidden RcppCCTZ_convertToTimePoint_nothrow(const cctz::civil_second& cs, const char* tzstr, cctz::time_point<cctz::seconds>& tp) {
   typedef int CONVERT_TO_TIMEPOINT(const cctz::civil_second&, const char*, cctz::time_point<cctz::seconds>&);
-  static CONVERT_TO_TIMEPOINT *convertToTimePoint =
-    (CONVERT_TO_TIMEPOINT*)  R_GetCCallable("RcppCCTZ", "_RcppCCTZ_convertToTimePoint_nothrow" );
+  static CONVERT_TO_TIMEPOINT *convertToTimePoint = (CONVERT_TO_TIMEPOINT*) R_GetCCallable("RcppCCTZ", "_RcppCCTZ_convertToTimePoint_nothrow");
   return convertToTimePoint(cs, tzstr, tp);
 }
 
@@ -43,8 +48,11 @@ namespace RcppCCTZ {
     return RcppCCTZ_getOffset_nothrow(s, tzstr, offset);
   }
 
-  inline int convertToTimePoint(const cctz::civil_second& cs, const char* tzstr,
-                                cctz::time_point<cctz::seconds>& tp) {
+  inline int convertToCivilSecond(const cctz::time_point<cctz::seconds>& tp, const char* tzstr, cctz::civil_second& cs) {
+    return RcppCCTZ_convertToCivilSecond_nothrow(tp, tzstr, cs);
+  }
+
+  inline int convertToTimePoint(const cctz::civil_second& cs, const char* tzstr, cctz::time_point<cctz::seconds>& tp) {
     return RcppCCTZ_convertToTimePoint_nothrow(cs, tzstr, tp);
   }
 }

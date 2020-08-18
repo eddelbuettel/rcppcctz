@@ -191,13 +191,13 @@ template <typename D>
 using time_point = std::chrono::time_point<std::chrono::system_clock, D>;
 using seconds    = std::chrono::duration<std::int_fast64_t>;
 
-int                 _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr);
-cctz::civil_second  _RcppCCTZ_convertToCivilSecond(const time_point<seconds>& tp, const char* tzstr);
-time_point<seconds> _RcppCCTZ_convertToTimePoint(const cctz::civil_second& cs, const char* tzstr);
+int                             _RcppCCTZ_getOffset(std::int_fast64_t s, const char* tzstr);
+cctz::civil_second              _RcppCCTZ_convertToCivilSecond(const cctz::time_point<cctz::seconds>& tp, const char* tzstr);
+cctz::time_point<cctz::seconds> _RcppCCTZ_convertToTimePoint(const cctz::civil_second& cs, const char* tzstr);
 
 int _RcppCCTZ_getOffset_nothrow(std::int_fast64_t s, const char* tzstr, int& offset);
-int _RcppCCTZ_convertToCivilSecond_nothrow(const time_point<seconds>& tp, const char* tzstr, cctz::civil_second& cs);
-int _RcppCCTZ_convertToTimePoint_nothrow(const cctz::civil_second& cs, const char* tzstr, time_point<seconds>& tp);
+int _RcppCCTZ_convertToCivilSecond_nothrow(const cctz::time_point<cctz::seconds>& tp, const char* tzstr, cctz::civil_second& cs);
+int _RcppCCTZ_convertToTimePoint_nothrow(const cctz::civil_second& cs, const char* tzstr, cctz::time_point<cctz::seconds>& tp);
 
 RcppExport void R_init_RcppCCTZ(DllInfo *dll) {
     R_RegisterCCallable("RcppCCTZ", "_RcppCCTZ_getOffset", (DL_FUNC) &_RcppCCTZ_getOffset);
