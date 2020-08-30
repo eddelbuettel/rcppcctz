@@ -3,6 +3,13 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
+\section{Changes in version 0.2.9 (2020-08-30)}{
+  \itemize{
+    \item Provide a header \code{RcppCCZT_API.h} for client packages.
+    \item Show a simple example of parsing a YYYYMMDD HHMMSS.FFFFFF date.
+  }
+}
+
 \section{Changes in version 0.2.8 (2020-08-04)}{
   \itemize{
     \item Added three new \code{nothrow} variants (needed for win32) needed 

@@ -1,5 +1,7 @@
 2020-08-30  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Release 0.2.9
+
 	* src/RcppExports_snippet.h: Snippet of exported functions needed in
 	RcppExports.cpp (but not added by compileAttributes)
 
