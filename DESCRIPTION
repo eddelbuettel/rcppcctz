@@ -19,6 +19,6 @@ SystemRequirements: A 64-bit POSIX OS such as Linux or OS X with IANA time
  (such as g++-4.9 or later which is preferred, g++-4.8 works too). On Windows
  the zoneinfo included with R is used; and time parsing support is enabled
  via a backport of std::get_time from the LLVM libc++ library.
-URL: https://github.com/eddelbuettel/rcppcctz
+URL: https://github.com/eddelbuettel/rcppcctz, https://dirk.eddelbuettel.com/code/rcpp.cctz.html
 BugReports: https://github.com/eddelbuettel/rcppcctz/issues
 RoxygenNote: 6.0.1
