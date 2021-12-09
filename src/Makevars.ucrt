@@ -1,0 +1,5 @@
+
+## We want C++11 
+CXX_STD = CXX11
+
+PKG_CXXFLAGS = -I../inst/include -D_POSIX_THREAD_SAFE_FUNCTIONS
