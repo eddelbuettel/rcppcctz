@@ -4,6 +4,7 @@
 
 /* number of R header files (possibly listing too many) */
 #include <R.h>
+#include <R_ext/Rdynload.h>
 
 #include "cctz/civil_time.h"
 #include "cctz/time_zone.h"
