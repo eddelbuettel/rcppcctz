@@ -2,8 +2,7 @@
 #ifndef _RcppCCTZ_API_H
 #define _RcppCCTZ_API_H
 
-/* number of R header files (possibly listing too many) */
-#include <R.h>
+#include <cstdint>
 #include <R_ext/Rdynload.h>
 
 #include "cctz/civil_time.h"
