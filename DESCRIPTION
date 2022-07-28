@@ -1,8 +1,8 @@
 Package: RcppCCTZ
 Type: Package
 Title: 'Rcpp' Bindings for the 'CCTZ' Library
-Version: 0.2.10
-Date: 2021-12-14
+Version: 0.2.10.1
+Date: 2022-07-28
 Author: Dirk Eddelbuettel
 Maintainer: Dirk Eddelbuettel <edd@debian.org>
 Description: 'Rcpp' Access to the 'CCTZ' timezone library is provided. 'CCTZ' is

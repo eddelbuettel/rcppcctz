@@ -1,6 +1,11 @@
-2022-07-26  Jing Lu <lujin@google.com>
+2022-07-28  Dirk Eddelbuettel  <edd@debian.org>
 
-	* inst/include/RcppCCTZ_types.h: Make #include more specific: notably, add `<R_ext/Rdynload.h>` for `R_GetCCallable`, and remove include of umbrella header `<R.h>`. 
+	* DESCRIPTION (Version, Date): Roll minor version
+
+2022-07-26  Jing Lu  <lujin@google.com>
+
+	* inst/include/RcppCCTZ_API.h: More specific #include files: add
+	R_ext/Rdynload.h for R_GetCCallable, remove umbrella header R.h
 
 2021-12-14  Dirk Eddelbuettel  <edd@debian.org>
 
