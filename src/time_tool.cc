@@ -14,12 +14,15 @@
 
 // A command-line tool for exercising the CCTZ library.
 
+// RcppCCTZ changes:  Add Rcpp header, change std::{cout,cerr} to Rcpp::{Rcout,Rcerr}
+
 #include <algorithm>
 #include <cctype>
 #include <chrono>
 #include <cstring>
 #include <ctime>
 #include <iomanip>
+#include <ios>
 #include <iostream>
 #include <limits>
 #include <sstream>
@@ -29,7 +32,7 @@
 #include "cctz/civil_time.h"
 #include "cctz/time_zone.h"
 
-#include <Rcpp.h>
+#include <Rcpp/Lightest>
 
 // Pulls in the aliases from cctz for brevity.
 template <typename D>
@@ -39,9 +42,9 @@ using seconds = cctz::seconds;
 // parse() specifiers for command-line time arguments.
 const char* const kFormats[] = {
   "%Y   %m   %d   %H   %M   %E*S",
-  "%Y - %m - %d T %H : %M : %E*S",
+  "%Y - %m - %d %ET %H : %M : %E*S",
   "%Y - %m - %d %H : %M : %E*S",
-  "%Y - %m - %d T %H : %M",
+  "%Y - %m - %d %ET %H : %M",
   "%Y - %m - %d %H : %M",
   "%Y - %m - %d",
   "%a %b %d %H : %M : %E*S %Z %Y",
@@ -62,7 +65,7 @@ const char* const kFormats[] = {
 
 bool ParseTimeSpec(const std::string& args, time_point<seconds>* when) {
   const cctz::time_zone ignored{};
-  for (const char* const* fmt = kFormats; *fmt != NULL; ++fmt) {
+  for (const char* const* fmt = kFormats; *fmt != nullptr; ++fmt) {
     const std::string format = std::string(*fmt) + " %E*z";
     time_point<seconds> tp;
     if (cctz::parse(format, args, ignored, &tp)) {
@@ -75,7 +78,7 @@ bool ParseTimeSpec(const std::string& args, time_point<seconds>* when) {
 
 bool ParseCivilSpec(const std::string& args, cctz::civil_second* when) {
   const cctz::time_zone utc = cctz::utc_time_zone();
-  for (const char* const* fmt = kFormats; *fmt != NULL; ++fmt) {
+  for (const char* const* fmt = kFormats; *fmt != nullptr; ++fmt) {
     time_point<seconds> tp;
     if (cctz::parse(*fmt, args, utc, &tp)) {
       *when = cctz::convert(tp, utc);
@@ -143,7 +146,7 @@ void InstantInfo(const std::string& label, const std::string& fmt,
 }
 
 // Report everything we know about a cctz::civil_second (YMDHMS).
-void CivilInfo(const std::string& fmt, const cctz::civil_second& cs,
+void CivilInfo(const std::string& fmt, const cctz::civil_second cs,
                cctz::time_zone zone) {
   ZoneInfo("tz: ", zone);
   cctz::time_zone::civil_lookup cl = zone.lookup(cs);
@@ -266,7 +269,6 @@ std::vector<std::string> StrSplit(char sep, const std::string& s) {
   return v;
 }
 
-#if REALLY_USE_MAIN
 // Parses [<lo-year>,]<hi-year>.
 bool ParseYearRange(bool zdump, const std::string& args,
                     cctz::year_t* lo_year, cctz::year_t* hi_year) {
@@ -333,7 +335,7 @@ int main(int argc, const char** argv) {
             break;
           }
           if (optind + 1 == argc) {
-            std::cerr << argv0 << ": option requires an argument -- 'z'\n";
+            Rcpp::Rcerr << argv0 << ": option requires an argument -- 'z'\n";
             ++opterr;
             break;
           }
@@ -344,7 +346,7 @@ int main(int argc, const char** argv) {
             break;
           }
           if (optind + 1 == argc) {
-            std::cerr << argv0 << ": option requires an argument -- 'f'\n";
+            Rcpp::Rcerr << argv0 << ": option requires an argument -- 'f'\n";
             ++opterr;
             break;
           }
@@ -354,7 +356,7 @@ int main(int argc, const char** argv) {
         } else if (c == 'd') {
           zone_dump = true;
         } else {
-          std::cerr << argv0 << ": invalid option -- '" << c << "'\n";
+          Rcpp::Rcerr << argv0 << ": invalid option -- '" << c << "'\n";
           ++opterr;
           break;
         }
@@ -366,7 +368,7 @@ int main(int argc, const char** argv) {
       }
       if (std::strcmp(opt, "tz") == 0) {
         if (optind + 1 == argc) {
-          std::cerr << argv0 << ": option '--tz' requires an argument\n";
+          Rcpp::Rcerr << argv0 << ": option '--tz' requires an argument\n";
           ++opterr;
         } else {
           zones = argv[++optind];
@@ -375,7 +377,7 @@ int main(int argc, const char** argv) {
         zones = opt + 3;
       } else if (std::strcmp(opt, "fmt") == 0) {
         if (optind + 1 == argc) {
-          std::cerr << argv0 << ": option '--fmt' requires an argument\n";
+          Rcpp::Rcerr << argv0 << ": option '--fmt' requires an argument\n";
           ++opterr;
         } else {
           fmt = argv[++optind];
@@ -387,21 +389,21 @@ int main(int argc, const char** argv) {
       } else if (std::strcmp(opt, "zone_dump") == 0) {
         zone_dump = true;
       } else {
-        std::cerr << argv0 << ": unrecognized option '--" << opt << "'\n";
+        Rcpp::Rcerr << argv0 << ": unrecognized option '--" << opt << "'\n";
         ++opterr;
       }
     }
   }
   if (opterr != 0) {
-    std::cerr << "Usage: " << prog << " [--tz=<zone>[,...]] [--fmt=<fmt>]";
+    Rcpp::Rcerr << "Usage: " << prog << " [--tz=<zone>[,...]] [--fmt=<fmt>]";
     if (prog == "zone_dump") {
-      std::cerr << " [[<lo-year>,]<hi-year>|<time-spec>]\n";
-      std::cerr << "  Default years are last year and next year,"
+      Rcpp::Rcerr << " [[<lo-year>,]<hi-year>|<time-spec>]\n";
+      Rcpp::Rcerr << "  Default years are last year and next year,"
                 << " respectively.\n";
     } else {
-      std::cerr << " [<time-spec>]\n";
+      Rcpp::Rcerr << " [<time-spec>]\n";
     }
-    std::cerr << "  Default <time-spec> is 'now'.\n";
+    Rcpp::Rcerr << "  Default <time-spec> is 'now'.\n";
     return 1;
   }
 
@@ -435,8 +437,10 @@ int main(int argc, const char** argv) {
   for (const std::string& tz : StrSplit(',', zones)) {
     Rcpp::Rcout << leader;
     cctz::time_zone zone;
-    if (!cctz::load_time_zone(tz, &zone)) {
-      std::cerr << tz << ": Unrecognized time zone\n";
+    if (tz == "localtime") {
+      zone = cctz::local_time_zone();
+    } else if (!cctz::load_time_zone(tz, &zone)) {
+      Rcpp::Rcerr << tz << ": Unrecognized time zone\n";
       return 1;
     }
 
@@ -448,7 +452,7 @@ int main(int argc, const char** argv) {
       cctz::year_t hi_year = (zdump ? 292277026596 : when.year() + 1);
       if (!args.empty() && !ParseYearRange(zdump, args, &lo_year, &hi_year)) {
         if (!have_time && !have_civil) {
-          std::cerr << args << ": Malformed year range\n";
+          Rcpp::Rcerr << args << ": Malformed year range\n";
           return 1;
         }
       }
@@ -456,7 +460,7 @@ int main(int argc, const char** argv) {
       leader = "---\n";
     } else {
       if (!have_civil && !have_time && !args.empty()) {
-        std::cerr << args << ": Malformed time spec\n";
+        Rcpp::Rcerr << args << ": Malformed time spec\n";
         return 1;
       }
       if (have_civil) {
@@ -468,4 +472,3 @@ int main(int argc, const char** argv) {
     }
   }
 }
-#endif
