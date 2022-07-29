@@ -7,6 +7,7 @@
   \itemize{
     \item More specific includes in RcppCCTZ_API.h (Jing Lu in \ghpr{42}
     closing \ghit{41})
+    \item Synchronized with upstream CCTZ (Dirk in \ghpr{43}).
   }
 }
 
