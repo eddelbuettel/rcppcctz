@@ -43,14 +43,17 @@ std::unique_ptr<cctz::ZoneInfoSource> DefaultFactory(
 #if !defined(__has_attribute)
 #define __has_attribute(x) 0
 #endif
-#if (__has_attribute(weak) || defined(__GNUC__)) && !(defined(__MINGW32__) || defined(__MINGW64__))
+// MinGW is GCC on Windows, so while it asserts __has_attribute(weak), the
+// Windows linker cannot handle that. Nor does the MinGW compiler know how to
+// pass "#pragma comment(linker, ...)" to the Windows linker.
+#if (__has_attribute(weak) || defined(__GNUC__)) && !defined(__MINGW32__)
 ZoneInfoSourceFactory zone_info_source_factory
     __attribute__((weak)) = DefaultFactory;
-#elif defined(_MSC_VER) && !defined(_LIBCPP_VERSION)
+#elif defined(_MSC_VER) && !defined(__MINGW32__) && !defined(_LIBCPP_VERSION)
 extern ZoneInfoSourceFactory zone_info_source_factory;
 extern ZoneInfoSourceFactory default_factory;
 ZoneInfoSourceFactory default_factory = DefaultFactory;
-#if defined(_M_IX86)
+#if defined(_M_IX86) || defined(_M_ARM)
 #pragma comment( \
     linker,      \
     "/alternatename:?zone_info_source_factory@cctz_extension@@3P6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@3@ABV?$function@$$A6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@@Z@3@@ZA=?default_factory@cctz_extension@@3P6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@3@ABV?$function@$$A6A?AV?$unique_ptr@VZoneInfoSource@cctz@@U?$default_delete@VZoneInfoSource@cctz@@@std@@@std@@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@@Z@3@@ZA")
