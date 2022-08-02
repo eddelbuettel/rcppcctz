@@ -8,6 +8,7 @@ on:
 
 env:
   USE_BSPM: "true"
+  TRIM_APT_SOURCES: "true"
   _R_CHECK_FORCE_SUGGESTS_: "false"
 
 jobs:
@@ -25,7 +26,7 @@ jobs:
 
       - name: Bootstrap
         run: |
-          curl -OLs https://eddelbuettel.github.io/r-ci/run.sh
+          curl -OLs https://eddelbuettel.github.io/r-ci/r2u/run.sh
           chmod 0755 run.sh
           ./run.sh bootstrap
 
