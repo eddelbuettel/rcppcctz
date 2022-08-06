@@ -3,11 +3,13 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
-\section{Changes in version 0.2.11 (2022-xx-yy)}{
+\section{Changes in version 0.2.11 (2022-08-06)}{
   \itemize{
     \item More specific includes in RcppCCTZ_API.h (Jing Lu in \ghpr{42}
-    closing \ghit{41})
+    closing \ghit{41}).
     \item Synchronized with upstream CCTZ (Dirk in \ghpr{43}).
+    \item Switched \href{https://eddelbuettel.github.io/r-ci/}{r-ci}
+    to \href{https://eddelbuettel.github.io/r2u/}{r2u} use.
   }
 }
 

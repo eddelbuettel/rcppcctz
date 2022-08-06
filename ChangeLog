@@ -1,3 +1,7 @@
+2022-08-06  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.2.11
+
 2022-08-02  Dirk Eddelbuettel  <edd@debian.org>
 
 	* .github/workflows/ci.yaml (jobs): Use r2u
