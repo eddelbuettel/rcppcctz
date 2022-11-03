@@ -5,6 +5,8 @@
 
 	* .editorconfig: Added
 
+	* .github/workflows/ci.yaml (jobs): Update to actions/checkout@v3
+
 2022-08-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.11
