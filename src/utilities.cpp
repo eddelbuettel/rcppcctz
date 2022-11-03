@@ -310,16 +310,21 @@ Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec,
     auto n = svec.size();
     Rcpp::NumericMatrix dm(n, 2);
     for (auto i=0; i<n; i++) {
-        std::string txt(svec(i));
+        if (svec[i] == NA_STRING) {
+            dm(i, 0) = NA_REAL;
+            dm(i, 1) = NA_REAL;
+        } else {
+            std::string txt(svec(i));
 
-        if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
+            if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
 
-        auto nanoseconds = tp.time_since_epoch().count();
-        auto secs = nanoseconds / 1000000000;
-        auto nanos = nanoseconds - secs * 1000000000;
-        //Rcpp::Rcout << nanoseconds << " " << secs << " " << nanos << std::endl;
-        dm(i, 0) = secs;
-        dm(i, 1) = nanos;
+            auto nanoseconds = tp.time_since_epoch().count();
+            auto secs = nanoseconds / 1000000000;
+            auto nanos = nanoseconds - secs * 1000000000;
+            //Rcpp::Rcout << nanoseconds << " " << secs << " " << nanos << std::endl;
+            dm(i, 0) = secs;
+            dm(i, 1) = nanos;
+        }
     }
     return dm;
 }

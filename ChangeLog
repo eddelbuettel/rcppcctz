@@ -1,6 +1,7 @@
 2022-11-03  Dirk Eddelbuettel  <edd@debian.org>
 
-	* src/utilities.cpp (parseDatetime): Support NA on incoming data
+	* src/utilities.cpp (parseDatetime,parseDouble): Support NA value on
+	incoming data which now return NA values
 
 	* .editorconfig: Added
 
