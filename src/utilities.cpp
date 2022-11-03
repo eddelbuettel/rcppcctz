@@ -1,4 +1,3 @@
-// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
 
 #include <Rcpp.h>
 
@@ -38,24 +37,24 @@ Rcpp::NumericVector tzDiff(const std::string tzfrom,
                            const std::string tzto,
                            const Rcpp::NumericVector& dt,
                            bool verbose=false) {
-    
+
     cctz::time_zone tz1, tz2;
-    
+
     if (!cctz::load_time_zone(tzfrom, &tz1)) Rcpp::stop("Bad 'from' timezone");
     if (!cctz::load_time_zone(tzto, &tz2))   Rcpp::stop("Bad 'to' timezone");
-    
+
     Rcpp::NumericVector res;
-    
+
     if (dt.inherits("POSIXct")) {
         res = Rcpp::NumericVector(dt.size());
-        std::transform(dt.begin(), dt.end(), res.begin(), 
+        std::transform(dt.begin(), dt.end(), res.begin(),
                        [&tz1, &tz2, verbose](double dtval){
                            Rcpp::Datetime dtt(dtval);
                            return tzDiffAtomic(tz1, tz2, dtt, verbose);
                         });
-        
+
     } else Rcpp::stop("Unhandled date class");
-    
+
     return res;
 }
 
@@ -69,7 +68,7 @@ double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, cons
                                                       dt.getSeconds()),
                                                       tz1);
     if (verbose) Rcpp::Rcout << cctz::format("%Y-%m-%d %H:%M:%S %z", tp1, tz1) << std::endl;
-    
+
     const auto tp2 = cctz::convert(cctz::civil_second(dt.getYear(),
                                                       dt.getMonth(),
                                                       dt.getDay(),
@@ -78,10 +77,10 @@ double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, cons
                                                       dt.getSeconds()),
                                                       tz2);
     if (verbose) Rcpp::Rcout << cctz::format("%Y-%m-%d %H:%M:%S %z", tp2, tz2) << std::endl;
-    
+
     sc::hours d = sc::duration_cast<sc::hours>(tp1-tp2);
     if (verbose) Rcpp::Rcout << "Difference: " << d.count() << std::endl;
-    
+
     return d.count();
 }
 
@@ -105,9 +104,9 @@ double tzDiffAtomic(const cctz::time_zone& tz1, const cctz::time_zone& tz2, cons
 //' toTz(Sys.time(), "America/New_York", "Europe/London")
 //' # this redoes the 'Armstrong on the moon in NYC and Sydney' example
 //' toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), "America/New_York", "Australia/Sydney", verbose=TRUE)
-//' # we can also explicitly format for Sydney time 
-//' format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"), 
-//'             "America/New_York", "Australia/Sydney", verbose=TRUE), 
+//' # we can also explicitly format for Sydney time
+//' format(toTz(ISOdatetime(1969,7,20,22,56,0,tz="UTC"),
+//'             "America/New_York", "Australia/Sydney", verbose=TRUE),
 //'        tz="Australia/Sydney")
 //' }
 // [[Rcpp::export]]
@@ -120,10 +119,10 @@ Rcpp::DatetimeVector toTz(Rcpp::DatetimeVector dtv,
     Rcpp::DatetimeVector rsv(n, tzto.c_str());
     for (size_t i=0; i<n; i++) {
         Rcpp::Datetime dt = dtv[i];
-    
+
         // retain existing sub-second information
         double remainder = dt.getFractionalTimestamp() - std::floor(dt.getFractionalTimestamp());
-    
+
         cctz::time_zone tz1, tz2;   // two time zone objects
         if (!cctz::load_time_zone(tzfrom, &tz1)) Rcpp::stop("Bad 'from' timezone");
         if (!cctz::load_time_zone(tzto, &tz2))   Rcpp::stop("Bad 'to' timezone");
@@ -138,11 +137,11 @@ Rcpp::DatetimeVector toTz(Rcpp::DatetimeVector dtv,
                                       tz1);
         if (verbose) Rcpp::Rcout << cctz::format("%Y-%m-%d %H:%M:%S %z", tp, tz1) << std::endl;
         if (verbose) Rcpp::Rcout << cctz::format("%Y-%m-%d %H:%M:%S %z", tp, tz2) << std::endl;
-        
+
         // create a civil-time object from time-point and new timezone
         const auto ct = cctz::convert(tp, tz2);
         if (verbose) Rcpp::Rcout << ct << std::endl;
-    
+
         cctz::time_point<cctz::sys_seconds> ntp = cctz::convert(ct, tz2);
         // time since epoch, with fractional seconds added back in
         double newdt = ntp.time_since_epoch().count() + remainder;
@@ -156,7 +155,7 @@ Rcpp::DatetimeVector toTz(Rcpp::DatetimeVector dtv,
 //' Format a Datetime vector
 //'
 //' An alternative to \code{format.POSIXct} based on the CCTZ library. The
-//' \code{formatDouble} variant uses two vectors for seconds since the epoch 
+//' \code{formatDouble} variant uses two vectors for seconds since the epoch
 //' and fractional nanoseconds, respectively, to provide fuller resolution.
 //'
 //' @title Format a Datetime vector as a string vector
@@ -185,7 +184,7 @@ Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
                                      std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
                                      std::string lcltzstr = "UTC",
                                      std::string tgttzstr = "UTC") {
-         
+
     cctz::time_zone tgttz, lcltz;
     load_time_zone(tgttzstr, &tgttz);
     load_time_zone(lcltzstr, &lcltz);
@@ -198,7 +197,7 @@ Rcpp::CharacterVector formatDatetime(Rcpp::DatetimeVector dtv,
             cctz::convert(cctz::civil_second(dt.getYear(), dt.getMonth(), dt.getDay(),
                                              dt.getHours(), dt.getMinutes(), dt.getSeconds()), lcltz)
             + sc::microseconds(dt.getMicroSeconds());
-    
+
         std::string res = cctz::format(fmt, tp, tgttz);
         cv(i) = res;
     }
@@ -239,29 +238,33 @@ Rcpp::DatetimeVector parseDatetime(Rcpp::CharacterVector svec,
 
     // if we wanted a 'start' timer
     //sc::system_clock::time_point start = sc::high_resolution_clock::now();
-    
+
     auto n = svec.size();
     Rcpp::DatetimeVector dv(n, tzstr.c_str());
     for (auto i=0; i<n; i++) {
-        std::string txt(svec(i));
-        
-        if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
-        // Rcpp::Rcout << cctz::format(fmt, tp, tz) << std::endl;
-            
-        // time since epoch, with fractional seconds added back in
-        // only microseconds guaranteed to be present
-        double dt = sc::duration_cast<sc::microseconds>(tp - unix_epoch).count() * 1.0e-6;
-        
-        // Rcpp::Rcout << "tp: " << cctz::format(fmt, tp, tz) << "\n"
-        //             << "unix epoch: " << cctz::format(fmt, unix_epoch, tz) << "\n"
-        //             << "(tp - unix.epoch).count(): " << (tp - unix_epoch).count() << "\n"
-        //             << "dt: " << dt << std::endl;
-            
-        dv(i) = Rcpp::Datetime(dt);
+        if (svec[i] == NA_STRING) {
+            dv[i] = NA_REAL;
+        } else {
+            std::string txt(svec(i));
+
+            if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
+            // Rcpp::Rcout << cctz::format(fmt, tp, tz) << std::endl;
+
+            // time since epoch, with fractional seconds added back in
+            // only microseconds guaranteed to be present
+            double dt = sc::duration_cast<sc::microseconds>(tp - unix_epoch).count() * 1.0e-6;
+
+            // Rcpp::Rcout << "tp: " << cctz::format(fmt, tp, tz) << "\n"
+            //             << "unix epoch: " << cctz::format(fmt, unix_epoch, tz) << "\n"
+            //             << "(tp - unix.epoch).count(): " << (tp - unix_epoch).count() << "\n"
+            //             << "dt: " << dt << std::endl;
+
+            dv(i) = Rcpp::Datetime(dt);
+        }
     }
-            
+
     // Rcpp::Rcout << "Took: "
-    //             << sc::nanoseconds(sc::high_resolution_clock::now() - start).count() 
+    //             << sc::nanoseconds(sc::high_resolution_clock::now() - start).count()
     //             << " nanosec" << " " << std::endl;
     return dv;
 }
@@ -275,7 +278,7 @@ Rcpp::CharacterVector formatDouble(Rcpp::NumericVector secv,
                                    Rcpp::NumericVector nanov,
                                    std::string fmt = "%Y-%m-%dT%H:%M:%E*S%Ez",
                                    std::string tgttzstr = "UTC") {
-         
+
     cctz::time_zone tgttz;
     load_time_zone(tgttzstr, &tgttz);
 
@@ -284,10 +287,10 @@ Rcpp::CharacterVector formatDouble(Rcpp::NumericVector secv,
     for (auto i=0; i<n; i++) {
         int64_t secs = static_cast<int64_t>(secv(i));
         int64_t nanos = static_cast<int64_t>(nanov(i));
-        
+
         cctz::time_point<sc::nanoseconds> tp = sc::system_clock::from_time_t(0);
         tp += sc::seconds(secs) + sc::nanoseconds(nanos);
-    
+
         std::string res = cctz::format(fmt, tp, tgttz);
         cv(i) = res;
     }
@@ -308,7 +311,7 @@ Rcpp::NumericMatrix parseDouble(Rcpp::CharacterVector svec,
     Rcpp::NumericMatrix dm(n, 2);
     for (auto i=0; i<n; i++) {
         std::string txt(svec(i));
-    
+
         if (!cctz::parse(fmt, txt, tz, &tp)) Rcpp::stop("Parse error on %s", txt);
 
         auto nanoseconds = tp.time_since_epoch().count();

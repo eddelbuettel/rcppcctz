@@ -1,3 +1,7 @@
+2022-11-03  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/utilities.cpp (parseDatetime): Support NA on incoming data
+
 2022-08-06  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Release 0.2.11
@@ -534,4 +538,3 @@
 2015-10-16  Dirk Eddelbuettel  <edd@debian.org>
 
 	* src/*: Initial packaging based on CCTZ repo
-
