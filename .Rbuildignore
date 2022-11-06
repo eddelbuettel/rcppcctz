@@ -6,3 +6,4 @@
 ^CRAN
 ^src/unused
 ^\.github
+^\.editorconfig
