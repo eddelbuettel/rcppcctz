@@ -1,5 +1,7 @@
 2023-04-01  Dirk Eddelbuettel  <edd@debian.org>
 
+	* DESCRIPTION (Version, Date): Roll micro version
+
 	* src/Makevars: No longer set CXX_STD to CXX11
 	* src/Makevars.win: Idem
 	* src/Makevars.ucrt: Idem
