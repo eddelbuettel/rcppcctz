@@ -1,3 +1,7 @@
+2023-06-01  Michael Quinn  <msquinn@google.com>
+
+	* src/examples.cpp: Qualify call to cctz::format()
+
 2023-04-01  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll micro version
