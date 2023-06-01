@@ -128,7 +128,7 @@ void exampleFormat() {
     tp += std::chrono::milliseconds(6) + std::chrono::microseconds(7) +
         std::chrono::nanoseconds(8);
 
-    std::string txt = format("%H:%M:%E15S", tp, tz);
+    std::string txt = cctz::format("%H:%M:%E15S", tp, tz);
 
     Rcpp::Rcout << "15 digit precision on subsecond time: " << txt << std::endl;    
 }
