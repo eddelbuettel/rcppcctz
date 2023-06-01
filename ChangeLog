@@ -1,4 +1,4 @@
-2023-06-01  Michael Quinn <msquinn@google.com
+2023-06-01  Michael Quinn  <msquinn@google.com>
 
 	* src/examples.cpp: Qualify call to cctz::format()
 
