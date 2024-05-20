@@ -3,7 +3,7 @@
 [![CI](https://github.com/eddelbuettel/rcppcctz/workflows/ci/badge.svg)](https://github.com/eddelbuettel/rcppcctz/actions?query=workflow%3Aci)
 [![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![CRAN](https://www.r-pkg.org/badges/version/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ)
-[![Dependencies](https://tinyverse.netlify.com/badge/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ)
+[![Dependencies](https://tinyverse.netlify.app/badge/RcppCCTZ)](https://cran.r-project.org/package=RcppCCTZ)
 [![Downloads](https://cranlogs.r-pkg.org/badges/RcppCCTZ?color=brightgreen)](https://www.r-pkg.org/pkg/RcppCCTZ)
 [![Last Commit](https://img.shields.io/github/last-commit/eddelbuettel/rcppcctz)](https://github.com/eddelbuettel/rcppcctz)
 
