@@ -1,3 +1,7 @@
+2024-09-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Authors@R): Added
+
 2024-05-20  Dirk Eddelbuettel  <edd@debian.org>
 
 	* README.md: Use tinyverse.netlify.app for dependency badge
