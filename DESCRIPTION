@@ -1,8 +1,8 @@
 Package: RcppCCTZ
 Type: Package
 Title: 'Rcpp' Bindings for the 'CCTZ' Library
-Version: 0.2.12.1
-Date: 2023-04-01
+Version: 0.2.13
+Date: 2024-12-11
 Authors@R: c(person("Dirk", "Eddelbuettel", role = c("aut", "cre"), email = "edd@debian.org",
                     comment = c(ORCID = "0000-0001-6419-907X")),
              person("Bradley", "White", role = "aut", comment = "Principal author of CCTZ"))

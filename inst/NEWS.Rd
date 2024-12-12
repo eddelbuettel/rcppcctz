@@ -3,6 +3,16 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
+\section{Changes in version 0.2.13 (2024-12-11)}{
+  \itemize{
+    \item No longer set compilation standard as recent R version set a
+    sufficiently high minimum
+    \item Qualify a call to \code{cctz::format} (Michael Quinn in \ghpr{44})
+    \item Routine updates to continuous integration and badges
+    \item Switch to Authors@R in DESCRIPTION
+  }
+}
+
 \section{Changes in version 0.2.12 (2022-11-06)}{
   \itemize{
     \item Support NA values in numerical or character input
