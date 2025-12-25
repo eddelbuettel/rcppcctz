@@ -2,6 +2,9 @@
 
 	* DESCRIPTION (Version, Date): Roll micro version and date
 
+	* inst/include/cctz/*: Synchronized with CCTZ repo
+	* src/*: Ditto
+
 	* DESCRIPTION (SystemRequirements): Remove compiler requirement
 	mention as current ones are good, and R-devel triggered over C++11
 
