@@ -1,3 +1,10 @@
+2025-12-29  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/Makevars: Explicitly list source files allowing non-Windows
+	builds to skip one Windows files
+	* src/Makevars.win: Explicitly list source files including an
+	additional file used only on Windows
+
 2025-12-25  Dirk Eddelbuettel  <edd@debian.org>
 
 	* DESCRIPTION (Version, Date): Roll micro version and date
