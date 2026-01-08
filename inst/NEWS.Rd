@@ -3,6 +3,14 @@
 \newcommand{\ghpr}{\href{https://github.com/eddelbuettel/rcppcctz/pull/#1}{##1}}
 \newcommand{\ghit}{\href{https://github.com/eddelbuettel/rcppcctz/issues/#1}{##1}}
 
+\section{Changes in version 0.2.14 (2026-01-08)}{
+  \itemize{
+    \item Synchronized with upstream CCTZ (Dirk in \ghpr{46}).
+    \item Explicitly enumerate files to be compiled in \code{src/Makevars*}
+    (Dirk in \ghpr{47})
+  }
+}
+
 \section{Changes in version 0.2.13 (2024-12-11)}{
   \itemize{
     \item No longer set compilation standard as recent R version set a

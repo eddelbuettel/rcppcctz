@@ -9,7 +9,7 @@
 
 ### What is CCTZ?
 
-[CCTZ](https://github.com/google/cctz) (C++ Time Zone) is an excellent (yet small) C++11 library for
+[CCTZ](https://github.com/google/cctz) (C++ Time Zone) is an excellent (yet small) C++ library for
 translating between absolute times and civil times using the rules defined by a time zone. See its
 [repository](https://github.com/google/cctz) (as well as code) for very detailed documentation.
 [CCTZ](https://github.com/google/cctz) is being developed by Google but not an officially endorsed product.
@@ -38,8 +38,8 @@ R> table(sapply(0:52, function(d) tzDiff("America/New_York", "Europe/London",
 
 ```r
 R> # Given current time in NY what is the time London, UK
-R> # (running the code locally in Chicago hence CST text format)    
-R> toTz(Sys.time(), "America/New_York", "Europe/London") 	
+R> # (running the code locally in Chicago hence CST text format)
+R> toTz(Sys.time(), "America/New_York", "Europe/London")
 [1] "2016-12-10 17:15:04.20370 CST"
 R> # this redoes the 'Armstrong on the moon in NYC and Sydney' example
 R> # note that the default print method will print the return object in _your local time_
